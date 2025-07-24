@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>气候变化舆情分析平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            accent: '#722ED1',
+            warning: '#FF7D00',
+            danger: '#F53F3F',
+            success: '#00B42A',
+            dark: {
+              100: '#86909C',
+              200: '#4E5969',
+              300: '#272E3B',
+              400: '#1D2129',
+              500: '#141414'
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        },
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1;
+      }
+      .glass-effect {
+        @apply bg-dark-400/80 backdrop-blur-md;
+      }
+      .scrollbar-thin {
+        scrollbar-width: thin;
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: rgba(156, 163, 175, 0.5);
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-dark-500 text-white font-inter antialiased min-h-screen flex flex-col">
+  <!-- 顶部导航栏 -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-dark-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- 左侧 Logo 和标题 -->
+        <div class="flex items-center space-x-2">
+          <div class="bg-primary/20 p-2 rounded-lg">
+            <i class="fa fa-line-chart text-primary text-xl"></i>
+          </div>
+          <h1 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
+            气候变化舆情分析平台
+          </h1>
+        </div>
+
+        <!-- 中间导航菜单 - 仅在中等及以上屏幕显示 -->
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#overview" class="text-white font-medium hover:text-primary transition-colors">概览</a>
+          <a href="#trends" class="text-dark-100 font-medium hover:text-primary transition-colors">时间趋势</a>
+          <a href="#themes" class="text-dark-100 font-medium hover:text-primary transition-colors">主题分析</a>
+          <a href="#hotspots" class="text-dark-100 font-medium hover:text-primary transition-colors">热点词云</a>
+          <a href="#alerts" class="text-dark-100 font-medium hover:text-primary transition-colors">预警中心</a>
+        </nav>
+
+        <!-- 右侧工具栏 -->
+        <div class="flex items-center space-x-4">
+          <button class="p-2 rounded-full hover:bg-dark-300/50 transition-colors relative">
+            <i class="fa fa-bell-o text-dark-100"></i>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full"></span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-dark-300/50 transition-colors">
+            <i class="fa fa-cog text-dark-100"></i>
+          </button>
+          <div class="hidden md:block h-8 w-8 rounded-full bg-gradient-to-br from-primary to-secondary"></div>
+
+          <!-- 移动端菜单按钮 -->
+          <button class="md:hidden p-2 rounded-md hover:bg-dark-300/50 transition-colors" id="mobile-menu-button">
+            <i class="fa fa-bars text-dark-100"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 移动端导航菜单 -->
+    <div class="md:hidden hidden bg-dark-400 border-b border-dark-300" id="mobile-menu">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <a href="#overview" class="block py-2 text-white font-medium hover:text-primary transition-colors">概览</a>
+        <a href="#trends" class="block py-2 text-dark-100 font-medium hover:text-primary transition-colors">时间趋势</a>
+        <a href="#themes" class="block py-2 text-dark-100 font-medium hover:text-primary transition-colors">主题分析</a>
+        <a href="#hotspots" class="block py-2 text-dark-100 font-medium hover:text-primary transition-colors">热点词云</a>
+        <a href="#alerts" class="block py-2 text-dark-100 font-medium hover:text-primary transition-colors">预警中心</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区域 -->
+  <main class="flex-grow pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <!-- 数据筛选栏 -->
+      <section class="py-6">
+        <div class="bg-dark-400 rounded-xl p-4 border border-dark-300 shadow-lg">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <input type="text" placeholder="搜索关键词..." class="bg-dark-300 border border-dark-200 rounded-lg py-2 pl-10 pr-4 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-dark-100"></i>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-dark-100">地区:</span>
+                <select class="bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <option>全球</option>
+                  <option>亚洲</option>
+                  <option>欧洲</option>
+                  <option>北美洲</option>
+                  <option>南美洲</option>
+                  <option>非洲</option>
+                  <option>大洋洲</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-dark-100">时间:</span>
+                <select class="bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <option>近7天</option>
+                  <option>近30天</option>
+                  <option>近90天</option>
+                  <option>近1年</option>
+                  <option>全部</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button class="bg-dark-300 hover:bg-dark-300/80 text-dark-100 py-2 px-4 rounded-lg transition-colors">
+                <i class="fa fa-filter mr-1"></i> 高级筛选
+              </button>
+              <button class="bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition-colors flex items-center">
+                <i class="fa fa-refresh mr-1"></i> 刷新数据
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 首页/总览页 -->
+      <section id="overview" class="py-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">全球气候变化舆情概览</h2>
+          <div class="flex items-center gap-2 text-dark-100">
+            <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span>数据实时更新中</span>
+          </div>
+        </div>
+
+        <!-- 关键指标卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-dark-100 text-sm">实时舆情总量</p>
+                <h3 class="text-3xl font-bold mt-1">128,543</h3>
+              </div>
+              <div class="bg-primary/10 p-2 rounded-lg">
+                <i class="fa fa-comments text-primary"></i>
+              </div>
+            </div>
+            <div class="flex items-center text-sm">
+              <span class="text-success flex items-center">
+                <i class="fa fa-arrow-up mr-1"></i> 12.5%
+              </span>
+              <span class="text-dark-100 ml-2">较昨日</span>
+            </div>
+          </div>
+
+          <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-dark-100 text-sm">情感倾向分布</p>
+                <div class="flex items-center mt-2">
+                  <div class="relative w-16 h-16">
+                    <canvas id="sentiment-donut"></canvas>
+                  </div>
+                  <div class="ml-3">
+                    <div class="flex items-center">
+                      <span class="w-2 h-2 rounded-full bg-danger mr-1"></span>
+                      <span class="text-xs text-dark-100">消极 45%</span>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="w-2 h-2 rounded-full bg-warning mr-1"></span>
+                      <span class="text-xs text-dark-100">中立 30%</span>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="w-2 h-2 rounded-full bg-success mr-1"></span>
+                      <span class="text-xs text-dark-100">积极 25%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-dark-100 text-sm">当日热点话题</p>
+                <div class="space-y-2 mt-2">
+                  <div class="flex items-center">
+                    <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded mr-2">#碳中和</span>
+                    <span class="text-dark-100 text-xs">32.4k 讨论</span>
+                  </div>
+                  <div class="flex items-center">
+                    <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded mr-2">#极端高温</span>
+                    <span class="text-dark-100 text-xs">28.7k 讨论</span>
+                  </div>
+                  <div class="flex items-center">
+                    <span class="bg-accent/10 text-accent text-xs px-2 py-1 rounded mr-2">#碳关税</span>
+                    <span class="text-dark-100 text-xs">21.3k 讨论</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-secondary/10 p-2 rounded-lg">
+                <i class="fa fa-fire text-secondary"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-dark-100 text-sm">全球热点地区</p>
+                <div class="mt-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <img src="https://picsum.photos/seed/brazil/20/20" alt="巴西国旗" class="w-4 h-4 rounded-full mr-2">
+                      <span class="text-sm">巴西</span>
+                    </div>
+                    <div class="w-24 bg-dark-300 rounded-full h-2">
+                      <div class="bg-danger h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center">
+                      <img src="https://picsum.photos/seed/usa/20/20" alt="美国国旗" class="w-4 h-4 rounded-full mr-2">
+                      <span class="text-sm">美国</span>
+                    </div>
+                    <div class="w-24 bg-dark-300 rounded-full h-2">
+                      <div class="bg-warning h-2 rounded-full" style="width: 72%"></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center">
+                      <img src="https://picsum.photos/seed/china/20/20" alt="中国国旗" class="w-4 h-4 rounded-full mr-2">
+                      <span class="text-sm">中国</span>
+                    </div>
+                    <div class="w-24 bg-dark-300 rounded-full h-2">
+                      <div class="bg-primary h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-accent/10 p-2 rounded-lg">
+                <i class="fa fa-globe text-accent"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 全局地图 -->
+        <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg h-[500px] mb-8">
+          <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+            <h3 class="font-semibold text-lg">全球舆情热度分布</h3>
+            <div class="flex items-center gap-2">
+              <button class="text-dark-100 hover:text-white transition-colors">
+                <i class="fa fa-expand"></i>
+              </button>
+              <button class="text-dark-100 hover:text-white transition-colors">
+                <i class="fa fa-download"></i>
+              </button>
+            </div>
+          </div>
+          <div class="h-[calc(100%-56px)] relative">
+            <!-- 嵌入全球地图可视化 -->
+            <iframe src="optimized_global_heatmap.html" class="w-full h-full border-0"></iframe>
+
+            <!-- 热点标记 -->
+            <div class="absolute top-[30%] left-[25%] group">
+              <div class="w-4 h-4 bg-danger rounded-full animate-pulse"></div>
+              <div class="hidden group-hover:block absolute -top-20 -left-32 bg-dark-400 p-3 rounded-lg border border-dark-300 shadow-lg w-64 z-10">
+                <h4 class="font-medium text-sm">巴西亚马逊森林火灾</h4>
+                <p class="text-xs text-dark-100 mt-1">舆情热度: 92</p>
+                <div class="flex items-center mt-2">
+                  <span class="bg-danger/20 text-danger text-xs px-2 py-1 rounded">消极 78%</span>
+                  <span class="bg-warning/20 text-warning text-xs px-2 py-1 rounded ml-2">中立 15%</span>
+                  <span class="bg-success/20 text-success text-xs px-2 py-1 rounded ml-2">积极 7%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="absolute top-[40%] left-[70%] group">
+              <div class="w-4 h-4 bg-warning rounded-full animate-pulse"></div>
+              <div class="hidden group-hover:block absolute -top-20 -left-32 bg-dark-400 p-3 rounded-lg border border-dark-300 shadow-lg w-64 z-10">
+                <h4 class="font-medium text-sm">中国极端降雨事件</h4>
+                <p class="text-xs text-dark-100 mt-1">舆情热度: 78</p>
+                <div class="flex items-center mt-2">
+                  <span class="bg-danger/20 text-danger text-xs px-2 py-1 rounded">消极 65%</span>
+                  <span class="bg-warning/20 text-warning text-xs px-2 py-1 rounded ml-2">中立 25%</span>
+                  <span class="bg-success/20 text-success text-xs px-2 py-1 rounded ml-2">积极 10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 时间趋势模块 -->
+      <section id="trends" class="py-6">
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-6">舆情时间趋势分析</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- 左侧筛选面板 -->
+          <div class="bg-dark-400 rounded-xl p-4 border border-dark-300">
+            <h3 class="font-semibold mb-4">筛选条件</h3>
+
+            <div class="space-y-4">
+              <div>
+                <label class="text-dark-100 text-sm block mb-2">时间范围</label>
+                <div class="flex gap-2">
+                  <button class="bg-primary text-white text-xs px-3 py-1 rounded-full">近1周</button>
+                  <button class="bg-dark-300 text-dark-100 text-xs px-3 py-1 rounded-full hover:bg-dark-300/80 transition-colors">近1月</button>
+                  <button class="bg-dark-300 text-dark-100 text-xs px-3 py-1 rounded-full hover:bg-dark-300/80 transition-colors">近3月</button>
+                  <button class="bg-dark-300 text-dark-100 text-xs px-3 py-1 rounded-full hover:bg-dark-300/80 transition-colors">近1年</button>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-dark-100 text-sm block mb-2">话题类别</label>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">政策讨论</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">影响评估</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">应对措施</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">科学研究</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">国际合作</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-dark-100 text-sm block mb-2">地区筛选</label>
+                <select class="bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 w-full focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <option>全球</option>
+                  <option>亚洲</option>
+                  <option>欧洲</option>
+                  <option>北美洲</option>
+                  <option>南美洲</option>
+                  <option>非洲</option>
+                  <option>大洋洲</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-dark-100 text-sm block mb-2">情感倾向</label>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-danger focus:ring-danger/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">消极</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-warning focus:ring-warning/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">中立</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-success focus:ring-success/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">积极</span>
+                  </label>
+                </div>
+              </div>
+
+              <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors">
+                应用筛选
+              </button>
+            </div>
+          </div>
+
+          <!-- 右侧时间趋势图 -->
+          <div class="lg:col-span-2 bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">舆情热度时间趋势</h3>
+              <div class="flex items-center gap-2">
+                <div class="relative">
+                  <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option>按日</option>
+                    <option>按周</option>
+                    <option>按月</option>
+                  </select>
+                </div>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-expand"></i>
+                </button>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-[400px]">
+              <!-- 嵌入时间趋势可视化 -->
+              <iframe src="舆情热度时间趋势图2.html" class="w-full h-full border-0"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 主题与情感分析模块 -->
+      <section id="themes" class="py-6">
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-6">主题与情感分析</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- 左侧分类占比图 -->
+          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">话题分类占比</h3>
+              <div class="flex items-center gap-2">
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-expand"></i>
+                </button>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-[400px]">
+              <!-- 嵌入堆叠柱状图可视化 -->
+              <iframe src="堆叠图4.html" class="w-full h-full border-0"></iframe>
+            </div>
+          </div>
+
+          <!-- 右侧情感分布图 -->
+          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">情感倾向分布</h3>
+              <div class="flex items-center gap-2">
+                <div class="relative">
+                  <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option>按地区</option>
+                    <option>按话题</option>
+                    <option>按时间</option>
+                  </select>
+                </div>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-expand"></i>
+                </button>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-[400px]">
+              <!-- 嵌入情感分析可视化 -->
+              <iframe src="情感3.html" class="w-full h-full border-0"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 词云与热点文本模块 -->
+      <section id="hotspots" class="py-6">
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-6">热点词云与文本</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- 左侧词云 -->
+          <div class="lg:col-span-2 bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">热点词云</h3>
+              <div class="flex items-center gap-2">
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-expand"></i>
+                </button>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-download"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-[400px]">
+              <!-- 嵌入词云可视化 -->
+              <iframe src="cyber_dynamic_wordcloud.html" class="w-full h-full border-0"></iframe>
+            </div>
+          </div>
+
+          <!-- 右侧热点文本 -->
+          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">热点文本</h3>
+              <div class="flex items-center gap-2">
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 h-[400px] overflow-y-auto scrollbar-thin">
+              <div class="space-y-4">
+                <div class="bg-dark-300/50 rounded-lg p-3 hover:bg-dark-300/70 transition-colors cursor-pointer">
+                  <div class="flex items-center mb-2">
+                    <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-2">
+                      <i class="fa fa-newspaper-o text-primary"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm">人民日报：中国发布《2025年应对气候变化国家报告》</h4>
+                      <p class="text-xs text-dark-100">2025-07-15 · 政策讨论</p>
+                    </div>
+                  </div>
+                  <p class="text-sm text-dark-100">报告显示，中国在过去五年中碳排放强度下降了18%，可再生能源占比提高至42%，森林碳汇能力显著增强...</p>
+                  <div class="flex justify-between items-center mt-2">
+                    <div class="flex items-center">
+                      <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">碳中和</span>
+                      <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded ml-1">可再生能源</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-dark-100 text-xs">
+                      <span><i class="fa fa-eye mr-1"></i> 2.4k</span>
+                      <span><i class="fa fa-comment mr-1"></i> 328</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/50 rounded-lg p-3 hover:bg-dark-300/70 transition-colors cursor-pointer">
+                  <div class="flex items-center mb-2">
+                    <div class="w-8 h-8 rounded-full bg-danger/20 flex items-center justify-center mr-2">
+                      <i class="fa fa-twitter text-danger"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm">联合国秘书长：全球气候危机已达临界点，需立即行动</h4>
+                      <p class="text-xs text-dark-100">2025-07-14 · 国际合作</p>
+                    </div>
+                  </div>
+                  <p class="text-sm text-dark-100">在最新的联合国气候峰会上，秘书长强调全球气温上升速度超过预期，呼吁各国加强合作，加大减排力度...</p>
+                  <div class="flex justify-between items-center mt-2">
+                    <div class="flex items-center">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">气候峰会</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded ml-1">减排目标</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-dark-100 text-xs">
+                      <span><i class="fa fa-eye mr-1"></i> 5.7k</span>
+                      <span><i class="fa fa-comment mr-1"></i> 842</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/50 rounded-lg p-3 hover:bg-dark-300/70 transition-colors cursor-pointer">
+                  <div class="flex items-center mb-2">
+                    <div class="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center mr-2">
+                      <i class="fa fa-globe text-warning"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm">WMO：2025年上半年为有记录以来最热半年</h4>
+                      <p class="text-xs text-dark-100">2025-07-12 · 影响评估</p>
+                    </div>
+                  </div>
+                  <p class="text-sm text-dark-100">世界气象组织最新数据显示，2025年1-6月全球平均气温比工业化前水平高出1.3℃，极端天气事件频率增加...</p>
+                  <div class="flex justify-between items-center mt-2">
+                    <div class="flex items-center">
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">极端高温</span>
+                      <span class="bg-accent/10 text-accent text-xs px-2 py-1 rounded ml-1">气候变化</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-dark-100 text-xs">
+                      <span><i class="fa fa-eye mr-1"></i> 3.9k</span>
+                      <span><i class="fa fa-comment mr-1"></i> 516</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/50 rounded-lg p-3 hover:bg-dark-300/70 transition-colors cursor-pointer">
+                  <div class="flex items-center mb-2">
+                    <div class="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center mr-2">
+                      <i class="fa fa-line-chart text-success"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm">研究：可再生能源成本持续下降，投资回报率创新高</h4>
+                      <p class="text-xs text-dark-100">2025-07-10 · 应对措施</p>
+                    </div>
+                  </div>
+                  <p class="text-sm text-dark-100">最新研究表明，太阳能和风能发电成本在过去十年中下降了70%以上，投资回报率超过传统化石能源...</p>
+                  <div class="flex justify-between items-center mt-2">
+                    <div class="flex items-center">
+                      <span class="bg-success/10 text-success text-xs px-2 py-1 rounded">清洁能源</span>
+                      <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded ml-1">投资</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-dark-100 text-xs">
+                      <span><i class="fa fa-eye mr-1"></i> 1.8k</span>
+                      <span><i class="fa fa-comment mr-1"></i> 243</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 预警中心模块 -->
+      <section id="alerts" class="py-6">
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-6">预警中心</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+          <div class="lg:col-span-3 bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">近期预警</h3>
+              <div class="flex items-center gap-2">
+                <div class="relative">
+                  <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option>全部预警</option>
+                    <option>热度异常</option>
+                    <option>情感波动</option>
+                    <option>事件爆发</option>
+                  </select>
+                </div>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+            <div class="h-[400px] overflow-y-auto scrollbar-thin">
+              <div class="divide-y divide-dark-300">
+                <div class="p-4 hover:bg-dark-300/30 transition-colors cursor-pointer">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="flex items-center">
+                        <div class="bg-danger/20 text-danger text-xs px-2 py-1 rounded mr-2">热度异常</div>
+                        <span class="text-dark-100 text-xs">2025-07-16 14:30</span>
+                      </div>
+                      <h4 class="font-medium mt-2">巴西亚马逊地区"森林火灾"舆情热度异常升高</h4>
+                      <p class="text-sm text-dark-100 mt-1">过去24小时内，巴西亚马逊地区关于森林火灾的讨论量增长215%，超过预警阈值200%。</p>
+                    </div>
+                    <div class="ml-4">
+                      <span class="text-danger text-lg font-bold">92</span>
+                      <span class="text-dark-100 text-xs">热度值</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center mt-3">
+                    <div class="flex items-center gap-2">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">消极 78%</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">中立 15%</span>
+                      <span class="bg-success/10 text-success text-xs px-2 py-1 rounded">积极 7%</span>
+                    </div>
+                    <button class="text-primary text-sm hover:underline">查看详情</button>
+                  </div>
+                </div>
+
+                <div class="p-4 hover:bg-dark-300/30 transition-colors cursor-pointer">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="flex items-center">
+                        <div class="bg-warning/20 text-warning text-xs px-2 py-1 rounded mr-2">情感波动</div>
+                        <span class="text-dark-100 text-xs">2025-07-15 09:15</span>
+                      </div>
+                      <h4 class="font-medium mt-2">"碳关税"政策相关讨论消极情绪激增</h4>
+                      <p class="text-sm text-dark-100 mt-1">过去48小时内，关于"碳关税"政策的讨论中，消极情绪占比从42%升至65%，增长超过50%。</p>
+                    </div>
+                    <div class="ml-4">
+                      <span class="text-warning text-lg font-bold">76</span>
+                      <span class="text-dark-100 text-xs">热度值</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center mt-3">
+                    <div class="flex items-center gap-2">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">消极 65%</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">中立 25%</span>
+                      <span class="bg-success/10 text-success text-xs px-2 py-1 rounded">积极 10%</span>
+                    </div>
+                    <button class="text-primary text-sm hover:underline">查看详情</button>
+                  </div>
+                </div>
+
+                <div class="p-4 hover:bg-dark-300/30 transition-colors cursor-pointer">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="flex items-center">
+                        <div class="bg-primary/20 text-primary text-xs px-2 py-1 rounded mr-2">事件爆发</div>
+                        <span class="text-dark-100 text-xs">2025-07-14 18:45</span>
+                      </div>
+                      <h4 class="font-medium mt-2">中国华北地区极端降雨引发洪灾舆情爆发</h4>
+                      <p class="text-sm text-dark-100 mt-1">过去12小时内，关于中国华北地区极端降雨和洪灾的讨论量达到32.5k，较前日增长310%。</p>
+                    </div>
+                    <div class="ml-4">
+                      <span class="text-primary text-lg font-bold">87</span>
+                      <span class="text-dark-100 text-xs">热度值</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center mt-3">
+                    <div class="flex items-center gap-2">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">消极 72%</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">中立 20%</span>
+                      <span class="bg-success/10 text-success text-xs px-2 py-1 rounded">积极 8%</span>
+                    </div>
+                    <button class="text-primary text-sm hover:underline">查看详情</button>
+                  </div>
+                </div>
+
+                <div class="p-4 hover:bg-dark-300/30 transition-colors cursor-pointer">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <div class="flex items-center">
+                        <div class="bg-accent/20 text-accent text-xs px-2 py-1 rounded mr-2">热度异常</div>
+                        <span class="text-dark-100 text-xs">2025-07-13 11:20</span>
+                      </div>
+                      <h4 class="font-medium mt-2">欧盟"碳边境调节机制"实施舆情热度激增</h4>
+                      <p class="text-sm text-dark-100 mt-1">过去24小时内，关于欧盟"碳边境调节机制"实施的讨论量增长185%，达到21.3k。</p>
+                    </div>
+                    <div class="ml-4">
+                      <span class="text-accent text-lg font-bold">79</span>
+                      <span class="text-dark-100 text-xs">热度值</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center mt-3">
+                    <div class="flex items-center gap-2">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">消极 58%</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">中立 32%</span>
+                      <span class="bg-success/10 text-success text-xs px-2 py-1 rounded">积极 10%</span>
+                    </div>
+                    <button class="text-primary text-sm hover:underline">查看详情</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧预警设置 -->
+          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300">
+              <h3 class="font-semibold text-lg">预警设置</h3>
+            </div>
+            <div class="p-4 space-y-4">
+              <div>
+                <h4 class="font-medium text-sm mb-3">预警阈值</h4>
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>热度增长率阈值</span>
+                      <span>200%</span>
+                    </div>
+                    <input type="range" min="50" max="300" value="200" class="w-full h-2 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
+                    <div class="flex justify-between text-xs text-dark-100 mt-1">
+                      <span>50%</span>
+                      <span>300%</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>情感波动阈值</span>
+                      <span>40%</span>
+                    </div>
+                    <input type="range" min="10" max="80" value="40" class="w-full h-2 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
+                    <div class="flex justify-between text-xs text-dark-100 mt-1">
+                      <span>10%</span>
+                      <span>80%</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>讨论量阈值</span>
+                      <span>10k</span>
+                    </div>
+                    <input type="range" min="1" max="50" value="10" class="w-full h-2 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
+                    <div class="flex justify-between text-xs text-dark-100 mt-1">
+                      <span>1k</span>
+                      <span>50k</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-dark-300 pt-4">
+                <h4 class="font-medium text-sm mb-3">关注话题</h4>
+                <div class="space-y-2">
+                  <label class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                      <span class="ml-2 text-sm">森林火灾</span>
+                    </div>
+                    <div class="bg-danger/20 text-danger text-xs px-2 py-1 rounded">高风险</div>
+                  </label>
+
+                  <label class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                      <span class="ml-2 text-sm">极端天气</span>
+                    </div>
+                    <div class="bg-warning/20 text-warning text-xs px-2 py-1 rounded">中风险</div>
+                  </label>
+
+                  <label class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                      <span class="ml-2 text-sm">碳关税政策</span>
+                    </div>
+                    <div class="bg-primary/20 text-primary text-xs px-2 py-1 rounded">中风险</div>
+                  </label>
+
+                  <label class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                      <span class="ml-2 text-sm">可再生能源</span>
+                    </div>
+                    <div class="bg-success/20 text-success text-xs px-2 py-1 rounded">低风险</div>
+                  </label>
+
+                  <label class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input type="checkbox" class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                      <span class="ml-2 text-sm">气候峰会</span>
+                    </div>
+                    <div class="bg-accent/20 text-accent text-xs px-2 py-1 rounded">中风险</div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="border-t border-dark-300 pt-4">
+                <h4 class="font-medium text-sm mb-3">通知方式</h4>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">系统内通知</span>
+                  </label>
+
+                  <label class="flex items-center">
+                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">邮件提醒</span>
+                  </label>
+
+                  <label class="flex items-center">
+                    <input type="checkbox" class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
+                    <span class="ml-2 text-sm">短信提醒</span>
+                  </label>
+                </div>
+              </div>
+
+              <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors">
+                保存设置
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-dark-400 border-t border-dark-300 py-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center mb-4 md:mb-0">
+          <div class="bg-primary/20 p-2 rounded-lg mr-2">
+            <i class="fa fa-line-chart text-primary text-xl"></i>
+          </div>
+          <h2 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
+            气候变化舆情分析平台
+          </h2>
+        </div>
+
+        <div class="flex space-x-6 mb-4 md:mb-0">
+          <a href="#" class="text-dark-100 hover:text-white transition-colors">
+            <i class="fa fa-github text-xl"></i>
+          </a>
+          <a href="#" class="text-dark-100 hover:text-white transition-colors">
+            <i class="fa fa-twitter text-xl"></i>
+          </a>
+          <a href="#" class="text-dark-100 hover:text-white transition-colors">
+            <i class="fa fa-linkedin text-xl"></i>
+          </a>
+        </div>
+
+        <div class="text-dark-100 text-sm">
+          &copy; 2025 气候变化舆情分析平台. 保留所有权利.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 移动端菜单切换
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+
+        // 如果是移动端，点击导航后关闭菜单
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+
+    // 情感倾向环形图
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const ctx = document.getElementById('sentiment-donut');
+
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['消极', '中立', '积极'],
+            datasets: [{
+              data: [45, 30, 25],
+              backgroundColor: [
+                '#F53F3F',
+                '#FF7D00',
+                '#00B42A'
+              ],
+              borderWidth: 0,
+              cutout: '70%'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return `${context.label}: ${context.raw}%`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

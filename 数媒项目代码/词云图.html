@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+            <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts-wordcloud.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="cyber_fresh_breath_wordcloud" class="chart-container" style="width:800px; height:430px; "></div>
+    <script>
+        var chart_cyber_fresh_breath_wordcloud = echarts.init(
+            document.getElementById('cyber_fresh_breath_wordcloud'), 'light', {renderer: 'canvas'});
+            
+    // 词云呼吸动画
+    var chart = echarts.getInstanceByDom(document.getElementById('cyber_fresh_breath_wordcloud'));
+    if(chart){
+        // 先给每个词加唯一class，便于选取
+        setTimeout(function(){
+            let texts = document.querySelectorAll('#cyber_fresh_breath_wordcloud text');
+            texts.forEach((el,idx)=>{
+                el.classList.add('cyber-wordcloud-word-'+idx);
+                el.style.transition = "all 0.7s cubic-bezier(.4,0,.2,1)";
+            });
+            // 随机选几个词做呼吸
+            setInterval(function(){
+                texts.forEach(el=>{
+                    el.style.transform = "";
+                    el.style.filter = "";
+                });
+                let arr = Array.from(texts);
+                let n = Math.ceil(arr.length/3);
+                for(let i=0;i<n;i++){
+                    let idx = Math.floor(Math.random()*arr.length);
+                    let el = arr[idx];
+                    // 放大1.19倍+高亮
+                    el.style.transform = "scale(1.19)";
+                    el.style.filter = "drop-shadow(0 0 8px #37A2FFaa)";
+                }
+            }, 1100);
+        }, 800);
+
+        // 点击弹窗
+        chart.on('click', function(params){
+            if(params.name){
+                var comments = {
+                    "碳中和": "实现碳中和是国家的重要目标。",
+                    "极端高温": "极端高温事件频发，需关注气候变化。",
+                    "热浪": "今年热浪影响范围广泛。",
+                    "绿色能源": "绿色能源产业发展迅速。"
+                };
+                var txt = comments[params.name] || "暂无相关热评片段";
+                alert("【"+ params.name +"】 热门评论：\n" + txt);
+            }
+        });
+    }
+    
+        var option_cyber_fresh_breath_wordcloud = {
+    "backgroundColor": "#f4f8fb",
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "wordCloud",
+            "name": "\u9ad8\u9891\u8bcd",
+            "shape": "circle",
+            "rotationRange": [
+                -90,
+                90
+            ],
+            "rotationStep": 45,
+            "girdSize": 20,
+            "sizeRange": [
+                18,
+                66
+            ],
+            "data": [
+                {
+                    "name": "\u78b3\u4e2d\u548c",
+                    "value": 128,
+                    "textStyle": {
+                        "color": "rgb(87,147,68)"
+                    }
+                },
+                {
+                    "name": "\u6781\u7aef\u9ad8\u6e29",
+                    "value": 110,
+                    "textStyle": {
+                        "color": "rgb(0,39,69)"
+                    }
+                },
+                {
+                    "name": "\u7eff\u8272\u80fd\u6e90",
+                    "value": 98,
+                    "textStyle": {
+                        "color": "rgb(65,9,134)"
+                    }
+                },
+                {
+                    "name": "\u6c61\u67d3",
+                    "value": 87,
+                    "textStyle": {
+                        "color": "rgb(1,85,30)"
+                    }
+                },
+                {
+                    "name": "\u51cf\u6392",
+                    "value": 85,
+                    "textStyle": {
+                        "color": "rgb(134,31,24)"
+                    }
+                },
+                {
+                    "name": "\u70ed\u6d6a",
+                    "value": 77,
+                    "textStyle": {
+                        "color": "rgb(21,111,152)"
+                    }
+                },
+                {
+                    "name": "\u9002\u5e94",
+                    "value": 73,
+                    "textStyle": {
+                        "color": "rgb(14,89,83)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u5019\u53d8\u5316",
+                    "value": 70,
+                    "textStyle": {
+                        "color": "rgb(15,1,27)"
+                    }
+                },
+                {
+                    "name": "\u521b\u65b0",
+                    "value": 63,
+                    "textStyle": {
+                        "color": "rgb(59,51,75)"
+                    }
+                },
+                {
+                    "name": "\u5e72\u65f1",
+                    "value": 59,
+                    "textStyle": {
+                        "color": "rgb(45,83,90)"
+                    }
+                },
+                {
+                    "name": "\u65b0\u80fd\u6e90",
+                    "value": 54,
+                    "textStyle": {
+                        "color": "rgb(82,138,113)"
+                    }
+                },
+                {
+                    "name": "\u4f4e\u78b3",
+                    "value": 50,
+                    "textStyle": {
+                        "color": "rgb(102,114,148)"
+                    }
+                },
+                {
+                    "name": "\u707e\u5bb3",
+                    "value": 48,
+                    "textStyle": {
+                        "color": "rgb(34,137,133)"
+                    }
+                },
+                {
+                    "name": "\u653f\u7b56",
+                    "value": 45,
+                    "textStyle": {
+                        "color": "rgb(12,32,110)"
+                    }
+                },
+                {
+                    "name": "\u73af\u4fdd",
+                    "value": 43,
+                    "textStyle": {
+                        "color": "rgb(64,109,83)"
+                    }
+                },
+                {
+                    "name": "\u751f\u7269\u591a\u6837\u6027",
+                    "value": 41,
+                    "textStyle": {
+                        "color": "rgb(24,99,89)"
+                    }
+                },
+                {
+                    "name": "\u6d2a\u6c34",
+                    "value": 39,
+                    "textStyle": {
+                        "color": "rgb(106,160,29)"
+                    }
+                },
+                {
+                    "name": "\u6cbb\u7406",
+                    "value": 36,
+                    "textStyle": {
+                        "color": "rgb(77,155,144)"
+                    }
+                },
+                {
+                    "name": "\u9002\u5e94\u6027",
+                    "value": 34,
+                    "textStyle": {
+                        "color": "rgb(74,148,125)"
+                    }
+                },
+                {
+                    "name": "\u7ecf\u6d4e\u8f6c\u578b",
+                    "value": 30,
+                    "textStyle": {
+                        "color": "rgb(45,32,81)"
+                    }
+                },
+                {
+                    "name": "\u516c\u4f17\u53c2\u4e0e",
+                    "value": 27,
+                    "textStyle": {
+                        "color": "rgb(19,69,92)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u8c61\u707e\u5bb3",
+                    "value": 25,
+                    "textStyle": {
+                        "color": "rgb(24,45,135)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u6e29",
+                    "value": 22,
+                    "textStyle": {
+                        "color": "rgb(73,129,33)"
+                    }
+                },
+                {
+                    "name": "\u6e29\u5ba4\u6c14\u4f53",
+                    "value": 18,
+                    "textStyle": {
+                        "color": "rgb(22,11,70)"
+                    }
+                },
+                {
+                    "name": "\u5e94\u5bf9",
+                    "value": 16,
+                    "textStyle": {
+                        "color": "rgb(37,104,67)"
+                    }
+                }
+            ],
+            "drawOutOfBound": false,
+            "textStyle": {
+                "emphasis": {}
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [],
+            "selected": {},
+            "show": true,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "formatter": "{b} \u8bcd\u9891\uff1a{c}",
+        "textStyle": {
+            "color": "#222",
+            "fontSize": 14
+        },
+        "backgroundColor": "rgba(255,255,255,0.98)",
+        "borderColor": "#37A2FF",
+        "borderWidth": 1.2,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "title": [
+        {
+            "show": true,
+            "text": "\u52a8\u6001\u8bcd\u4e91\uff08\u79d1\u6280\u611f\u00b7\u660e\u4eae\u7b80\u6d01\uff09",
+            "target": "blank",
+            "subtext": "\u9ad8\u9891\u5173\u952e\u8bcd",
+            "subtarget": "blank",
+            "left": "center",
+            "top": "3%",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#222",
+                "fontWeight": "bold",
+                "fontFamily": "Consolas",
+                "fontSize": 20
+            },
+            "subtextStyle": {
+                "color": "#37A2FF",
+                "fontFamily": "Consolas",
+                "fontSize": 13
+            }
+        }
+    ]
+};
+        chart_cyber_fresh_breath_wordcloud.setOption(option_cyber_fresh_breath_wordcloud);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="tech_trend_chart" class="chart-container" style="width:100%; height:600px; "></div>
+    <script>
+        var chart_tech_trend_chart = echarts.init(
+            document.getElementById('tech_trend_chart'), 'dark', {renderer: 'canvas'});
+            
+            chart_tech_trend_chart.dispatchAction({
+                type: 'markLine',
+                seriesIndex: 0,
+                data: [{
+                    xAxis: '2025-03-15',
+                    label: {
+                        formatter: 'IPCC报告发布',
+                        position: 'start',
+                        color: '#ff6a00',
+                        fontSize: 10
+                    },
+                    lineStyle: {
+                        color: '#ff6a00',
+                        type: 'solid',
+                        width: 1
+                    }
+                }]
+            });
+        
+            
+            chart_tech_trend_chart.dispatchAction({
+                type: 'markLine',
+                seriesIndex: 0,
+                data: [{
+                    xAxis: '2025-04-22',
+                    label: {
+                        formatter: '地球日',
+                        position: 'start',
+                        color: '#ff6a00',
+                        fontSize: 10
+                    },
+                    lineStyle: {
+                        color: '#ff6a00',
+                        type: 'solid',
+                        width: 1
+                    }
+                }]
+            });
+        
+            
+            chart_tech_trend_chart.dispatchAction({
+                type: 'markLine',
+                seriesIndex: 0,
+                data: [{
+                    xAxis: '2025-05-12',
+                    label: {
+                        formatter: '飓风登陆',
+                        position: 'start',
+                        color: '#ff6a00',
+                        fontSize: 10
+                    },
+                    lineStyle: {
+                        color: '#ff6a00',
+                        type: 'solid',
+                        width: 1
+                    }
+                }]
+            });
+        
+            
+            chart_tech_trend_chart.dispatchAction({
+                type: 'markLine',
+                seriesIndex: 0,
+                data: [{
+                    xAxis: '2025-06-05',
+                    label: {
+                        formatter: '环境日',
+                        position: 'start',
+                        color: '#ff6a00',
+                        fontSize: 10
+                    },
+                    lineStyle: {
+                        color: '#ff6a00',
+                        type: 'solid',
+                        width: 1
+                    }
+                }]
+            });
+        
+        var option_tech_trend_chart = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "line",
+            "name": "\u8206\u60c5\u70ed\u5ea6",
+            "connectNulls": false,
+            "xAxisIndex": 0,
+            "symbol": "circle",
+            "symbolSize": 6,
+            "showSymbol": true,
+            "smooth": true,
+            "clip": true,
+            "step": false,
+            "stackStrategy": "samesign",
+            "data": [
+                [
+                    "2025-01-01",
+                    159
+                ],
+                [
+                    "2025-01-02",
+                    146
+                ],
+                [
+                    "2025-01-03",
+                    263
+                ],
+                [
+                    "2025-01-04",
+                    274
+                ],
+                [
+                    "2025-01-05",
+                    285
+                ],
+                [
+                    "2025-01-06",
+                    155
+                ],
+                [
+                    "2025-01-07",
+                    169
+                ],
+                [
+                    "2025-01-08",
+                    259
+                ],
+                [
+                    "2025-01-09",
+                    251
+                ],
+                [
+                    "2025-01-10",
+                    159
+                ],
+                [
+                    "2025-01-11",
+                    179
+                ],
+                [
+                    "2025-01-12",
+                    148
+                ],
+                [
+                    "2025-01-13",
+                    124
+                ],
+                [
+                    "2025-01-14",
+                    174
+                ],
+                [
+                    "2025-01-15",
+                    165
+                ],
+                [
+                    "2025-01-16",
+                    287
+                ],
+                [
+                    "2025-01-17",
+                    300
+                ],
+                [
+                    "2025-01-18",
+                    237
+                ],
+                [
+                    "2025-01-19",
+                    262
+                ],
+                [
+                    "2025-01-20",
+                    247
+                ],
+                [
+                    "2025-01-21",
+                    159
+                ],
+                [
+                    "2025-01-22",
+                    163
+                ],
+                [
+                    "2025-01-23",
+                    198
+                ],
+                [
+                    "2025-01-24",
+                    182
+                ],
+                [
+                    "2025-01-25",
+                    256
+                ],
+                [
+                    "2025-01-26",
+                    289
+                ],
+                [
+                    "2025-01-27",
+                    125
+                ],
+                [
+                    "2025-01-28",
+                    173
+                ],
+                [
+                    "2025-01-29",
+                    300
+                ],
+                [
+                    "2025-01-30",
+                    250
+                ],
+                [
+                    "2025-01-31",
+                    273
+                ],
+                [
+                    "2025-02-01",
+                    204
+                ],
+                [
+                    "2025-02-02",
+                    265
+                ],
+                [
+                    "2025-02-03",
+                    112
+                ],
+                [
+                    "2025-02-04",
+                    242
+                ],
+                [
+                    "2025-02-05",
+                    187
+                ],
+                [
+                    "2025-02-06",
+                    234
+                ],
+                [
+                    "2025-02-07",
+                    124
+                ],
+                [
+                    "2025-02-08",
+                    184
+                ],
+                [
+                    "2025-02-09",
+                    161
+                ],
+                [
+                    "2025-02-10",
+                    201
+                ],
+                [
+                    "2025-02-11",
+                    188
+                ],
+                [
+                    "2025-02-12",
+                    207
+                ],
+                [
+                    "2025-02-13",
+                    294
+                ],
+                [
+                    "2025-02-14",
+                    277
+                ],
+                [
+                    "2025-02-15",
+                    214
+                ],
+                [
+                    "2025-02-16",
+                    104
+                ],
+                [
+                    "2025-02-17",
+                    181
+                ],
+                [
+                    "2025-02-18",
+                    210
+                ],
+                [
+                    "2025-02-19",
+                    110
+                ],
+                [
+                    "2025-02-20",
+                    118
+                ],
+                [
+                    "2025-02-21",
+                    149
+                ],
+                [
+                    "2025-02-22",
+                    186
+                ],
+                [
+                    "2025-02-23",
+                    141
+                ],
+                [
+                    "2025-02-24",
+                    207
+                ],
+                [
+                    "2025-02-25",
+                    166
+                ],
+                [
+                    "2025-02-26",
+                    280
+                ],
+                [
+                    "2025-02-27",
+                    121
+                ],
+                [
+                    "2025-02-28",
+                    174
+                ],
+                [
+                    "2025-03-01",
+                    275
+                ],
+                [
+                    "2025-03-02",
+                    199
+                ],
+                [
+                    "2025-03-03",
+                    271
+                ],
+                [
+                    "2025-03-04",
+                    278
+                ],
+                [
+                    "2025-03-05",
+                    160
+                ],
+                [
+                    "2025-03-06",
+                    114
+                ],
+                [
+                    "2025-03-07",
+                    152
+                ],
+                [
+                    "2025-03-08",
+                    165
+                ],
+                [
+                    "2025-03-09",
+                    173
+                ],
+                [
+                    "2025-03-10",
+                    130
+                ],
+                [
+                    "2025-03-11",
+                    207
+                ],
+                [
+                    "2025-03-12",
+                    194
+                ],
+                [
+                    "2025-03-13",
+                    388
+                ],
+                [
+                    "2025-03-14",
+                    611
+                ],
+                [
+                    "2025-03-15",
+                    600
+                ],
+                [
+                    "2025-03-16",
+                    655
+                ],
+                [
+                    "2025-03-17",
+                    433
+                ],
+                [
+                    "2025-03-18",
+                    479
+                ],
+                [
+                    "2025-03-19",
+                    277
+                ],
+                [
+                    "2025-03-20",
+                    133
+                ],
+                [
+                    "2025-03-21",
+                    160
+                ],
+                [
+                    "2025-03-22",
+                    196
+                ],
+                [
+                    "2025-03-23",
+                    277
+                ],
+                [
+                    "2025-03-24",
+                    203
+                ],
+                [
+                    "2025-03-25",
+                    132
+                ],
+                [
+                    "2025-03-26",
+                    211
+                ],
+                [
+                    "2025-03-27",
+                    214
+                ],
+                [
+                    "2025-03-28",
+                    256
+                ],
+                [
+                    "2025-03-29",
+                    128
+                ],
+                [
+                    "2025-03-30",
+                    123
+                ],
+                [
+                    "2025-03-31",
+                    177
+                ],
+                [
+                    "2025-04-01",
+                    187
+                ],
+                [
+                    "2025-04-02",
+                    110
+                ],
+                [
+                    "2025-04-03",
+                    134
+                ],
+                [
+                    "2025-04-04",
+                    236
+                ],
+                [
+                    "2025-04-05",
+                    121
+                ],
+                [
+                    "2025-04-06",
+                    193
+                ],
+                [
+                    "2025-04-07",
+                    225
+                ],
+                [
+                    "2025-04-08",
+                    217
+                ],
+                [
+                    "2025-04-09",
+                    157
+                ],
+                [
+                    "2025-04-10",
+                    236
+                ],
+                [
+                    "2025-04-11",
+                    271
+                ],
+                [
+                    "2025-04-12",
+                    258
+                ],
+                [
+                    "2025-04-13",
+                    107
+                ],
+                [
+                    "2025-04-14",
+                    299
+                ],
+                [
+                    "2025-04-15",
+                    191
+                ],
+                [
+                    "2025-04-16",
+                    286
+                ],
+                [
+                    "2025-04-17",
+                    124
+                ],
+                [
+                    "2025-04-18",
+                    186
+                ],
+                [
+                    "2025-04-19",
+                    206
+                ],
+                [
+                    "2025-04-20",
+                    319
+                ],
+                [
+                    "2025-04-21",
+                    461
+                ],
+                [
+                    "2025-04-22",
+                    450
+                ],
+                [
+                    "2025-04-23",
+                    528
+                ],
+                [
+                    "2025-04-24",
+                    444
+                ],
+                [
+                    "2025-04-25",
+                    382
+                ],
+                [
+                    "2025-04-26",
+                    267
+                ],
+                [
+                    "2025-04-27",
+                    295
+                ],
+                [
+                    "2025-04-28",
+                    102
+                ],
+                [
+                    "2025-04-29",
+                    185
+                ],
+                [
+                    "2025-04-30",
+                    125
+                ],
+                [
+                    "2025-05-01",
+                    176
+                ],
+                [
+                    "2025-05-02",
+                    215
+                ],
+                [
+                    "2025-05-03",
+                    279
+                ],
+                [
+                    "2025-05-04",
+                    204
+                ],
+                [
+                    "2025-05-05",
+                    221
+                ],
+                [
+                    "2025-05-06",
+                    298
+                ],
+                [
+                    "2025-05-07",
+                    194
+                ],
+                [
+                    "2025-05-08",
+                    234
+                ],
+                [
+                    "2025-05-09",
+                    255
+                ],
+                [
+                    "2025-05-10",
+                    490
+                ],
+                [
+                    "2025-05-11",
+                    758
+                ],
+                [
+                    "2025-05-12",
+                    800
+                ],
+                [
+                    "2025-05-13",
+                    645
+                ],
+                [
+                    "2025-05-14",
+                    564
+                ],
+                [
+                    "2025-05-15",
+                    409
+                ],
+                [
+                    "2025-05-16",
+                    248
+                ],
+                [
+                    "2025-05-17",
+                    217
+                ],
+                [
+                    "2025-05-18",
+                    192
+                ],
+                [
+                    "2025-05-19",
+                    134
+                ],
+                [
+                    "2025-05-20",
+                    225
+                ],
+                [
+                    "2025-05-21",
+                    107
+                ],
+                [
+                    "2025-05-22",
+                    173
+                ],
+                [
+                    "2025-05-23",
+                    113
+                ],
+                [
+                    "2025-05-24",
+                    208
+                ],
+                [
+                    "2025-05-25",
+                    177
+                ],
+                [
+                    "2025-05-26",
+                    131
+                ],
+                [
+                    "2025-05-27",
+                    162
+                ],
+                [
+                    "2025-05-28",
+                    255
+                ],
+                [
+                    "2025-05-29",
+                    103
+                ],
+                [
+                    "2025-05-30",
+                    194
+                ],
+                [
+                    "2025-05-31",
+                    180
+                ],
+                [
+                    "2025-06-01",
+                    194
+                ],
+                [
+                    "2025-06-02",
+                    108
+                ],
+                [
+                    "2025-06-03",
+                    460
+                ],
+                [
+                    "2025-06-04",
+                    462
+                ],
+                [
+                    "2025-06-05",
+                    500
+                ],
+                [
+                    "2025-06-06",
+                    546
+                ],
+                [
+                    "2025-06-07",
+                    483
+                ],
+                [
+                    "2025-06-08",
+                    451
+                ],
+                [
+                    "2025-06-09",
+                    294
+                ],
+                [
+                    "2025-06-10",
+                    169
+                ],
+                [
+                    "2025-06-11",
+                    265
+                ],
+                [
+                    "2025-06-12",
+                    141
+                ],
+                [
+                    "2025-06-13",
+                    213
+                ],
+                [
+                    "2025-06-14",
+                    290
+                ],
+                [
+                    "2025-06-15",
+                    218
+                ],
+                [
+                    "2025-06-16",
+                    203
+                ],
+                [
+                    "2025-06-17",
+                    282
+                ],
+                [
+                    "2025-06-18",
+                    281
+                ],
+                [
+                    "2025-06-19",
+                    298
+                ],
+                [
+                    "2025-06-20",
+                    257
+                ],
+                [
+                    "2025-06-21",
+                    180
+                ],
+                [
+                    "2025-06-22",
+                    246
+                ],
+                [
+                    "2025-06-23",
+                    252
+                ],
+                [
+                    "2025-06-24",
+                    124
+                ],
+                [
+                    "2025-06-25",
+                    276
+                ],
+                [
+                    "2025-06-26",
+                    179
+                ],
+                [
+                    "2025-06-27",
+                    149
+                ],
+                [
+                    "2025-06-28",
+                    219
+                ],
+                [
+                    "2025-06-29",
+                    266
+                ]
+            ],
+            "hoverAnimation": true,
+            "label": {
+                "show": false,
+                "margin": 8,
+                "valueAnimation": false
+            },
+            "logBase": 10,
+            "seriesLayoutBy": "column",
+            "lineStyle": {
+                "show": true,
+                "width": 3,
+                "opacity": 1,
+                "curveness": 0,
+                "type": "solid"
+            },
+            "areaStyle": {
+                "opacity": 0,
+                "color":                 new echarts.graphic.LinearGradient(0, 0, 0, 1, [{                    offset: 0,                    color: 'rgba(0, 244, 255, 0.3)'                }, {                    offset: 1,                    color: 'rgba(0, 77, 167, 0.3)'                }])            
+            },
+            "markPoint": {
+                "symbol": "pin",
+                "symbolSize": 50,
+                "label": {
+                    "show": true,
+                    "position": "top",
+                    "color": "#fff",
+                    "margin": 8,
+                    "formatter":                 function(params) {                    return params.name + ': ' + params.value[1];                }            ,
+                    "valueAnimation": false
+                },
+                "data": [
+                    {
+                        "name": "\u6700\u5927\u503c",
+                        "type": "max"
+                    },
+                    {
+                        "name": "\u6700\u5c0f\u503c",
+                        "type": "min"
+                    }
+                ]
+            },
+            "markLine": {
+                "silent": false,
+                "symbol": [
+                    "none",
+                    "none"
+                ],
+                "precision": 2,
+                "label": {
+                    "show": true,
+                    "position": "middle",
+                    "color": "#fff",
+                    "margin": 8,
+                    "formatter":                 function(params) {                    return '\u5747\u503c: ' + Math.round(params.value * 100) / 100;                }            ,
+                    "valueAnimation": false
+                },
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "dashed",
+                    "color": "#ffcc00"
+                },
+                "data": [
+                    {
+                        "name": "\u5e73\u5747\u503c",
+                        "type": "average"
+                    }
+                ]
+            },
+            "itemStyle": {
+                "color":                 new echarts.graphic.LinearGradient(0, 0, 0, 1, [{                    offset: 0,                    color: 'rgba(0, 244, 255, 1)'                }, {                    offset: 1,                    color: 'rgba(0, 77, 167, 1)'                }])            
+            },
+            "zlevel": 0,
+            "z": 0,
+            "rippleEffect": {
+                "show": true,
+                "brushType": "stroke",
+                "scale": 2.5,
+                "period": 4
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u8206\u60c5\u70ed\u5ea6"
+            ],
+            "selected": {},
+            "show": false,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "axis",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "cross"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "color": "#fff"
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0.7)",
+        "borderColor": "rgba(50, 150, 250, 0.7)",
+        "borderWidth": 1,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "xAxis": [
+        {
+            "type": "category",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "axisLine": {
+                "show": true,
+                "onZero": true,
+                "onZeroAxisIndex": 0,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid",
+                    "color": "#4a657a"
+                }
+            },
+            "axisTick": {
+                "show": true,
+                "alignWithLabel": true,
+                "inside": false,
+                "length": 3,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid",
+                    "color": "#4a657a"
+                }
+            },
+            "axisLabel": {
+                "show": true,
+                "color": "#a7a7a7",
+                "margin": 8,
+                "interval": 30,
+                "fontSize": 10,
+                "valueAnimation": false
+            },
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "boundaryGap": false,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "dashed",
+                    "color": "rgba(50, 150, 250, 0.1)"
+                }
+            },
+            "animation": true,
+            "animationThreshold": 2000,
+            "animationDuration": 1000,
+            "animationEasing": "cubicOut",
+            "animationDelay": 0,
+            "animationDurationUpdate": 300,
+            "animationEasingUpdate": "cubicOut",
+            "animationDelayUpdate": 0,
+            "data": [
+                "2025-01-01",
+                "2025-01-02",
+                "2025-01-03",
+                "2025-01-04",
+                "2025-01-05",
+                "2025-01-06",
+                "2025-01-07",
+                "2025-01-08",
+                "2025-01-09",
+                "2025-01-10",
+                "2025-01-11",
+                "2025-01-12",
+                "2025-01-13",
+                "2025-01-14",
+                "2025-01-15",
+                "2025-01-16",
+                "2025-01-17",
+                "2025-01-18",
+                "2025-01-19",
+                "2025-01-20",
+                "2025-01-21",
+                "2025-01-22",
+                "2025-01-23",
+                "2025-01-24",
+                "2025-01-25",
+                "2025-01-26",
+                "2025-01-27",
+                "2025-01-28",
+                "2025-01-29",
+                "2025-01-30",
+                "2025-01-31",
+                "2025-02-01",
+                "2025-02-02",
+                "2025-02-03",
+                "2025-02-04",
+                "2025-02-05",
+                "2025-02-06",
+                "2025-02-07",
+                "2025-02-08",
+                "2025-02-09",
+                "2025-02-10",
+                "2025-02-11",
+                "2025-02-12",
+                "2025-02-13",
+                "2025-02-14",
+                "2025-02-15",
+                "2025-02-16",
+                "2025-02-17",
+                "2025-02-18",
+                "2025-02-19",
+                "2025-02-20",
+                "2025-02-21",
+                "2025-02-22",
+                "2025-02-23",
+                "2025-02-24",
+                "2025-02-25",
+                "2025-02-26",
+                "2025-02-27",
+                "2025-02-28",
+                "2025-03-01",
+                "2025-03-02",
+                "2025-03-03",
+                "2025-03-04",
+                "2025-03-05",
+                "2025-03-06",
+                "2025-03-07",
+                "2025-03-08",
+                "2025-03-09",
+                "2025-03-10",
+                "2025-03-11",
+                "2025-03-12",
+                "2025-03-13",
+                "2025-03-14",
+                "2025-03-15",
+                "2025-03-16",
+                "2025-03-17",
+                "2025-03-18",
+                "2025-03-19",
+                "2025-03-20",
+                "2025-03-21",
+                "2025-03-22",
+                "2025-03-23",
+                "2025-03-24",
+                "2025-03-25",
+                "2025-03-26",
+                "2025-03-27",
+                "2025-03-28",
+                "2025-03-29",
+                "2025-03-30",
+                "2025-03-31",
+                "2025-04-01",
+                "2025-04-02",
+                "2025-04-03",
+                "2025-04-04",
+                "2025-04-05",
+                "2025-04-06",
+                "2025-04-07",
+                "2025-04-08",
+                "2025-04-09",
+                "2025-04-10",
+                "2025-04-11",
+                "2025-04-12",
+                "2025-04-13",
+                "2025-04-14",
+                "2025-04-15",
+                "2025-04-16",
+                "2025-04-17",
+                "2025-04-18",
+                "2025-04-19",
+                "2025-04-20",
+                "2025-04-21",
+                "2025-04-22",
+                "2025-04-23",
+                "2025-04-24",
+                "2025-04-25",
+                "2025-04-26",
+                "2025-04-27",
+                "2025-04-28",
+                "2025-04-29",
+                "2025-04-30",
+                "2025-05-01",
+                "2025-05-02",
+                "2025-05-03",
+                "2025-05-04",
+                "2025-05-05",
+                "2025-05-06",
+                "2025-05-07",
+                "2025-05-08",
+                "2025-05-09",
+                "2025-05-10",
+                "2025-05-11",
+                "2025-05-12",
+                "2025-05-13",
+                "2025-05-14",
+                "2025-05-15",
+                "2025-05-16",
+                "2025-05-17",
+                "2025-05-18",
+                "2025-05-19",
+                "2025-05-20",
+                "2025-05-21",
+                "2025-05-22",
+                "2025-05-23",
+                "2025-05-24",
+                "2025-05-25",
+                "2025-05-26",
+                "2025-05-27",
+                "2025-05-28",
+                "2025-05-29",
+                "2025-05-30",
+                "2025-05-31",
+                "2025-06-01",
+                "2025-06-02",
+                "2025-06-03",
+                "2025-06-04",
+                "2025-06-05",
+                "2025-06-06",
+                "2025-06-07",
+                "2025-06-08",
+                "2025-06-09",
+                "2025-06-10",
+                "2025-06-11",
+                "2025-06-12",
+                "2025-06-13",
+                "2025-06-14",
+                "2025-06-15",
+                "2025-06-16",
+                "2025-06-17",
+                "2025-06-18",
+                "2025-06-19",
+                "2025-06-20",
+                "2025-06-21",
+                "2025-06-22",
+                "2025-06-23",
+                "2025-06-24",
+                "2025-06-25",
+                "2025-06-26",
+                "2025-06-27",
+                "2025-06-28",
+                "2025-06-29"
+            ]
+        }
+    ],
+    "yAxis": [
+        {
+            "type": "value",
+            "name": "\u8206\u60c5\u70ed\u5ea6",
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "nameTextStyle": {
+                "color": "#a7a7a7",
+                "padding": [
+                    0,
+                    0,
+                    0,
+                    40
+                ]
+            },
+            "gridIndex": 0,
+            "axisLine": {
+                "show": true,
+                "onZero": true,
+                "onZeroAxisIndex": 0,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid",
+                    "color": "#4a657a"
+                }
+            },
+            "axisTick": {
+                "show": true,
+                "alignWithLabel": false,
+                "inside": false,
+                "length": 3,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid",
+                    "color": "#4a657a"
+                }
+            },
+            "axisLabel": {
+                "show": true,
+                "color": "#a7a7a7",
+                "margin": 8,
+                "fontSize": 10,
+                "valueAnimation": false
+            },
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "min": 0,
+            "max": 1000,
+            "minInterval": 0,
+            "splitLine": {
+                "show": true,
+                "lineStyle": {
+                    "show": true,
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "dashed",
+                    "color": "rgba(50, 150, 250, 0.1)"
+                }
+            },
+            "animation": true,
+            "animationThreshold": 2000,
+            "animationDuration": 1000,
+            "animationEasing": "cubicOut",
+            "animationDelay": 0,
+            "animationDurationUpdate": 300,
+            "animationEasingUpdate": "cubicOut",
+            "animationDelayUpdate": 0
+        }
+    ],
+    "title": [
+        {
+            "show": true,
+            "text": "\u8206\u60c5\u70ed\u5ea6\u65f6\u95f4\u8d8b\u52bf\u5206\u6790",
+            "target": "blank",
+            "subtext": "2025\u5e741\u6708-6\u6708",
+            "subtarget": "blank",
+            "left": "center",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#fff",
+                "fontWeight": "bold",
+                "fontFamily": "Microsoft YaHei",
+                "fontSize": 24
+            },
+            "subtextStyle": {
+                "color": "#ccc",
+                "fontSize": 14
+            }
+        }
+    ],
+    "toolbox": {
+        "show": true,
+        "orient": "horizontal",
+        "itemSize": 15,
+        "itemGap": 10,
+        "left": "80%",
+        "right": "20px",
+        "top": "10px",
+        "feature": {
+            "dataZoom": {
+                "yAxisIndex": "none"
+            },
+            "restore": {},
+            "saveAsImage": {
+                "pixelRatio": 2,
+                "title": "\u4fdd\u5b58\u56fe\u7247",
+                "name": "\u8206\u60c5\u70ed\u5ea6\u8d8b\u52bf\u56fe"
+            }
+        }
+    },
+    "dataZoom": [
+        {
+            "type": "slider",
+            "xaxis_index": [
+                0
+            ],
+            "range_start": 0,
+            "range_end": 100,
+            "handleIcon": "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+            "handleSize": "80%",
+            "handleStyle": {
+                "color": "rgba(0, 150, 250, 0.7)",
+                "borderColor": "rgba(0, 150, 250, 0.7)",
+                "borderWidth": 1
+            }
+        },
+        {
+            "type": "inside",
+            "xaxis_index": [
+                0
+            ],
+            "range_start": 0,
+            "range_end": 100
+        }
+    ]
+};
+        chart_tech_trend_chart.setOption(option_tech_trend_chart);
+            window.addEventListener('resize', function(){
+                chart_tech_trend_chart.resize();
+            })
+    </script>
+</body>
+</html>

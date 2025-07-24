@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts-wordcloud.min.js"></script>
+</head>
+<body>
+    <div id="cyber_dynamic_wordcloud" class="chart-container" style="width:750px; height:420px;"></div>
+    <script>
+        // 1. 初始化图表时不指定主题（避免主题样式冲突）
+        var chart_cyber_dynamic_wordcloud = echarts.init(
+            document.getElementById('cyber_dynamic_wordcloud'),
+            null,  // 不使用预设主题
+            {renderer: 'canvas'}
+        );
+
+        // 2. 修正渐变背景配置（补全逗号，确保语法正确）
+        chart_cyber_dynamic_wordcloud.setOption({
+            // 3. 直接在这里设置渐变背景，替代原有的固定颜色
+            backgroundColor: new echarts.graphic.LinearGradient(
+                1, 0, 1, 1,  // 从左上角到右下角的对角线渐变
+                [
+                    { offset: 0, color: '#E6E6FA' },   // 浅紫色（起点）
+                    { offset: 0.5, color: '#C8A2C8' }, // 粉紫色（中点）
+                    { offset: 1, color: '#6C2BD9' }    // 电紫色（终点）
+                ]
+            ),
+            animation: true,
+            animationThreshold: 2000,
+            animationDuration: 1000,
+            animationEasing: "cubicOut",
+            animationDelay: 0,
+            animationDurationUpdate: 300,
+            animationEasingUpdate: "cubicOut",
+            animationDelayUpdate: 0,
+            aria: {
+                enabled: false
+            },
+            series: [
+                {
+                    "type": "wordCloud",
+                    "name": "\u9ad8\u9891\u8bcd",
+                    "shape": "circle",
+                    "rotationRange": [-90, 90],
+                    "rotationStep": 45,
+                    "gridSize": 12,  // 调整词间距
+                    "sizeRange": [18, 66],
+                    "data": [
+                        {'name': '碳中和', 'value': 128, 'textStyle': {'color': '#4effd2'}},
+                        {'name': '极端高温', 'value': 110, 'textStyle': {'color': '#ff6b9b'}},
+                        {'name': '绿色能源', 'value': 98, 'textStyle': {'color': '#7affd7'}},
+                        {'name': '污染', 'value': 87, 'textStyle': {'color': '#ff8a7a'}},
+                        {'name': '减排', 'value': 85, 'textStyle': {'color': '#7affd7'}},
+                        {'name': '热浪', 'value': 77, 'textStyle': {'color': '#ff6b9b'}},
+                        {'name': '适应', 'value': 73, 'textStyle': {'color': '#a3a3c2'}},
+                        {'name': '气候变化', 'value': 70, 'textStyle': {'color': '#a3a3c2'}},
+                        {'name': '应急', 'value': 66, 'textStyle': {'color': '#7aeca6'}},
+                        {'name': '创新', 'value': 63, 'textStyle': {'color': '#8ae7ff'}},
+                        {'name': '干旱', 'value': 59, 'textStyle': {'color': '#f93c7a'}},
+                        {'name': '新能源', 'value': 54, 'textStyle': {'color': '#34eaff'}},
+                        {'name': '低碳', 'value': 50, 'textStyle': {'color': '#7affd7'}},
+                        {'name': '灾害', 'value': 48, 'textStyle': {'color': '#f93c7a'}},
+                        {'name': '政策', 'value': 45, 'textStyle': {'color': '#7aeca6'}},
+                        {'name': '环保', 'value': 43, 'textStyle': {'color': '#7affd7'}},
+                        {'name': '生物多样性', 'value': 41, 'textStyle': {'color': '#8ae7ff'}},
+                        {'name': '洪水', 'value': 39, 'textStyle': {'color': '#f93c7a'}},
+                        {'name': '治理', 'value': 36, 'textStyle': {'color': '#b388ff'}},
+                        {'name': '适应性', 'value': 34, 'textStyle': {'color': '#7aeca6'}},
+                        {'name': '经济转型', 'value': 30, 'textStyle': {'color': '#34eaff'}},
+                        {'name': '公众参与', 'value': 27, 'textStyle': {'color': '#34eaff'}},
+                        {'name': '气象灾害', 'value': 25, 'textStyle': {'color': '#f93c7a'}},
+                        {'name': '气温', 'value': 22, 'textStyle': {'color': '#c9cfff'}},
+                        {'name': '温室气体', 'value': 18, 'textStyle': {'color': '#7aeca6'}},
+                        {'name': '应对', 'value': 16, 'textStyle': {'color': '#7aeca6'}}
+                    ],
+                    "drawOutOfBound": false,
+                    "textStyle": {
+                        "fontFamily": "Consolas, 微软雅黑, Arial",
+                        "fontWeight": "bold",
+                        "shadowBlur": 10,
+                        "shadowColor": "#c084fc"  // 紫色阴影
+                    },
+                    "emphasis": {
+                        "focus": "self",
+                        "textStyle": {
+                            "shadowBlur": 20,
+                            "shadowColor": "#f0abfc",  // 高亮时的浅紫色阴影
+                            "color": "#fff"
+                        }
+                    },
+                    "animation": true,
+                    "animationDuration": 1800,
+                    "animationEasing": "elasticOut"
+                }
+            ],
+            "legend": [
+                {
+                    "data": [],
+                    "selected": {},
+                    "show": false  // 隐藏图例（原数据为空）
+                }
+            ],
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove|click",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "formatter": "{b} \u8bcd\u9891\uff1a{c}",
+                "textStyle": {
+                    "color": "#72ed41",
+                    "fontSize": 13
+                },
+                "backgroundColor": "rgba(172,131,241,0.9)",  // 紫色半透明背景
+                "borderColor": "#C8A2C8",
+                "borderWidth": 1.2
+            },
+            "title": [
+                {
+                    "show": true,
+                    "text": "\u9ad8\u9891\u5173\u952e\u8bcd\u4e0e\u60c5\u611f\u6620\u5c04",
+                    "left": "center",
+                    "top": "3%",
+                    "textStyle": {
+                        "color": "#fffefe",  // 白色标题，与背景对比
+                        "fontWeight": "bold",
+                        "fontFamily": "Consolas",
+                        "fontSize": 20
+                    }
+                }
+            ]
+        });
+
+        // 点击事件保持不变
+        chart_cyber_dynamic_wordcloud.on('click', function(params){
+            if(params.name){
+                var comments = {
+                    "热浪": "今年热浪频发，气温屡创新高。",
+                    "碳中和": "实现碳中和需要全社会共同努力。",
+                    "极端高温": "极端高温让人们更加关注气候变化。",
+                    "绿色能源": "绿色能源发展势头强劲。",
+                    "污染": "部分城市污染问题依然严重。",
+                };
+                var txt = comments[params.name] || "暂无相关热评片段";
+                alert("【"+ params.name +"】 热门评论：\n" + txt);
+            }
+        });
+    </script>
+</body>
+</html>

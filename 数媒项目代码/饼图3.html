@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="climate_pie" class="chart-container" style="width:630px; height:420px; "></div>
+    <script>
+        var chart_climate_pie = echarts.init(
+            document.getElementById('climate_pie'), 'dark', {renderer: 'canvas'});
+            
+function initGlow(chartId) {
+    var chart = echarts.getInstanceByDom(document.getElementById(chartId));
+    chart.setOption({
+        graphic: [{
+            type: 'rect',
+            left: 'center',
+            top: 'center',
+            shape: { width: 280, height: 280 },  // 缩小光环
+            style: {
+                fill: new echarts.graphic.RadialGradient(0.5, 0.5, 0.8, [{
+                    offset: 0,
+                    color: 'rgba(0, 242, 254, 0.1)'
+                }, {
+                    offset: 1,
+                    color: 'rgba(0, 120, 255, 0)'
+                }])
+            },
+            silent: true
+        }]
+    });
+}
+initGlow('climate_pie');
+
+        var option_climate_pie = {
+    "backgroundColor": "#0F1C3C",
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "pie",
+            "colorBy": "data",
+            "legendHoverLink": true,
+            "selectedMode": false,
+            "selectedOffset": 10,
+            "clockwise": true,
+            "startAngle": 90,
+            "minAngle": 0,
+            "minShowLabelAngle": 0,
+            "avoidLabelOverlap": true,
+            "stillShowZeroSum": true,
+            "percentPrecision": 2,
+            "showEmptyCircle": true,
+            "emptyCircleStyle": {
+                "color": "lightgray",
+                "borderColor": "#000",
+                "borderWidth": 0,
+                "borderType": "solid",
+                "borderDashOffset": 0,
+                "borderCap": "butt",
+                "borderJoin": "bevel",
+                "borderMiterLimit": 10,
+                "opacity": 1
+            },
+            "data": [
+                {
+                    "name": "\u6781\u7aef\u5929\u6c14\u4e8b\u4ef6",
+                    "value": 35
+                },
+                {
+                    "name": "\u51cf\u6392\u653f\u7b56",
+                    "value": 25
+                },
+                {
+                    "name": "\u53ef\u518d\u751f\u80fd\u6e90",
+                    "value": 20
+                },
+                {
+                    "name": "\u6d77\u5e73\u9762\u4e0a\u5347",
+                    "value": 10
+                },
+                {
+                    "name": "\u78b3\u6355\u83b7\u6280\u672f",
+                    "value": 10
+                }
+            ],
+            "radius": [
+                "40%",
+                "75%"
+            ],
+            "center": [
+                "50%",
+                "50%"
+            ],
+            "roseType": "radius",
+            "label": {
+                "show": true,
+                "position": "outside",
+                "margin": 8,
+                "formatter": "{b|{b}}\n{d}%",
+                "rich": {
+                    "b": {
+                        "color": "#FFF",
+                        "fontSize": 10
+                    }
+                },
+                "valueAnimation": false
+            },
+            "labelLine": {
+                "show": true,
+                "showAbove": false,
+                "length": 15,
+                "length2": 15,
+                "smooth": false,
+                "minTurnAngle": 90,
+                "maxSurfaceAngle": 90
+            },
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove|click",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "showContent": true,
+                "alwaysShowContent": false,
+                "showDelay": 0,
+                "hideDelay": 100,
+                "enterable": false,
+                "confine": false,
+                "appendToBody": false,
+                "transitionDuration": 0.4,
+                "formatter": "<b>{b}</b><br/>\u5360\u6bd4: {d}%<br/>\u8ba8\u8bba\u91cf: {c}k",
+                "textStyle": {
+                    "fontSize": 10
+                },
+                "backgroundColor": "rgba(0,0,0,0.7)",
+                "borderColor": "#0078FF",
+                "borderWidth": 0,
+                "padding": 5,
+                "order": "seriesAsc"
+            },
+            "itemStyle": {
+                "borderColor": "#0F1C3C",
+                "borderWidth": 1.5,
+                "opacity": 0.9
+            },
+            "rippleEffect": {
+                "show": true,
+                "brushType": "stroke",
+                "scale": 4,
+                "period": 4
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u6781\u7aef\u5929\u6c14\u4e8b\u4ef6",
+                "\u51cf\u6392\u653f\u7b56",
+                "\u53ef\u518d\u751f\u80fd\u6e90",
+                "\u6d77\u5e73\u9762\u4e0a\u5347",
+                "\u78b3\u6355\u83b7\u6280\u672f"
+            ],
+            "selected": {},
+            "show": true,
+            "right": "5%",
+            "top": "center",
+            "orient": "vertical",
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 12,
+            "itemHeight": 12,
+            "textStyle": {
+                "color": "#FFF",
+                "fontSize": 10
+            },
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "color": [
+        "#00F2FE",
+        "#4FACFE",
+        "#16BFFD",
+        "#0078FF",
+        "#0059B2"
+    ],
+    "title": [
+        {
+            "show": true,
+            "text": "\u6c14\u5019\u53d8\u5316\u8206\u60c5\u4e3b\u9898",
+            "target": "blank",
+            "subtext": "CLIMATE CHANGE PUBLIC OPINION ANALYSIS",
+            "subtarget": "blank",
+            "top": "5%",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#FFF",
+                "fontWeight": "bold",
+                "fontFamily": "Arial",
+                "fontSize": 16
+            },
+            "subtextStyle": {
+                "color": "#4FACFE",
+                "fontSize": 10
+            }
+        }
+    ],
+    "toolbox": {
+        "show": true,
+        "orient": "horizontal",
+        "itemSize": 15,
+        "itemGap": 10,
+        "left": "80%",
+        "feature": {
+            "saveAsImage": {
+                "type": "png",
+                "backgroundColor": "auto",
+                "connectedBackgroundColor": "#fff",
+                "show": true,
+                "title": "\u4fdd\u5b58\u4e3a\u56fe\u7247",
+                "pixelRatio": 1
+            },
+            "restore": {
+                "show": true,
+                "title": "\u8fd8\u539f"
+            },
+            "dataView": {
+                "show": true,
+                "title": "\u6570\u636e\u89c6\u56fe",
+                "readOnly": false,
+                "lang": [
+                    "\u6570\u636e\u89c6\u56fe",
+                    "\u5173\u95ed",
+                    "\u5237\u65b0"
+                ],
+                "backgroundColor": "#fff",
+                "textareaColor": "#fff",
+                "textareaBorderColor": "#333",
+                "textColor": "#000",
+                "buttonColor": "#c23531",
+                "buttonTextColor": "#fff"
+            },
+            "dataZoom": {
+                "show": true,
+                "title": {
+                    "zoom": "\u533a\u57df\u7f29\u653e",
+                    "back": "\u533a\u57df\u7f29\u653e\u8fd8\u539f"
+                },
+                "icon": {},
+                "filterMode": "filter"
+            },
+            "magicType": {
+                "show": true,
+                "type": [
+                    "line",
+                    "bar",
+                    "stack",
+                    "tiled"
+                ],
+                "title": {
+                    "line": "\u5207\u6362\u4e3a\u6298\u7ebf\u56fe",
+                    "bar": "\u5207\u6362\u4e3a\u67f1\u72b6\u56fe",
+                    "stack": "\u5207\u6362\u4e3a\u5806\u53e0",
+                    "tiled": "\u5207\u6362\u4e3a\u5e73\u94fa"
+                },
+                "icon": {}
+            }
+        }
+    }
+};
+        chart_climate_pie.setOption(option_climate_pie);
+    </script>
+</body>
+</html>

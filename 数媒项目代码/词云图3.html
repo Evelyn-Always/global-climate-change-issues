@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+            <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts-wordcloud.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="cyber_dream_purple_wordcloud" class="chart-container" style="width:900px; height:480px; "></div>
+    <script>
+        var chart_cyber_dream_purple_wordcloud = echarts.init(
+            document.getElementById('cyber_dream_purple_wordcloud'), 'dark', {renderer: 'canvas'});
+            
+    // 词云每个词轻微浮动/呼吸动画
+    var chart = echarts.getInstanceByDom(document.getElementById('cyber_dream_purple_wordcloud'));
+    if(chart){
+        setTimeout(function(){
+            let texts = document.querySelectorAll('#cyber_dream_purple_wordcloud text');
+            texts.forEach((el,idx)=>{
+                el.classList.add('cyber-purple-word-'+idx);
+                el.style.transition = "all 1s cubic-bezier(.4,0,.2,1)";
+            });
+            setInterval(function(){
+                texts.forEach((el, i) => {
+                    // 让每个词都以不同相位做上下浮动/轻微缩放
+                    let t = Date.now()/900 + i*0.7;
+                    let dy = Math.sin(t)*6.8; // 上下浮动幅度
+                    let scale = 1 + 0.08*Math.sin(t/2.1+i); // 呼吸缩放
+                    el.style.transform = `translateY(${dy}px) scale(${scale})`;
+                    el.style.filter = "drop-shadow(0 0 14px #3726fa88)";
+                });
+            }, 70);
+        }, 700);
+
+        // 点击弹窗
+        chart.on('click', function(params){
+            if(params.name){
+                var comments = {
+                    "碳中和": "实现碳中和是国家的重要目标。",
+                    "极端高温": "极端高温事件频发，需关注气候变化。",
+                    "热浪": "今年热浪影响范围广泛。",
+                    "绿色能源": "绿色能源产业发展迅速。"
+                };
+                var txt = comments[params.name] || "暂无相关热评片段";
+                alert("【"+ params.name +"】 热门评论：\n" + txt);
+            }
+        });
+    }
+    
+        var option_cyber_dream_purple_wordcloud = {
+    "backgroundColor": "#141537",
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "wordCloud",
+            "name": "\u9ad8\u9891\u8bcd",
+            "shape": "circle",
+            "rotationRange": [
+                -90,
+                90
+            ],
+            "rotationStep": 45,
+            "girdSize": 20,
+            "sizeRange": [
+                23,
+                74
+            ],
+            "data": [
+                {
+                    "name": "\u78b3\u4e2d\u548c",
+                    "value": 128,
+                    "textStyle": {
+                        "color": "rgb(143,32,87)"
+                    }
+                },
+                {
+                    "name": "\u6781\u7aef\u9ad8\u6e29",
+                    "value": 110,
+                    "textStyle": {
+                        "color": "rgb(152,36,134)"
+                    }
+                },
+                {
+                    "name": "\u7eff\u8272\u80fd\u6e90",
+                    "value": 98,
+                    "textStyle": {
+                        "color": "rgb(100,78,17)"
+                    }
+                },
+                {
+                    "name": "\u6c61\u67d3",
+                    "value": 87,
+                    "textStyle": {
+                        "color": "rgb(54,132,141)"
+                    }
+                },
+                {
+                    "name": "\u51cf\u6392",
+                    "value": 85,
+                    "textStyle": {
+                        "color": "rgb(45,153,60)"
+                    }
+                },
+                {
+                    "name": "\u70ed\u6d6a",
+                    "value": 77,
+                    "textStyle": {
+                        "color": "rgb(149,114,52)"
+                    }
+                },
+                {
+                    "name": "\u9002\u5e94",
+                    "value": 73,
+                    "textStyle": {
+                        "color": "rgb(88,105,128)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u5019\u53d8\u5316",
+                    "value": 70,
+                    "textStyle": {
+                        "color": "rgb(18,115,61)"
+                    }
+                },
+                {
+                    "name": "\u5e94\u6025",
+                    "value": 66,
+                    "textStyle": {
+                        "color": "rgb(33,37,101)"
+                    }
+                },
+                {
+                    "name": "\u521b\u65b0",
+                    "value": 63,
+                    "textStyle": {
+                        "color": "rgb(150,102,46)"
+                    }
+                },
+                {
+                    "name": "\u5e72\u65f1",
+                    "value": 59,
+                    "textStyle": {
+                        "color": "rgb(42,146,122)"
+                    }
+                },
+                {
+                    "name": "\u65b0\u80fd\u6e90",
+                    "value": 54,
+                    "textStyle": {
+                        "color": "rgb(55,62,4)"
+                    }
+                },
+                {
+                    "name": "\u4f4e\u78b3",
+                    "value": 50,
+                    "textStyle": {
+                        "color": "rgb(16,49,135)"
+                    }
+                },
+                {
+                    "name": "\u707e\u5bb3",
+                    "value": 48,
+                    "textStyle": {
+                        "color": "rgb(16,67,39)"
+                    }
+                },
+                {
+                    "name": "\u653f\u7b56",
+                    "value": 45,
+                    "textStyle": {
+                        "color": "rgb(32,126,6)"
+                    }
+                },
+                {
+                    "name": "\u73af\u4fdd",
+                    "value": 43,
+                    "textStyle": {
+                        "color": "rgb(23,62,22)"
+                    }
+                },
+                {
+                    "name": "\u751f\u7269\u591a\u6837\u6027",
+                    "value": 41,
+                    "textStyle": {
+                        "color": "rgb(70,53,83)"
+                    }
+                },
+                {
+                    "name": "\u6d2a\u6c34",
+                    "value": 39,
+                    "textStyle": {
+                        "color": "rgb(6,61,127)"
+                    }
+                },
+                {
+                    "name": "\u6cbb\u7406",
+                    "value": 36,
+                    "textStyle": {
+                        "color": "rgb(15,77,70)"
+                    }
+                },
+                {
+                    "name": "\u9002\u5e94\u6027",
+                    "value": 34,
+                    "textStyle": {
+                        "color": "rgb(57,16,67)"
+                    }
+                },
+                {
+                    "name": "\u7ecf\u6d4e\u8f6c\u578b",
+                    "value": 30,
+                    "textStyle": {
+                        "color": "rgb(46,1,90)"
+                    }
+                },
+                {
+                    "name": "\u516c\u4f17\u53c2\u4e0e",
+                    "value": 27,
+                    "textStyle": {
+                        "color": "rgb(153,158,79)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u8c61\u707e\u5bb3",
+                    "value": 25,
+                    "textStyle": {
+                        "color": "rgb(97,156,122)"
+                    }
+                },
+                {
+                    "name": "\u6c14\u6e29",
+                    "value": 22,
+                    "textStyle": {
+                        "color": "rgb(39,69,121)"
+                    }
+                },
+                {
+                    "name": "\u6e29\u5ba4\u6c14\u4f53",
+                    "value": 18,
+                    "textStyle": {
+                        "color": "rgb(33,78,99)"
+                    }
+                },
+                {
+                    "name": "\u5e94\u5bf9",
+                    "value": 16,
+                    "textStyle": {
+                        "color": "rgb(8,6,142)"
+                    }
+                }
+            ],
+            "drawOutOfBound": false,
+            "textStyle": {
+                "emphasis": {}
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [],
+            "selected": {},
+            "show": true,
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 25,
+            "itemHeight": 14,
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "formatter": "{b} \u8bcd\u9891\uff1a{c}",
+        "textStyle": {
+            "color": "#ffe956",
+            "fontSize": 15
+        },
+        "backgroundColor": "rgba(30,25,60,0.96)",
+        "borderColor": "#4a3aff",
+        "borderWidth": 1.2,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "title": [
+        {
+            "show": true,
+            "text": "\u52a8\u6001\u8bcd\u4e91 \u00b7 \u8d5b\u535a\u7d2b\u8272\u7cfb",
+            "target": "blank",
+            "subtext": "\u9ad8\u9891\u5173\u952e\u8bcd",
+            "subtarget": "blank",
+            "left": "center",
+            "top": "4%",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#8a62fa",
+                "fontWeight": "bold",
+                "fontFamily": "Consolas",
+                "fontSize": 21
+            },
+            "subtextStyle": {
+                "color": "#55e8ff",
+                "fontFamily": "Consolas",
+                "fontSize": 13
+            }
+        }
+    ]
+};
+        chart_cyber_dream_purple_wordcloud.setOption(option_cyber_dream_purple_wordcloud);
+    </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+
+    
+</head>
+<body >
+    <div id="cyber_pie" class="chart-container" style="width:800px; height:500px; "></div>
+    <script>
+        var chart_cyber_pie = echarts.init(
+            document.getElementById('cyber_pie'), 'dark', {renderer: 'canvas'});
+            
+    var chart = echarts.getInstanceByDom(document.getElementById('cyber_pie'));
+    if(chart){
+        chart.setOption({
+            graphic: [{
+                type: 'circle',
+                left: 'center',
+                top: 'center',
+                z: -1,
+                shape: { r: 130 },
+                style: {
+                    fill: {
+                        type: 'radial',
+                        x: 0.5,
+                        y: 0.5,
+                        r: 0.5,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(0,242,254,0.18)' },
+                            { offset: 1, color: 'rgba(15,28,60,0)' }
+                        ]
+                    },
+                    shadowColor: 'rgba(0,242,254,0.35)',
+                    shadowBlur: 60
+                }
+            }]
+        });
+    }
+    
+        var option_cyber_pie = {
+    "backgroundColor": "#0f1c3c",
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "pie",
+            "name": "SENTIMENT",
+            "colorBy": "data",
+            "legendHoverLink": true,
+            "selectedMode": false,
+            "selectedOffset": 10,
+            "clockwise": true,
+            "startAngle": 90,
+            "minAngle": 0,
+            "minShowLabelAngle": 0,
+            "avoidLabelOverlap": true,
+            "stillShowZeroSum": true,
+            "percentPrecision": 2,
+            "showEmptyCircle": true,
+            "emptyCircleStyle": {
+                "color": "lightgray",
+                "borderColor": "#000",
+                "borderWidth": 0,
+                "borderType": "solid",
+                "borderDashOffset": 0,
+                "borderCap": "butt",
+                "borderJoin": "bevel",
+                "borderMiterLimit": 10,
+                "opacity": 1
+            },
+            "data": [
+                {
+                    "name": "\u79ef\u6781",
+                    "value": 20
+                },
+                {
+                    "name": "\u6d88\u6781",
+                    "value": 50
+                },
+                {
+                    "name": "\u4e2d\u7acb",
+                    "value": 30
+                }
+            ],
+            "radius": [
+                "45%",
+                "68%"
+            ],
+            "center": [
+                "50%",
+                "54%"
+            ],
+            "label": {
+                "show": true,
+                "position": "outside",
+                "margin": 8,
+                "fontSize": 15,
+                "formatter": "{b|{b}}\n{d}%",
+                "rich": {
+                    "b": {
+                        "color": "#00f2fe",
+                        "fontWeight": "bold",
+                        "fontSize": 16,
+                        "textBorderColor": "#0ff",
+                        "textBorderWidth": 1
+                    }
+                },
+                "valueAnimation": false
+            },
+            "labelLine": {
+                "show": true,
+                "showAbove": false,
+                "length": 15,
+                "length2": 15,
+                "smooth": false,
+                "minTurnAngle": 90,
+                "maxSurfaceAngle": 90
+            },
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove|click",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "showContent": true,
+                "alwaysShowContent": false,
+                "showDelay": 0,
+                "hideDelay": 100,
+                "enterable": false,
+                "confine": false,
+                "appendToBody": false,
+                "transitionDuration": 0.4,
+                "formatter": "\n            <div style=\"font-family: Consolas; background: rgba(5,20,40,0.95); border: 1.5px solid #00f2fe; padding: 12px; border-radius: 7px;\">\n                <span style='color: {a}; font-weight:bold;'>{b}</span><br/>\n                \u25b8 Value: <b>{c}%</b><br/>\n                \u25b8 Ratio: <b>{d}%</b>\n            </div>\n            ",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 13
+                },
+                "backgroundColor": "transparent",
+                "borderColor": "#00f2fe",
+                "borderWidth": 0,
+                "padding": 5,
+                "order": "seriesAsc"
+            },
+            "itemStyle": {
+                "borderColor": "#1f335c",
+                "borderWidth": 3,
+                "opacity": 0.96
+            },
+            "rippleEffect": {
+                "show": true,
+                "brushType": "stroke",
+                "scale": 2.5,
+                "period": 4
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u79ef\u6781",
+                "\u6d88\u6781",
+                "\u4e2d\u7acb"
+            ],
+            "selected": {},
+            "show": true,
+            "right": "5%",
+            "top": "center",
+            "orient": "vertical",
+            "padding": 5,
+            "itemGap": 20,
+            "itemWidth": 16,
+            "itemHeight": 16,
+            "textStyle": {
+                "color": "#fff",
+                "fontFamily": "Consolas",
+                "fontSize": 13
+            },
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "color": [
+        "#00F2FE",
+        "#FF2D75",
+        "#7238F7"
+    ],
+    "title": [
+        {
+            "show": true,
+            "text": "SENTIMENT DISTRIBUTION",
+            "target": "blank",
+            "subtext": "AI-POWERED EMOTION RADAR",
+            "subtarget": "blank",
+            "left": "center",
+            "top": "5%",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false,
+            "textStyle": {
+                "color": "#fff",
+                "fontWeight": "bold",
+                "fontFamily": "Agency FB",
+                "fontSize": 22
+            },
+            "subtextStyle": {
+                "color": "#00f2fe",
+                "fontFamily": "Consolas",
+                "fontSize": 13
+            }
+        }
+    ],
+    "toolbox": {
+        "show": true,
+        "orient": "horizontal",
+        "itemSize": 15,
+        "itemGap": 10,
+        "left": "80%",
+        "right": "5%",
+        "bottom": "5%",
+        "feature": {
+            "saveAsImage": {
+                "type": "png",
+                "backgroundColor": "#0f1c3c",
+                "connectedBackgroundColor": "#fff",
+                "show": true,
+                "title": "\u4fdd\u5b58\u4e3a\u56fe\u7247",
+                "pixelRatio": 1
+            },
+            "restore": {
+                "show": true,
+                "title": "\u8fd8\u539f"
+            },
+            "dataView": {
+                "show": true,
+                "title": "\u6570\u636e\u89c6\u56fe",
+                "readOnly": false,
+                "lang": [
+                    "\u6570\u636e\u89c6\u56fe",
+                    "\u5173\u95ed",
+                    "\u5237\u65b0"
+                ],
+                "backgroundColor": "#fff",
+                "textareaColor": "#fff",
+                "textareaBorderColor": "#333",
+                "textColor": "#000",
+                "buttonColor": "#c23531",
+                "buttonTextColor": "#fff"
+            },
+            "dataZoom": {
+                "show": true,
+                "title": {
+                    "zoom": "\u533a\u57df\u7f29\u653e",
+                    "back": "\u533a\u57df\u7f29\u653e\u8fd8\u539f"
+                },
+                "icon": {},
+                "filterMode": "filter"
+            },
+            "magicType": {
+                "show": true,
+                "type": [
+                    "line",
+                    "bar",
+                    "stack",
+                    "tiled"
+                ],
+                "title": {
+                    "line": "\u5207\u6362\u4e3a\u6298\u7ebf\u56fe",
+                    "bar": "\u5207\u6362\u4e3a\u67f1\u72b6\u56fe",
+                    "stack": "\u5207\u6362\u4e3a\u5806\u53e0",
+                    "tiled": "\u5207\u6362\u4e3a\u5e73\u94fa"
+                },
+                "icon": {}
+            }
+        }
+    }
+};
+        chart_cyber_pie.setOption(option_cyber_pie);
+    </script>
+</body>
+</html>
