@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>气候变化舆情分析平台 - Vue 3版本测试</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            accent: '#722ED1',
+            warning: '#FF7D00',
+            danger: '#F53F3F',
+            success: '#00B42A',
+            dark: {
+              100: '#86909C',
+              200: '#4E5969',
+              300: '#272E3B',
+              400: '#1D2129',
+              500: '#141414'
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        },
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1;
+      }
+      .glass-effect {
+        @apply bg-dark-400/80 backdrop-blur-md;
+      }
+      .scrollbar-thin {
+        scrollbar-width: thin;
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: rgba(156, 163, 175, 0.5);
+        border-radius: 20px;
+      }
+      .nav-active {
+        @apply bg-primary/10 text-primary border-l-4 border-primary;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-dark-500 text-white font-inter antialiased">
+  <div id="app">
+    <div class="bg-dark-500 text-white font-inter antialiased min-h-screen flex flex-col overflow-hidden">
+      <div class="flex h-screen">
+        <!-- 左侧导航栏 -->
+        <aside class="w-48 bg-dark-400 border-r border-dark-300 flex-shrink-0 hidden md:block transition-all duration-300 z-40">
+          <!-- Logo 和标题 -->
+          <div class="flex items-center space-x-2 p-4 border-b border-dark-300">
+            <div class="bg-primary/20 p-2 rounded-lg">
+              <i class="fa fa-line-chart text-primary text-xl"></i>
+            </div>
+            <h1 class="text-lg font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
+              气候变化舆情分析平台
+            </h1>
+          </div>
+          
+          <!-- 导航菜单 -->
+          <nav class="py-4 w-48">
+            <ul class="space-y-1 px-2">
+              <li v-for="item in navigationItems" :key="item.id">
+                <a 
+                  href="#" 
+                  @click.prevent="currentPage = item.id"
+                  :class="[
+                    'flex items-center space-x-3 px-4 py-3 rounded-lg transition-all',
+                    currentPage === item.id 
+                      ? 'nav-active bg-primary/10 text-primary border-l-4 border-primary' 
+                      : 'text-dark-100 hover:bg-dark-300/50'
+                  ]"
+                >
+                  <i :class="['fa', item.icon, 'w-5 text-center']"></i>
+                  <span class="text-sm">{{ item.label }}</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          
+          <!-- 底部用户信息 -->
+          <div class="absolute bottom-0 left-0 right-0 border-t border-dark-300 p-2">
+            <div class="flex items-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary mr-3"></div>
+              <div class="hidden md:block ml-2">
+                <p class="text-xs font-medium">管理员</p>
+                <p class="text-[10px] text-dark-100">admin@example.com</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+          <!-- 顶部导航栏 -->
+          <header class="h-16 bg-dark-400 border-b border-dark-300 flex items-center justify-between px-6 z-30">
+            <!-- 移动端菜单按钮 -->
+            <button class="md:hidden p-2 rounded-md hover:bg-dark-300/50 transition-colors">
+              <i class="fa fa-bars text-dark-100"></i>
+            </button>
+
+            <!-- 数据状态 -->
+            <div class="hidden md:flex items-center gap-2 text-dark-100">
+              <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <span>数据实时更新中</span>
+            </div>
+
+            <!-- 右侧工具栏 -->
+            <div class="flex items-center space-x-4">
+              <div class="relative">
+                <input type="text" placeholder="搜索..." v-model="searchQuery" class="bg-dark-300 border border-dark-200 rounded-lg py-1.5 pl-8 pr-3 w-40 lg:w-64 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-dark-100 text-sm"></i>
+              </div>
+
+              <button class="p-2 rounded-full hover:bg-dark-300/50 transition-colors relative">
+                <i class="fa fa-bell-o text-dark-100"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full"></span>
+              </button>
+            </div>
+          </header>
+
+          <!-- 页面内容区域 -->
+          <div class="flex-1 overflow-y-auto p-6 scrollbar-thin">
+            <!-- 数据概览页面 -->
+            <div v-show="currentPage === 'dashboard'">
+              <div class="mb-6">
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">全球气候变化舆情概览</h2>
+                <p class="text-dark-100 mt-1">实时监控全球范围内气候变化相关舆情动态与趋势</p>
+              </div>
+
+              <!-- 关键指标卡片 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="text-dark-100 text-sm">实时舆情总量</p>
+                      <h3 class="text-3xl font-bold mt-1">{{ formatNumber(128543) }}</h3>
+                    </div>
+                    <div class="bg-primary/10 p-2 rounded-lg">
+                      <i class="fa fa-comments text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="flex items-center text-sm">
+                    <span class="text-success flex items-center">
+                      <i class="fa fa-arrow-up mr-1"></i> 12.5%
+                    </span>
+                    <span class="text-dark-100 ml-2">较昨日</span>
+                  </div>
+                </div>
+
+                <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="text-dark-100 text-sm">情感倾向分布</p>
+                      <div class="flex items-center mt-2">
+                        <div class="relative w-16 h-16">
+                          <canvas ref="sentimentChart"></canvas>
+                        </div>
+                        <div class="ml-3">
+                          <div class="flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-danger mr-1"></span>
+                            <span class="text-xs text-dark-100">消极 45%</span>
+                          </div>
+                          <div class="flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-warning mr-1"></span>
+                            <span class="text-xs text-dark-100">中立 30%</span>
+                          </div>
+                          <div class="flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-success mr-1"></span>
+                            <span class="text-xs text-dark-100">积极 25%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="text-dark-100 text-sm">当日热点话题</p>
+                      <div class="space-y-2 mt-2">
+                        <div v-for="topic in hotTopics" :key="topic.tag" class="flex items-center">
+                          <span :class="'bg-' + topic.color + '/10 text-' + topic.color + ' text-xs px-2 py-1 rounded mr-2'">#{{ topic.tag }}</span>
+                          <span class="text-dark-100 text-xs">{{ topic.discussions }} 讨论</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-secondary/10 p-2 rounded-lg">
+                      <i class="fa fa-fire text-secondary"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-dark-400 rounded-xl p-6 border border-dark-300 card-hover">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <p class="text-dark-100 text-sm">全球热点地区</p>
+                      <div class="mt-2">
+                        <div v-for="region in regions" :key="region.name" class="flex items-center justify-between mt-2 first:mt-0">
+                          <div class="flex items-center">
+                            <span class="text-sm">{{ region.name }}</span>
+                          </div>
+                          <div class="w-24 bg-dark-300 rounded-full h-2">
+                            <div :class="'bg-' + region.color + ' h-2 rounded-full'" :style="{ width: region.percentage }"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-accent/10 p-2 rounded-lg">
+                      <i class="fa fa-globe text-accent"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 数据筛选栏 -->
+              <div class="bg-dark-400 rounded-xl p-4 border border-dark-300 shadow-lg mb-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center gap-2">
+                      <span class="text-dark-100 text-xs">地区:</span>
+                      <select v-model="filters.region" class="bg-dark-300 border border-dark-200 rounded-lg py-1.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <option>全球</option>
+                        <option>亚洲</option>
+                        <option>欧洲</option>
+                        <option>北美洲</option>
+                        <option>南美洲</option>
+                        <option>非洲</option>
+                        <option>大洋洲</option>
+                      </select>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                      <span class="text-dark-100">时间:</span>
+                      <select v-model="filters.timeRange" class="bg-dark-300 border border-dark-200 rounded-lg py-1.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <option>近7天</option>
+                        <option>近30天</option>
+                        <option>近90天</option>
+                        <option>近1年</option>
+                        <option>全部</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <button class="bg-dark-300 hover:bg-dark-300/80 text-dark-100 py-1.5 px-3 rounded-lg transition-colors">
+                      <i class="fa fa-filter mr-1"></i> 高级筛选
+                    </button>
+                    <button class="bg-primary hover:bg-primary/90 text-white py-1.5 px-3 rounded-lg transition-colors flex items-center">
+                      <i class="fa fa-refresh mr-1"></i> 刷新数据
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 全局地图 -->
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-8 transition-all duration-300">
+                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+                  <h3 class="font-semibold text-lg">全球舆情热度分布</h3>
+                  <div class="flex items-center gap-2">
+                    <button @click="showMapModal = true" class="text-dark-100 hover:text-white transition-colors">
+                      <i class="fa fa-expand"></i>
+                    </button>
+                    <button class="text-dark-100 hover:text-white transition-colors">
+                      <i class="fa fa-download"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="h-[300px] relative bg-dark-300/30 flex items-center justify-center">
+                  <p class="text-dark-100">地图组件区域</p>
+                </div>
+              </div>
+
+              <!-- 可放大的网格区域 -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="bg-dark-400 rounded-xl p-5 border border-dark-300 hover:shadow-lg transition-all duration-300">
+                  <h3 class="text-sm font-medium mb-4">舆情趋势变化</h3>
+                  <div class="h-64">
+                    <canvas ref="trendChart"></canvas>
+                  </div>
+                </div>
+
+                <div class="bg-dark-400 rounded-xl p-5 border border-dark-300 hover:shadow-lg transition-all duration-300">
+                  <h3 class="text-sm font-medium mb-4">情感倾向分布</h3>
+                  <div class="h-64">
+                    <canvas ref="distributionChart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 热点文本 -->
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-6">
+                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+                  <h3 class="font-semibold text-lg">最新热点文本</h3>
+                  <div class="flex items-center gap-2">
+                    <button class="text-dark-100 hover:text-white transition-colors">
+                      <i class="fa fa-refresh"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="p-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div v-for="news in newsItems" :key="news.id" class="bg-dark-300/50 rounded-lg p-3 hover:bg-dark-300/70 transition-colors cursor-pointer">
+                      <div class="flex items-center mb-2">
+                        <div :class="'bg-' + news.iconColor + '/20 w-8 h-8 rounded-full flex items-center justify-center mr-2'">
+                          <i :class="'fa ' + news.icon + ' text-' + news.iconColor"></i>
+                        </div>
+                        <div>
+                          <h4 class="font-medium text-sm">{{ news.title }}</h4>
+                          <p class="text-xs text-dark-100">{{ news.date }} · {{ news.category }}</p>
+                        </div>
+                      </div>
+                      <p class="text-sm text-dark-100">{{ news.description }}</p>
+                      <div class="flex justify-between items-center mt-2">
+                        <div class="flex items-center">
+                          <span v-for="tag in news.tags" :key="tag.name" :class="'bg-' + tag.color + '/10 text-' + tag.color + ' text-xs px-2 py-1 rounded mr-1'">{{ tag.name }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-dark-100 text-xs">
+                          <span><i class="fa fa-eye mr-1"></i> {{ news.views }}</span>
+                          <span><i class="fa fa-comment mr-1"></i> {{ news.comments }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 其他页面显示简单的占位内容 -->
+            <div v-show="currentPage !== 'dashboard'" class="flex items-center justify-center h-full">
+              <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">{{ getPageTitle(currentPage) }}</h2>
+                <p class="text-dark-100">该页面功能正在开发中...</p>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, reactive, computed, onMounted, nextTick } = Vue;
+
+    createApp({
+      setup() {
+        const currentPage = ref('dashboard')
+        const searchQuery = ref('')
+        const showMapModal = ref(false)
+
+        const filters = reactive({
+          region: '全球',
+          timeRange: '近7天'
+        })
+
+        const navigationItems = [
+          { id: 'dashboard', label: '数据概览', icon: 'fa-dashboard' },
+          { id: 'trends', label: '时间趋势', icon: 'fa-line-chart' },
+          { id: 'themes', label: '主题分析', icon: 'fa-tags' },
+          { id: 'alerts', label: '预警中心', icon: 'fa-bell' },
+          { id: 'timeline', label: '气候时间线', icon: 'fa-history' },
+          { id: 'news-policy', label: '新闻政策', icon: 'fa-newspaper-o' },
+          { id: 'discussion', label: '用户讨论', icon: 'fa-comments' },
+          { id: 'download-share', label: '数据分享', icon: 'fa-download' },
+          { id: 'future-topic', label: 'AI预测', icon: 'fa-magic' }
+        ]
+
+        const hotTopics = [
+          { tag: '碳中和', color: 'primary', discussions: '32.4k' },
+          { tag: '极端高温', color: 'secondary', discussions: '28.7k' },
+          { tag: '碳关税', color: 'accent', discussions: '21.3k' }
+        ]
+
+        const regions = [
+          { name: '巴西', percentage: '85%', color: 'danger' },
+          { name: '美国', percentage: '72%', color: 'warning' },
+          { name: '中国', percentage: '65%', color: 'primary' }
+        ]
+
+        const newsItems = [
+          {
+            id: 1,
+            title: '人民日报：中国发布《2025年应对气候变化国家报告》',
+            date: '2025-07-15',
+            category: '政策讨论',
+            description: '报告显示，中国在过去五年中碳排放强度下降了18%，可再生能源占比提高至42%...',
+            icon: 'fa-newspaper-o',
+            iconColor: 'primary',
+            tags: [{ name: '碳中和', color: 'primary' }, { name: '可再生能源', color: 'secondary' }],
+            views: '2.4k',
+            comments: '328'
+          },
+          {
+            id: 2,
+            title: '联合国秘书长：全球气候危机已达临界点，需立即行动',
+            date: '2025-07-14',
+            category: '国际合作',
+            description: '在最新的联合国气候峰会上，秘书长强调全球气温上升速度超过预期...',
+            icon: 'fa-twitter',
+            iconColor: 'danger',
+            tags: [{ name: '气候峰会', color: 'danger' }, { name: '减排目标', color: 'warning' }],
+            views: '5.7k',
+            comments: '842'
+          }
+        ]
+
+        const formatNumber = (num) => {
+          return num.toLocaleString()
+        }
+
+        const getPageTitle = (pageId) => {
+          const page = navigationItems.find(item => item.id === pageId)
+          return page ? page.label : '未知页面'
+        }
+
+        // 图表refs
+        const sentimentChart = ref(null)
+        const trendChart = ref(null)
+        const distributionChart = ref(null)
+
+        // 初始化图表
+        const initCharts = () => {
+          nextTick(() => {
+            // 情感倾向环形图
+            if (sentimentChart.value && window.Chart) {
+              new Chart(sentimentChart.value, {
+                type: 'doughnut',
+                data: {
+                  labels: ['消极', '中立', '积极'],
+                  datasets: [{
+                    data: [45, 30, 25],
+                    backgroundColor: ['#F53F3F', '#FF7D00', '#00B42A'],
+                    borderWidth: 0,
+                    cutout: '70%'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false }
+                  }
+                }
+              });
+            }
+
+            // 趋势图表
+            if (trendChart.value && window.Chart) {
+              new Chart(trendChart.value, {
+                type: 'line',
+                data: {
+                  labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
+                  datasets: [{
+                    label: '舆情数量',
+                    data: [1200, 1900, 1700, 2100, 2500, 2300, 2800],
+                    borderColor: '#165DFF',
+                    backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                    x: { grid: { color: 'rgba(255, 255, 255, 0.05)' } }
+                  }
+                }
+              });
+            }
+
+            // 分布图表
+            if (distributionChart.value && window.Chart) {
+              new Chart(distributionChart.value, {
+                type: 'doughnut',
+                data: {
+                  labels: ['消极', '中立', '积极'],
+                  datasets: [{
+                    data: [45, 30, 25],
+                    backgroundColor: ['#F53F3F', '#FF7D00', '#00B42A'],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: { legend: { position: 'bottom' } }
+                }
+              });
+            }
+          })
+        }
+
+        onMounted(() => {
+          initCharts()
+        })
+
+        return {
+          currentPage,
+          searchQuery,
+          showMapModal,
+          filters,
+          navigationItems,
+          hotTopics,
+          regions,
+          newsItems,
+          formatNumber,
+          getPageTitle,
+          sentimentChart,
+          trendChart,
+          distributionChart
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

@@ -3,6 +3,30 @@
   将原HTML页面的结构、样式（Tailwind CSS）和交互逻辑转换为Vue 3组件化架构。
   实现了侧边栏、顶部导航、主内容区的组件化拆分，以及各功能页面的按需懒加载。
   所有交互逻辑均使用Vue的响应式数据和事件机制实现。
+
+  使用说明：
+  1. 本文件为单文件组件（SFC），包含template、script和style三个部分
+  2. 外部依赖：Vue 3、Chart.js、Tailwind CSS、Font Awesome
+  3. 可通过CDN或npm包的方式引入依赖
+  4. 主要功能页面：数据概览、时间趋势、主题分析、预警中心、时间线、新闻政策、用户讨论、数据分享、AI预测
+  5. 支持响应式布局、模态框交互、图表缩放等功能
+  
+  组件结构：
+  - App (根组件)
+    - Sidebar (侧边栏导航)
+    - Header (顶部导航栏)  
+    - MainContent (主内容区)
+      - DashboardPage (数据概览页)
+      - TrendsPage (时间趋势页)
+      - ThemesPage (主题分析页)
+      - AlertsPage (预警中心页)
+      - TimelinePage (时间线页)
+      - NewsPolicyPage (新闻政策页)
+      - DiscussionPage (用户讨论页)
+      - DownloadSharePage (数据分享页)
+      - FutureTopicPage (AI预测页)
+    - FullscreenModal (全屏模态框)
+    - ChartModal (图表模态框)
 -->
 
 <template>
@@ -556,7 +580,159 @@ const HotTopicsList = {
   }
 }
 
-const TrendsPage = defineAsyncComponent(() => Promise.resolve({
+// 图表组件
+const ChartSection = {
+  props: ['title', 'chartSrc', 'chartId', 'height', 'withSelect', 'selectOptions'],
+  emits: ['expand'],
+  template: `
+    <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-6">
+      <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+        <h3 class="font-semibold text-lg">{{ title }}</h3>
+        <div class="flex items-center gap-3">
+          <div v-if="withSelect" class="relative">
+            <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+              <option v-for="option in selectOptions" :key="option">{{ option }}</option>
+            </select>
+          </div>
+          <div class="flex items-center border border-dark-200 rounded-lg overflow-hidden">
+            <button @click="resizeChart(0.9)" class="bg-dark-300 text-dark-100 hover:text-white px-2 py-1 transition-colors">
+              <i class="fa fa-search-minus"></i>
+            </button>
+            <button @click="resetChart()" class="bg-dark-300 text-dark-100 hover:text-white px-2 py-1 transition-colors">
+              <i class="fa fa-compress"></i>
+            </button>
+            <button @click="resizeChart(1.1)" class="bg-dark-300 text-dark-100 hover:text-white px-2 py-1 transition-colors">
+              <i class="fa fa-search-plus"></i>
+            </button>
+          </div>
+          <button @click="$emit('expand', { title, chartSrc })" class="text-dark-100 hover:text-white transition-colors hover:bg-dark-300/50 p-1.5 rounded-full">
+            <i class="fa fa-expand"></i>
+          </button>
+          <button class="text-dark-100 hover:text-white transition-colors hover:bg-dark-300/50 p-1.5 rounded-full">
+            <i class="fa fa-download"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 relative">
+        <iframe :id="chartId" :src="chartSrc" :style="{ height: height + 'px' }" class="w-full border-0 transition-all duration-300"></iframe>
+      </div>
+    </div>
+  `,
+  methods: {
+    resizeChart(scale) {
+      const element = document.getElementById(this.chartId)
+      if (element) {
+        const currentHeight = parseInt(element.style.height) || this.height
+        const newHeight = Math.max(200, Math.min(800, currentHeight * scale))
+        element.style.height = newHeight + 'px'
+      }
+    },
+    resetChart() {
+      const element = document.getElementById(this.chartId)
+      if (element) {
+        element.style.height = this.height + 'px'
+      }
+    }
+  }
+}
+
+const HotTopicsDetail = {
+  template: `
+    <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-xl">
+      <div class="p-4 border-b border-dark-300 flex flex-wrap justify-between items-center gap-3">
+        <h3 class="font-semibold text-lg flex items-center">
+          <i class="fa fa-fire text-warning mr-2"></i>热门主题详情
+        </h3>
+        <div class="flex items-center gap-3">
+          <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+            <option>按热度排序</option>
+            <option>按增长速度</option>
+            <option>按讨论时长</option>
+          </select>
+          <button class="text-dark-100 hover:text-white transition-colors hover:bg-dark-300/50 p-1.5 rounded-full">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-for="topic in topicDetails" :key="topic.id" class="bg-dark-300/20 rounded-xl p-4 border border-dark-300 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 group">
+            <div class="flex items-center mb-3">
+              <span :class="['bg-' + topic.color + '/10', 'text-' + topic.color, 'text-xs px-2.5 py-1 rounded-full font-medium']">
+                #{{ topic.tag }}
+              </span>
+              <span class="ml-auto bg-dark-300/50 text-white text-xs px-2 py-0.5 rounded-full flex items-center">
+                <i :class="['fa fa-bolt text-' + topic.color, 'mr-1']"></i>热度: {{ topic.heat }}
+              </span>
+            </div>
+            <p class="text-sm text-dark-100 mb-3 leading-relaxed">{{ topic.description }}</p>
+            <div class="mb-3">
+              <div class="flex justify-between text-xs text-dark-100 mb-1.5">
+                <span>情感分布</span>
+                <span class="font-medium">积极{{ topic.sentiment.positive }}% 中立{{ topic.sentiment.neutral }}% 消极{{ topic.sentiment.negative }}%</span>
+              </div>
+              <div class="w-full bg-dark-300/50 rounded-full h-2.5 overflow-hidden flex">
+                <div class="bg-success h-full transition-all duration-1000" :style="{ width: topic.sentiment.positive + '%' }"></div>
+                <div class="bg-warning h-full transition-all duration-1000" :style="{ width: topic.sentiment.neutral + '%' }"></div>
+                <div class="bg-danger h-full transition-all duration-1000" :style="{ width: topic.sentiment.negative + '%' }"></div>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs text-dark-100 pt-1 border-t border-dark-300/50">
+              <span class="flex items-center hover:text-white transition-colors">
+                <i class="fa fa-comment mr-1.5"></i> {{ topic.discussions }} 讨论
+              </span>
+              <span :class="['flex items-center font-medium', topic.trend > 0 ? 'text-success' : 'text-danger']">
+                <i :class="['fa', topic.trend > 0 ? 'fa-arrow-up' : 'fa-arrow-down', 'mr-1.5']"></i> {{ Math.abs(topic.trend) }}%
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+          <button class="inline-flex items-center px-4 py-2 bg-dark-300/30 hover:bg-dark-300/50 text-white text-sm rounded-lg transition-all duration-200">
+            查看更多热门主题
+            <i class="fa fa-chevron-right ml-2 text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `,
+  setup() {
+    const topicDetails = [
+      {
+        id: 1,
+        tag: '碳中和',
+        color: 'primary',
+        heat: 92,
+        description: '全球各国碳中和政策进展与实施效果讨论，包括减排目标、政策工具和实施路径等。',
+        sentiment: { positive: 32, neutral: 38, negative: 30 },
+        discussions: '32.4k',
+        trend: 12.5
+      },
+      {
+        id: 2,
+        tag: '极端高温',
+        color: 'warning',
+        heat: 87,
+        description: '全球范围内极端高温事件的报道与讨论，包括对生态系统、人类健康和社会经济的影响。',
+        sentiment: { positive: 15, neutral: 25, negative: 60 },
+        discussions: '28.7k',
+        trend: 23.2
+      },
+      {
+        id: 3,
+        tag: '碳关税',
+        color: 'accent',
+        heat: 79,
+        description: '关于碳边境调节机制(CBAM)等碳关税政策的讨论，包括国际贸易影响和公平性争议。',
+        sentiment: { positive: 20, neutral: 25, negative: 55 },
+        discussions: '21.3k',
+        trend: 8.7
+      }
+    ]
+
+    return { topicDetails }
+  }
+}
   template: `
     <div>
       <div class="mb-6">
@@ -609,6 +785,10 @@ const TrendsPage = defineAsyncComponent(() => Promise.resolve({
 }))
 
 const ThemesPage = defineAsyncComponent(() => Promise.resolve({
+  components: {
+    ChartSection,
+    HotTopicsDetail
+  },
   template: `
     <div>
       <div class="mb-6">
@@ -634,7 +814,7 @@ const ThemesPage = defineAsyncComponent(() => Promise.resolve({
             chart-id="sentiment-chart"
             :height="440"
             :with-select="true"
-            select-options="['按地区', '按话题', '按时间']"
+            :select-options="['按地区', '按话题', '按时间']"
             @expand="expandChart"
           />
 
@@ -1129,7 +1309,9 @@ export default {
     GlobalMap,
     TrendChart,
     DistributionChart,
-    HotTopicsList
+    HotTopicsList,
+    ChartSection,
+    HotTopicsDetail
   },
   setup() {
     // 响应式数据
@@ -1195,8 +1377,30 @@ export default {
       document.body.style.overflow = ''
     }
 
-    // 键盘事件监听
-    onMounted(() => {
+    // 图表缩放功能
+    const resizeChart = (chartId, scale) => {
+      const chartElement = document.getElementById(chartId)
+      if (chartElement) {
+        const currentHeight = parseInt(chartElement.style.height) || 500
+        const newHeight = Math.max(200, Math.min(800, currentHeight * scale))
+        chartElement.style.height = newHeight + 'px'
+      }
+    }
+
+    const resetChartSize = (chartId) => {
+      const chartElement = document.getElementById(chartId)
+      if (chartElement) {
+        chartElement.style.height = '500px'
+      }
+    }
+
+    const resizeModalChart = (scale) => {
+      // 模态框图表缩放逻辑
+    }
+
+    const resetModalChart = () => {
+      // 重置模态框图表大小
+    }
       const handleKeydown = (e) => {
         if (e.key === 'Escape') {
           if (modal.isOpen) closeModal()
@@ -1222,7 +1426,11 @@ export default {
       openModal,
       closeModal,
       openChartModal,
-      closeChartModal
+      closeChartModal,
+      resizeChart,
+      resetChartSize,
+      resizeModalChart,
+      resetModalChart
     }
   }
 }
