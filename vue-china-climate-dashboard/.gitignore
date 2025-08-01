@@ -1,0 +1,10 @@
+node_modules
+dist
+*.log
+.vite
+.env
+.env.local
+.env.*.local
+coverage
+*.tgz
+*.tar.gz
