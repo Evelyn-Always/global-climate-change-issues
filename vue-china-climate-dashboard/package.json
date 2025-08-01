@@ -1,0 +1,27 @@
+{
+  "name": "vue-china-climate-dashboard",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["vue3", "climate", "china", "dashboard", "echarts"],
+  "author": "",
+  "license": "ISC",
+  "description": "China Climate Change Sentiment Analysis Dashboard built with Vue3, Vite, TailwindCSS and ECharts",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/compiler-sfc": "^3.5.18",
+    "echarts": "^5.6.0",
+    "vite": "^7.0.6",
+    "vue": "^3.5.18",
+    "vue-echarts": "^7.0.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  }
+}
