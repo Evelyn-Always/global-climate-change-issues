@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9', // 亮蓝色科技蓝
+            secondary: '#06b6d4',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            info: '#94a3b8',
+            success: '#10b981',
+            'event-heat': '#f97316',         // 高温事件
+            'event-rain': '#0ea5e9',         // 暴雨事件
+            'event-drought': '#f59e0b',      // 干旱事件
+            'event-typhoon': '#8b5cf6',      // 台风事件
+            'event-cold': '#06b6d4',         // 寒潮事件
+            'event-sand': '#d6d3d1',         // 沙尘暴事件
+            dark: {
+              100: '#f8fafc',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .timeline-line {
+        @apply absolute left-6 top-0 bottom-0 w-0.5 bg-dark-700;
+      }
+      .timeline-dot {
+        @apply absolute left-6 w-3 h-3 -ml-[6px] rounded-full border-2 border-dark-800 z-10;
+      }
+      .timeline-dot-active {
+        @apply w-4 h-4 -ml-[8px] shadow-lg;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+      }
+      .glow {
+        box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+      }
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-dark-950 text-dark-200 min-h-screen flex flex-col">
+  
+
+        
+        <!-- 右侧功能区 -->
+        <div class="flex items-center">
+        
+          
+          <!-- 移动端菜单按钮 -->
+          <button type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-dark-400 hover:text-primary hover:bg-dark-800 focus:outline-none" id="mobile-menu-button">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+        </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-dark-900 border-b border-dark-800">
+        <a href="#" class="bg-primary/10 text-primary block pl-3 pr-4 py-2 rounded-md text-base font-medium">
+          时间线
+        </a>
+        <a href="#" class="text-dark-400 hover:bg-dark-800 hover:text-primary block pl-3 pr-4 py-2 rounded-md text-base font-medium">
+          数据分析
+        </a>
+        <a href="#" class="text-dark-400 hover:bg-dark-800 hover:text-primary block pl-3 pr-4 py-2 rounded-md text-base font-medium">
+          历史对比
+        </a>
+        <a href="#" class="text-dark-400 hover:bg-dark-800 hover:text-primary block pl-3 pr-4 py-2 rounded-md text-base font-medium">
+          关于平台
+        </a>
+      </div>
+      <div class="pt-4 pb-3 border-t border-dark-800 bg-dark-900">
+        <div class="flex items-center px-5">
+          <div class="relative w-full">
+            <input type="text" placeholder="搜索气候事件..." 
+                  class="pl-9 pr-4 py-2 rounded-lg border border-dark-700 bg-dark-800 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all text-sm w-full text-dark-200">
+            <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-dark-500"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+   
+    
+    <!-- 筛选工具栏 -->
+    <div class="bg-dark-900 rounded-xl shadow-lg p-4 mb-8 transition-all duration-300 hover:shadow-primary/10 border border-dark-800">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- 事件类型筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-dark-400 mb-1">事件类型</label>
+          <div class="relative">
+            <select id="event-type-filter" class="block w-full pl-3 pr-10 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg appearance-none text-dark-200">
+              <option value="all">全部类型</option>
+              <option value="heat">高温热浪</option>
+              <option value="rain">极端暴雨</option>
+              <option value="drought">干旱</option>
+              <option value="typhoon">台风</option>
+              <option value="cold">寒潮</option>
+              <option value="sand">沙尘暴</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-dark-500">
+              <i class="fa fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 时间范围筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-dark-400 mb-1">时间范围</label>
+          <div class="relative">
+            <select id="time-range-filter" class="block w-full pl-3 pr-10 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg appearance-none text-dark-200">
+              <option value="all">全部时间</option>
+              <option value="1y">近1年</option>
+              <option value="5y">近5年</option>
+              <option value="10y">近10年</option>
+              <option value="custom">自定义</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-dark-500">
+              <i class="fa fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 影响区域筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-dark-400 mb-1">影响区域</label>
+          <div class="relative">
+            <select id="region-filter" class="block w-full pl-3 pr-10 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg appearance-none text-dark-200">
+              <option value="all">全国</option>
+              <option value="north">华北地区</option>
+              <option value="northeast">东北地区</option>
+              <option value="east">华东地区</option>
+              <option value="central">华中地区</option>
+              <option value="south">华南地区</option>
+              <option value="northwest">西北地区</option>
+              <option value="southwest">西南地区</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-dark-500">
+              <i class="fa fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 事件等级筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-dark-400 mb-1">事件等级</label>
+          <div class="relative">
+            <select id="level-filter" class="block w-full pl-3 pr-10 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg appearance-none text-dark-200">
+              <option value="all">全部等级</option>
+              <option value="extreme">特大事件</option>
+              <option value="major">重大事件</option>
+              <option value="significant">较大事件</option>
+              <option value="general">一般事件</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-dark-500">
+              <i class="fa fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 自定义时间范围 (默认隐藏) -->
+      <div id="custom-date-range" class="hidden mt-4 pt-4 border-t border-dark-800 grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-dark-400 mb-1">开始日期</label>
+          <input type="date" class="block w-full pl-3 pr-3 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary-primary sm:text-sm rounded rounded-lg text-dark-200">
+        </div>
+        <div>
+          <label class="block text-sm4 font-medium text-dark-400 mb-1">结束日期</label>
+          <input type="date" class="block w-full pl-3 pr-3 py-2 text-base border border-dark-700 bg-dark-800 focus:outline-none focus:ring-primary focus:border-primary-primary sm:text-sm rounded-lg text-dark-200">
+        </div>
+      </div>
+    </div>
+    
+    <!-- 主要内容区：时间轴 + 舆情面板 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- 时间轴区域 (占2/3宽度) -->
+      <div class="lg:col-span-2">
+        <div class="bg-dark-900 rounded-xl shadow-lg p-4 md:p-6 mb-6 border border-dark-800">
+          <!-- 时间轴控制栏 -->
+          <div class="flex flex-wrap justify-between justify items-between items-center mb-6 gap-4">
+            <h2 class="text-xl font-semibold text-white">气候事件时间轴</h2>
+            <div class="flex items-center space-x-2">
+              <button id="zoom-out" class="p-2 rounded-lg border border-dark-700 hover:bg-dark-800 text-dark-400 hover:text-primary transition-colors" title="缩小时间范围">
+                <i class="fa fa-search-minus"></i>
+              </button>
+              <button id="zoom-reset" class="p-2 rounded-lg border border-dark-700 hover:bg-dark-800 text-dark-400 hover:text-primary transition-colors" title="重置视图">
+                <i class="fa fa-compress"></i>
+              </button>
+              <button id="zoom-in" class="p-2 rounded-lg border border border-dark-700 hover:bg-dark-800 text-dark-400 hover:text-primary transition-colors" title="放大时间范围">
+                <i class="fa fa-search-plus"></i>
+              </button>
+              <span class="mx-2 text-dark-600">|</span>
+              <button id="timeline-view-toggle" class="p-2 rounded-lg border border-dark-700 hover:bg-dark-800 text-dark-400 hover:text-primary transition-colors" title="切换视图模式">
+                <i class="fa fa-th-large"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- 时间轴内容区域 -->
+          <div id="timeline-container" class="relative pl-16 pb-4 min-h-[600px]">
+            <!-- 时间轴中心线 -->
+            <div class="timeline-line"></div>
+            
+            <!-- 2023年事件 -->
+            <div class="timeline-year-label text-lg font-semibold text-white mt-8 mb-4 relative">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">2023年</span>
+            </div>
+            
+            <!-- 事件1：2023年华北暴雨 -->
+            <div class="timeline-item mb-8 relative event-rain" data-type="rain" data-region="north" data-level="extreme">
+              <div class="timeline-dot bg-event-rain"></div>
+              <div class="timeline-date text-sm font-medium text-dark-400 mb-1">2023年7月29日 - 8月2日</div>
+              <div class="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer event-card hover:border-primary/50 transition-all" data-id="rain-2023-07">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-event-rain/10 flex items-center justify-center mr-3">
+                    <i class="fa fa-tint text-event-rain"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-medium text-white">2023年华北地区特大暴雨</h3>
+                    <p class="text-sm text-dark-400 mt-1">京津冀等地遭遇历史罕见特大暴雨，多地降雨量突破历史极值</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="px-2 py-0.5 bg-event-rain/10 text-event-rain text-xs rounded-full">极端暴雨</span>
+                      <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">华北地区</span>
+                      <span class="px-2 py-0.5 bg-danger/10 text-danger text-xs rounded-full">特大事件</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 事件2：2023年南方高温 -->
+            <div class="timeline-item mb-8 relative event-heat" data-type="heat" data-region="south" data-level="major">
+              <div class="timeline-dot bg-event-heat"></div>
+              <div class="timeline-date text-sm font-medium text-dark-400 mb-1">2023年8月10日 - 8月25日</div>
+              <div class="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer event-card hover:border-primary/50 transition-all" data-id="heat-2023-08">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-event-heat/10 flex items-center justify-center mr-3">
+                    <i class="fa fa-sun-o text-event-heat"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-medium text-white">2023年南方持续性高温热浪</h3>
+                    <p class="text-sm text-dark-400 mt-1">江南、华南等地出现持续性高温天气，多地最高气温突破40℃</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="px-2 py-0.5 bg-event-heat/10 text-event-heat text-xs rounded-full">高温热浪</span>
+                      <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">华南地区</span>
+                      <span class="px-2 py-0.5 bg-warning/10 text-warning text-xs rounded-full">重大事件</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 2022年事件 -->
+            <div class="timeline-year-label text-lg font-semibold text-white mt-8 mb-4 relative">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">2022年</span>
+            </div>
+            
+            <!-- 事件3：2022年长江流域干旱 -->
+            <div class="timeline-item mb-8 relative event-drought" data-type="drought" data-region="central" data-level="major">
+              <div class="timeline-dot bg-event-drought"></div>
+              <div class="timeline-date text-sm font-medium text-dark-400 mb-1">2022年8月 - 10月</div>
+              <div class="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer event-card hover:border-primary/50 transition-all" data-id="drought-2022-08">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-event-drought/10 flex items-center justify-center mr-3">
+                    <i class="fa fa-leaf text-event-drought"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-medium text-white">2022年长江流域极端干旱</h3>
+                    <p class="text-sm text-dark-400 mt-1">长江流域遭遇60年来最严重干旱，多条支流断流，湖泊水位创新低</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="px-2 py-0.5 bg-event-drought/10 text-event-drought text-xs rounded-full">干旱</span>
+                      <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">长江流域</span>
+                      <span class="px-2 py-0.5 bg-warning/10 text-warning text-xs rounded-full">重大事件</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 事件4：2022年台风"梅花" -->
+            <div class="timeline-item mb-8 relative event-typhoon" data-type="typhoon" data-region="east" data-level="major">
+              <div class="timeline-dot bg-event-typhoon"></div>
+              <div class="timeline-date text-sm font-medium text-dark-400 mb-1">2022年9月12日 - 9月16日</div>
+              <div class="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer event-card hover:border-primary/50 transition-all" data-id="typhoon-2022-09">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-event-typhoon/10 flex items-center justify-center mr-3">
+                    <i class="fa fa-bolt text-event-typhoon"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-medium text-white">台风"梅花"登陆华东地区</h3>
+                    <p class="text-sm text-dark-400 mt-1">台风"梅花"四次登陆我国，影响华东多省市，带来强风暴雨</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="px-2 py-0.5 bg-event-typhoon/10 text-event-typhoon text-xs rounded-full">台风</span>
+                      <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">华东地区</span>
+                      <span class="px-2 py-0.5 bg-warning/10 text-warning text-xs rounded-full">重大事件</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 2021年事件 -->
+            <div class="timeline-year-label text-lg font-semibold text-white mt-8 mb-4 relative">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">2021年</span>
+            </div>
+            
+            <!-- 事件5：2021年河南暴雨 -->
+            <div class="timeline-item mb-8 relative event-rain" data-type="rain" data-region="central" data-level="extreme">
+              <div class="timeline-dot bg-event-rain"></div>
+              <div class="timeline-date text-sm font-medium text-dark-400 mb-1">2021年7月17日 - 7月23日</div>
+              <div class="bg-dark-800 border border-dark-700 rounded-xl p-4 shadow-lg card-hover cursor-pointer event-card hover:border-primary/50 transition-all" data-id="rain-2021-07">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 w-10 h-10 rounded-full bg-event-rain/10 flex items-center justify-center mr-3">
+                    <i class="fa fa-tint text-event-rain"></i>
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-medium text-white">2021年河南特大暴雨</h3>
+                    <p class="text-sm text-dark-400 mt-1">河南省遭遇历史罕见特大暴雨，郑州等城市发生严重内涝</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="px-2 py-0.5 bg-event-rain/10 text-event-rain text-xs rounded-full">极端暴雨</span>
+                      <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">华中地区</span>
+                      <span class="px-2 py-0.5 bg-danger/10 text-danger text-xs rounded-full">特大事件</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-6">
+              <button id="load-more" class="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-dark-900 transition-colors opacity-50 cursor-not-allowed" disabled>
+                没有更多事件了
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 舆情分析面板 (占1/3宽度) -->
+      <div class="lg:col-span-1">
+        <!-- 舆情趋势卡片 -->
+        <div class="bg-dark-900 rounded-xl shadow-lg p-4 md:p-6 mb-6 sticky top-20 border border-dark-800">
+          <h2 class="text-xl font-semibold text-white mb-4">舆情趋势分析</h2>
+          <p class="text-sm text-dark-400 mb-6">选择时间轴上的事件查看详细舆情分析</p>
+          
+          <!-- 舆情趋势图表 -->
+          <div id="sentiment-chart-container" class="h-64 mb-6">
+            <canvas id="sentiment-chart"></canvas>
+          </div>
+          
+          <!-- 情感倾向分布 -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-white mb-3">情感倾向分布</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="h-48">
+                <canvas id="emotion-chart"></canvas>
+              </div>
+              <div class="flex flex-col justify-center">
+                <div class="mb-3">
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>担忧</span>
+                    <span>45%</span>
+                  </div>
+                  <div class="w-full bg-dark-700 rounded-full h-2">
+                    <div class="bg-danger h-2 rounded-full" style="width: 45%"></div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>建议</span>
+                    <span>30%</span>
+                  </div>
+                  <div class="w-full bg-dark-700 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full" style="width: 30%"></div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>点赞</span>
+                    <span>15%</span>
+                  </div>
+                  <div class="w-full bg-dark-700 rounded-full h-2">
+                    <div class="bg-success h-2 rounded-full" style="width: 15%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>质疑</span>
+                    <span>10%</span>
+                  </div>
+                  <div class="w-full bg-dark-700 rounded-full h-2">
+                    <div class="bg-warning h-2 rounded-full" style="width: 10%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 核心舆情关键词 -->
+          <div>
+            <h3 class="text-sm font-medium text-white mb-3">核心舆情关键词</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">暴雨致涝</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">应急响应</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">城市排水</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">救援进展</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">物资保障</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">预警系统</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">灾后重建</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- 事件详情弹窗 -->
+  <div id="event-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden">
+    <div class="bg-dark-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide mx-4 transform transition-all duration-300 scale-95 opacity-0 border border-dark-800" id="modal-content">
+      <!-- 弹窗头部 -->
+      <div class="sticky top-0 bg-dark-900 z-10 border-b border-dark-800 px-6 py-4 flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-white" id="modal-title">事件详情</h2>
+        <button id="close-modal" class="text-dark-400 hover:text-white transition-colors">
+          <i class="fa fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- 弹窗内容 -->
+      <div class="p-6">
+        <!-- 事件基本信息 -->
+        <div class="mb-6">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full bg-event-rain/10 flex items-center justify-center mr-4">
+              <i class="fa fa-tint text-event-rain text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white" id="event-title">2023年华北地区特大暴雨</h3>
+              <p class="text-dark-400" id="event-date">发生时间：2023年7月29日 - 8月2日</p>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-3 mb-6">
+            <span class="px-3 py-1 bg-event-rain/10 text-event-rain text-sm rounded-full">极端暴雨</span>
+            <span class="px-3 py-1 bg-dark-700 text-dark-300 text-sm rounded-full">华北地区</span>
+            <span class="px-3 py-1 bg-danger/10 text-danger text-sm rounded-full">特大事件</span>
+            <span class="px-3 py-1 bg-dark-700 text-dark-300 text-sm rounded-full">应急响应级别：Ⅰ级</span>
+          </div>
+        </div>
+        
+        <!-- 事件影响区域地图 -->
+        <div class="mb-8">
+          <h4 class="text-lg font-medium text-white mb-3">影响区域</h4>
+          <div class="rounded-lg overflow-hidden border border-dark-700 h-64 bg-dark-800 relative">
+            <img src="https://picsum.photos/id/28/800/400" alt="华北地区暴雨影响区域地图" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+              <div class="p-4 text-white">
+                <p class="font-medium">主要影响区域：北京、天津、河北中南部、山西东部</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 事件详情标签页 -->
+        <div class="border-b border-dark-800 mb-6">
+          <div class="flex space-x-8">
+            <button class="modal-tab active py-2 border-b-2 border-primary text-primary font-medium" data-tab="overview">事件概况</button>
+            <button class="modal-tab py-2 border-b-2 border-transparent text-dark-400 hover:text-white font-medium" data-tab="impact">影响数据</button>
+            <button class="modal-tab py-2 border-b-2 border-transparent text-dark-400 hover:text-white font-medium" data-tab="response">应对措施</button>
+            <button class="modal-tab py-2 border-b-2 border-transparent text-dark-400 hover:text-white font-medium" data-tab="related">相关事件</button>
+          </div>
+        </div>
+        
+        <!-- 事件概况 -->
+        <div class="modal-tab-content active" id="overview-tab">
+          <p class="text-dark-300 mb-4">2023年7月29日至8月2日，受台风"杜苏芮"残余环流影响，华北地区遭遇历史罕见的特大暴雨袭击。北京、天津、河北中南部等地出现持续性强降雨，多个站点日降雨量突破历史极值。</p>
+          
+          <p class="text-dark-300 mb-4">此次暴雨具有持续时间长、累计雨量大、影响范围广、极端性强等特点。北京市平均降雨量达到250毫米，房山区部分地区累计降雨量超过600毫米；河北省邢台、邯郸等地降雨量也普遍在300-500毫米之间。</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="bg-dark-800 p-4 rounded-lg border border-dark-700">
+              <p class="text-dark-400 text-sm mb-1">最大日降雨量</p>
+              <p class="text-2xl font-bold text-white">292mm</p>
+              <p class="text-dark-500 text-xs">北京房山区（7月31日）</p>
+            </div>
+            <div class="bg-dark-800 p-4 rounded-lg border border-dark-700">
+              <p class="text-dark-400 text-sm mb-1">降雨持续天数</p>
+              <p class="text-2xl font-bold text-white">5天</p>
+              <p class="text-dark-500 text-xs">7月29日至8月2日</p>
+            </div>
+            <div class="bg-dark-800 p-4 rounded-lg border border-dark-700">
+              <p class="text-dark-400 text-sm mb-1">影响面积</p>
+              <p class="text-2xl font-bold text-white">12.3万km²</p>
+              <p class="text-dark-500 text-xs">覆盖华北多省市</p>
+            </div>
+          </div>
+          
+          <div class="bg-primary/5 p-4 rounded-lg border border-primary/20 mb-4">
+            <h5 class="font-medium text-primary mb-2 flex items-center">
+              <i class="fa fa-lightbulb-o mr-2"></i> 事件特点
+            </h5>
+            <ul class="list-disc list-inside text-dark-300 space-y-1 pl-2">
+              <li>降雨强度大，多个站点突破历史极值</li>
+              <li>强降雨区域集中，与地形因素密切相关</li>
+              <li>降雨持续时间长，导致土壤饱和，次生灾害多发</li>
+              <li>与台风残余环流影响密切相关</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- 影响数据 -->
+        <div class="modal-tab-content hidden" id="impact-tab">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h5 class="font-medium text-white mb-3">社会影响</h5>
+              <ul class="space-y-3">
+                <li class="flex items-start">
+                  <i class="fa fa-user text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">受灾人口</p>
+                    <p class="text-dark-400 text-sm">约375.2万人</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-home text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">房屋损坏</p>
+                    <p class="text-dark-400 text-sm">约4.2万间，其中倒塌1200余间</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-money text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">直接经济损失</p>
+                    <p class="text-dark-400 text-sm">约128.5亿元</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-road text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">基础设施受损</p>
+                    <p class="text-dark-400 text-sm">多条公路、铁路中断，部分桥梁受损</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 class="font-medium text-white mb-3">农业影响</h5>
+              <ul class="space-y-3">
+                <li class="flex items-start">
+                  <i class="fa fa-leaf text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">农作物受灾面积</p>
+                    <p class="text-dark-400 text-sm">约28.6万公顷</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-ban text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">农作物绝收面积</p>
+                    <p class="text-dark-400 text-sm">约5.2万公顷</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-tint text-dark-400 mt-1 mr-3"></i>
+                  <div>
+                    <p class="text-white font-medium">水产养殖损失</p>
+                    <p class="text-dark-400 text-sm">约3.8万吨，直接损失4.2亿元</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <h5 class="font-medium text-white mb-3">气象数据变化</h5>
+            <div class="h-64 bg-dark-800 border border-dark-700 rounded-lg p-2">
+              <canvas id="meteorological-chart"></canvas>
+            </div>
+          </div>
+          
+          <div>
+            <h5 class="font-medium text-white mb-3">次生灾害</h5>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="bg-danger/5 p-3 rounded-lg border border-danger/20">
+                <p class="font-medium text-danger flex items-center">
+                  <i class="fa fa-exclamation-triangle mr-2"></i> 山洪与滑坡
+                </p>
+                <p class="text-dark-300 text-sm mt-1">河北、北京等地发生多起山洪和山体滑坡，造成人员伤亡和财产损失</p>
+              </div>
+              <div class="bg-warning/5 p-3 rounded-lg border border-warning/20">
+                <p class="font-medium text-warning flex items-center">
+                  <i class="fa fa-tint mr-2"></i> 城市内涝
+                </p>
+                <p class="text-dark-300 text-sm mt-1">北京、天津等城市部分区域出现严重内涝，交通中断，车辆被淹</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 应对措施 -->
+        <div class="modal-tab-content hidden" id="response-tab">
+          <div class="mb-6">
+            <h5 class="font-medium text-white mb-3">应急响应</h5>
+            <div class="bg-primary/5 p-4 rounded-lg border border-primary/20 mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <p class="font-medium text-white">国家应急响应级别</p>
+                <span class="px-3 py-1 bg-danger/10 text-danger text-xs rounded-full">Ⅰ级应急响应</span>
+              </div>
+              <p class="text-dark-300 text-sm">7月30日，国家防汛抗旱总指挥部启动防汛Ⅰ级应急响应，这是自2016年以来首次启动该级别响应。</p>
+            </div>
+            
+            <div class="space-y-4">
+              <div>
+                <p class="font-medium text-white mb-1">主要应对措施</p>
+                <ul class="list-disc list-inside text-dark-300 space-y-1 pl-2 text-sm">
+                  <li>紧急转移安置危险区域群众超过50万人</li>
+                  <li>暂停各类学校、培训机构线下教学活动</li>
+                  <li>停工停业，倡导居家办公，减少人员外出</li>
+                  <li>关闭景区、公园、山区道路等危险区域</li>
+                  <li>组织消防、武警、解放军等救援力量待命</li>
+                </ul>
+              </div>
+              
+              <div>
+                <p class="font-medium text-white mb-1">救援行动</p>
+                <ul class="list-disc list-inside text-dark-300 space-y-1 pl-2 text-sm">
+                  <li>投入救援力量超过10万人次，救援车辆2万余辆</li>
+                  <li>解救被困群众超过8万人</li>
+                  <li>调拨帐篷、棉被、食品等救灾物资价值超过2亿元</li>
+                  <li>组织社会救援力量参与抢险救灾</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h5 class="font-medium text-white mb-3">官方通报与资料</h5>
+            <div class="space-y-3">
+              <a href="#" class="flex items-center p-3 border border-dark-700 rounded-lg hover:border-primary hover:bg-dark-800 transition-colors group">
+                <i class="fa fa-file-text-o text-primary mr-3 text-xl"></i>
+                <div class="flex-grow">
+                  <p class="font-medium text-white group-hover:text-primary transition-colors">国家应急管理部关于华北暴雨的通报（第5号）</p>
+                  <p class="text-dark-400 text-sm">发布时间：2023年8月1日</p>
+                </div>
+                <i class="fa fa-chevron-right text-dark-400 group-hover:text-primary transition-colors"></i>
+              </a>
+              
+              <a href="#" class="flex items-center p-3 border border-dark-700 rounded-lg hover:border-primary hover:bg-dark-800 transition-colors group">
+                <i class="fa fa-file-text-o text-primary mr-3 text-xl"></i>
+                <div class="flex-grow">
+                  <p class="font-medium text-white group-hover:text-primary transition-colors">中国气象局关于本次暴雨过程的分析报告</p>
+                  <p class="text-dark-400 text-sm">发布时间：2023年8月3日</p>
+                </div>
+                <i class="fa fa-chevron-right text-dark-400 group-hover:text-primary transition-colors"></i>
+              </a>
+              
+              <a href="#" class="flex items-center p-3 border border-dark-700 rounded-lg hover:border-primary hover:bg-dark-800 transition-colors group">
+                <i class="fa fa-newspaper-o text-primary mr-3 text-xl"></i>
+                <div class="flex-grow">
+                  <p class="font-medium text-white group-hover:text-primary transition-colors">新华社：华北地区暴雨救援进展综述</p>
+                  <p class="text-dark-400 text-sm">发布时间：2023年8月2日</p>
+                </div>
+                <i class="fa fa-chevron-right text-dark-400 group-hover:text-primary transition-colors"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 相关事件 -->
+        <div class="modal-tab-content hidden" id="related-tab">
+          <p class="text-dark-300 mb-4">历史上华北地区也曾发生多起重大暴雨事件，与本次事件有一定的相似性和关联性。</p>
+          
+          <div class="mb-6">
+            <h5 class="font-medium text-white mb-3">历史同期相似事件</h5>
+            
+            <div class="space-y-4">
+              <div class="border border-dark-700 rounded-lg overflow-hidden hover:border-primary transition-colors bg-dark-800">
+                <div class="p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <h6 class="font-medium text-white">2012年北京"7·21"特大暴雨</h6>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">11年前</span>
+                  </div>
+                  <p class="text-dark-400 text-sm mb-3">2012年7月21日，北京遭遇61年来最大暴雨，全市平均降雨量170毫米，造成79人死亡，经济损失超百亿元。</p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">相似指数：82%</span>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">持续时间：1天</span>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">最大降雨量：400mm</span>
+                  </div>
+                </div>
+                <div class="bg-dark-900 px-4 py-2 border-t border-dark-800">
+                  <p class="text-sm text-primary flex items-center cursor-pointer hover:underline">
+                    查看详细对比分析 <i class="fa fa-angle-right ml-1"></i>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="border border-dark-700 rounded-lg overflow-hidden hover:border-primary transition-colors bg-dark-800">
+                <div class="p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <h6 class="font-medium text-white">2016年河北邢台暴雨洪灾</h6>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">7年前</span>
+                  </div>
+                  <p class="text-dark-400 text-sm mb-3">2016年7月19日至20日，河北省邢台市遭遇特大暴雨，引发洪水灾害，造成重大人员伤亡和财产损失。</p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">相似指数：76%</span>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">持续时间：2天</span>
+                    <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">最大降雨量：350mm</span>
+                  </div>
+                </div>
+                <div class="bg-dark-900 px-4 py-2 border-t border-dark-800">
+                  <p class="text-sm text-primary flex items-center cursor-pointer hover:underline">
+                    查看详细对比分析 <i class="fa fa-angle-right ml-1"></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h5 class="font-medium text-white mb-3">相似区域事件</h5>
+            
+            <div class="border border-dark-700 rounded-lg overflow-hidden hover:border-primary transition-colors bg-dark-800">
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <h6 class="font-medium text-white">2021年河南"7·20"特大暴雨</h6>
+                  <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">2年前</span>
+                </div>
+                <p class="text-dark-400 text-sm mb-3">2021年7月，河南省遭遇历史罕见特大暴雨，郑州等地出现极端降雨，造成重大人员伤亡和财产损失。</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">相似指数：79%</span>
+                  <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">持续时间：3天</span>
+                  <span class="px-2 py-0.5 bg-dark-700 text-dark-300 text-xs rounded-full">最大降雨量：624mm</span>
+                </div>
+              </div>
+              <div class="bg-dark-900 px-4 py-2 border-t border-dark-800">
+                <p class="text-sm text-primary flex items-center cursor-pointer hover:underline">
+                  查看详细对比分析 <i class="fa fa-angle-right ml-1"></i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 弹窗底部 -->
+      <div class="sticky bottom-0 bg-dark-900 border-t border-dark-800 px-6 py-4 flex justify-between items-center">
+        <div class="text-sm text-dark-500">
+          数据来源：国家气象局、应急管理部
+        </div>
+        <button class="px-4 py-2 bg-primary text-dark-900 rounded-lg hover:bg-primary/90 transition-colors">
+          下载完整报告 <i class="fa fa-download ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 页脚 -->
+  <footer class="bg-dark-900 text-dark-400 py-8 border-t border-dark-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <div class="flex items-center mb-4">
+            <i class="fa fa-cloud text-primary text-2xl mr-2"></i>
+            <span class="text-xl font-semibold text-white">气候事件分析平台</span>
+          </div>
+          <p class="text-dark-500 text-sm">追踪历史气候事件，分析发展脉络与社会影响，为气候应对提供数据支持。</p>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-medium mb-4 text-white">快速链接</h3>
+          <ul class="space-y-2 text-dark-500 text-sm">
+            <li><a href="#" class="hover:text-primary transition-colors">平台介绍</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">数据来源</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">使用指南</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">常见问题</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">联系我们</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-medium mb-4 text-white">相关资源</h3>
+          <ul class="space-y-2 text-dark-500 text-sm">
+            <li><a href="#" class="hover:text-primary transition-colors">国家气候中心</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">应急管理部</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">中国气象局</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">气象数据共享服务</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-dark-800 mt-8 pt-6 text-center text-dark-600 text-sm">
+        <p>© 2023 气候事件分析平台 版权所有</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- JavaScript -->
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化图表
+      initCharts();
+      
+      // 移动端菜单切换
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+      
+      // 时间范围筛选切换自定义日期显示
+      const timeRangeFilter = document.getElementById('time-range-filter');
+      const customDateRange = document.getElementById('custom-date-range');
+      
+      timeRangeFilter.addEventListener('change', function() {
+        if (this.value === 'custom') {
+          customDateRange.classList.remove('hidden');
+        } else {
+          customDateRange.classList.add('hidden');
+        }
+      });
+      
+      // 事件卡片点击显示详情
+      const eventCards = document.querySelectorAll('.event-card');
+      const eventModal = document.getElementById('event-modal');
+      const modalContent = document.getElementById('modal-content');
+      const closeModal = document.getElementById('close-modal');
+      
+      eventCards.forEach(card => {
+        card.addEventListener('click', function() {
+          // 显示模态框并添加动画
+          eventModal.classList.remove('hidden');
+          setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+          }, 10);
+          
+          // 阻止页面滚动
+          document.body.style.overflow = 'hidden';
+        });
+      });
+      
+      // 关闭模态框
+      closeModal.addEventListener('click', closeModalFunc);
+      
+      eventModal.addEventListener('click', function(e) {
+        if (e.target === eventModal) {
+          closeModalFunc();
+        }
+      });
+      
+      function closeModalFunc() {
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          eventModal.classList.add('hidden');
+          // 恢复页面滚动
+          document.body.style.overflow = '';
+        }, 300);
+      }
+      
+      // 模态框标签页切换
+      const modalTabs = document.querySelectorAll('.modal-tab');
+      const modalTabContents = document.querySelectorAll('.modal-tab-content');
+      
+      modalTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          
+          // 移除所有标签页的活动状态
+          modalTabs.forEach(t => {
+            t.classList.remove('active', 'border-primary', 'text-primary');
+            t.classList.add('border-transparent', 'text-dark-400');
+          });
+          
+          // 隐藏所有内容
+          modalTabContents.forEach(content => {
+            content.classList.add('hidden');
+            content.classList.remove('active');
+          });
+          
+          // 激活当前标签页
+          this.classList.add('active', 'border-primary', 'text-primary');
+          this.classList.remove('border-transparent', 'text-dark-400');
+          
+          // 显示当前内容
+          const activeContent = document.getElementById(`${tabId}-tab`);
+          activeContent.classList.remove('hidden');
+          activeContent.classList.add('active');
+        });
+      });
+      
+      // 滚动时导航栏样式变化
+      const header = document.getElementById('main-header');
+      let lastScrollTop = 0;
+      
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 10) {
+          header.classList.add('shadow-lg', 'shadow-primary/5');
+          header.classList.remove('shadow');
+        } else {
+          header.classList.remove('shadow-lg', 'shadow-primary/5');
+          header.classList.add('shadow');
+        }
+        
+        lastScrollTop = scrollTop;
+      });
+      
+      // 时间轴事件筛选功能
+      const filters = {
+        type: 'all',
+        region: 'all',
+        level: 'all',
+        time: 'all'
+      };
+      
+      // 筛选器变化事件
+      document.getElementById('event-type-filter').addEventListener('change', function() {
+        filters.type = this.value;
+        applyFilters();
+      });
+      
+      document.getElementById('region-filter').addEventListener('change', function() {
+        filters.region = this.value;
+        applyFilters();
+      });
+      
+      document.getElementById('level-filter').addEventListener('change', function() {
+        filters.level = this.value;
+        applyFilters();
+      });
+      
+      document.getElementById('time-range-filter').addEventListener('change', function() {
+        filters.time = this.value;
+        applyFilters();
+      });
+      
+      // 应用筛选
+      function applyFilters() {
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        let hasVisibleItems = false;
+        
+        timelineItems.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const region = item.getAttribute('data-region');
+          const level = item.getAttribute('data-level');
+          
+          // 简单的时间筛选逻辑（实际应用中可能需要更复杂的处理）
+          const isTypeMatch = filters.type === 'all' || type === filters.type;
+          const isRegionMatch = filters.region === 'all' || region === filters.region;
+          const isLevelMatch = filters.level === 'all' || level === filters.level;
+          
+          if (isTypeMatch && isRegionMatch && isLevelMatch) {
+            item.style.display = '';
+            hasVisibleItems = true;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        
+        // 处理年份标签的显示
+        const yearLabels = document.querySelectorAll('.timeline-year-label');
+        yearLabels.forEach(label => {
+          const nextSibling = label.nextElementSibling;
+          if (nextSibling && nextSibling.classList.contains('timeline-item') && 
+              nextSibling.style.display !== 'none') {
+            label.style.display = '';
+          } else {
+            // 检查该年份下是否有可见的事件
+            let yearHasItems = false;
+            let currentElement = label.nextElementSibling;
+            
+            while (currentElement && !currentElement.classList.contains('timeline-year-label')) {
+              if (currentElement.classList.contains('timeline-item') && 
+                  currentElement.style.display !== 'none') {
+                yearHasItems = true;
+                break;
+              }
+              currentElement = currentElement.nextElementSibling;
+            }
+            
+            label.style.display = yearHasItems ? '' : 'none';
+          }
+        });
+      }
+      
+      // 初始化图表
+      function initCharts() {
+        // 舆情趋势图表
+        const sentimentCtx = document.getElementById('sentiment-chart').getContext('2d');
+        const sentimentChart = new Chart(sentimentCtx, {
+          type: 'line',
+          data: {
+            labels: ['7/28', '7/29', '7/30', '7/31', '8/1', '8/2', '8/3', '8/4', '8/5'],
+            datasets: [
+              {
+                label: '舆情热度',
+                data: [1200, 3500, 8900, 12500, 15800, 13200, 9800, 6500, 3200],
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                tension: 0.4,
+                fill: true
+              },
+              {
+                label: '媒体报道',
+                data: [300, 800, 2100, 3200, 4500, 3800, 2900, 1800, 900],
+                borderColor: '#06b6d4',
+                backgroundColor: 'transparent',
+                tension: 0.4,
+                borderDash: [5, 5]
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: '#e2e8f0'
+                }
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.05)'
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              }
+            }
+          }
+        });
+        
+        // 情感倾向图表
+        const emotionCtx = document.getElementById('emotion-chart').getContext('2d');
+        const emotionChart = new Chart(emotionCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['担忧', '建议', '点赞', '质疑'],
+            datasets: [{
+              data: [45, 30, 15, 10],
+              backgroundColor: [
+                '#ef4444',
+                '#0ea5e9',
+                '#10b981',
+                '#f59e0b'
+              ],
+              borderWidth: 0,
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
+          }
+        });
+        
+        // 气象数据图表（在模态框中）
+        const meteorologicalCtx = document.getElementById('meteorological-chart').getContext('2d');
+        const meteorologicalChart = new Chart(meteorologicalCtx, {
+          type: 'bar',
+          data: {
+            labels: ['7/29', '7/30', '7/31', '8/1', '8/2'],
+            datasets: [{
+              label: '日降雨量 (mm)',
+              data: [56, 128, 292, 185, 62],
+              backgroundColor: '#0ea5e9',
+              borderRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.05)'
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      // 加载更多按钮
+      document.getElementById('load-more').addEventListener('click', function() {
+        this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 加载中...';
+        
+        // 模拟加载延迟
+        setTimeout(() => {
+          this.innerHTML = '没有更多事件了';
+          this.disabled = true;
+          this.classList.add('opacity-50', 'cursor-not-allowed');
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
