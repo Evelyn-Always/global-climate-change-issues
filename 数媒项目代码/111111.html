@@ -1281,222 +1281,311 @@ document.addEventListener('keydown', function(e) {
 
         <!-- 4. 预警中心页面 -->
 
-        <section id="alerts-page" class="page-content hidden">
-              <div class="mb-6">
+       <section id="alerts-page" class="page-content hidden bg-dark-800 min-h-screen">
+  <div class="mb-6">
     <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">预警中心</h2>
-    <p class="text-dark-100 mt-1">深入分析气候变化相关舆情的主题分布与情感倾向</p>
+    <p class="text-dark-100 mt-1">AI驱动多源数据融合、三维预警态势、虚拟事件推演、全息通知、跨端协同</p>
   </div>
-       <!-- <h2 class="text-lg font-bold text-white mb-4">预警中心</h2> -->
-
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          <div class="lg:col-span-3 bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-            <div class="p-3 border-b border-dark-300 flex justify-between items-center">
-              <h3 class="font-semibold text-sm">近期预警</h3>
-              <div class="flex items-center gap-2">
-                <div class="relative">
-                  <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50">
-                    <option>全部预警</option>
-                    <option>热度异常</option>
-                    <option>情感波动</option>
-                    <option>事件爆发</option>
-                  </select>
-                </div>
-                <button class="text-dark-100 hover:text-white transition-colors">
-                  <i class="fa fa-refresh text-xs"></i>
-                </button>
-              </div>
-            </div>
-            <div class="h-[400px] overflow-y-auto scrollbar-thin">
-              <div class="divide-y divide-dark-300">
-                <div class="p-3 hover:bg-dark-300/30 transition-colors cursor-pointer">
-                  <div class="flex justify-between items-start">
-                    <div>
-                      <div class="flex items-center">
-                        <div class="bg-danger/20 text-danger text-xs px-2 py-0.5 rounded mr-2">热度异常</div>
-                        <span class="text-dark-100 text-xs">2025-07-16 14:30</span>
-                      </div>
-                      <h4 class="font-medium text-sm mt-1.5">巴西亚马逊地区"森林火灾"舆情热度异常升高</h4>
-                      <p class="text-xs text-dark-100 mt-1">过去24小时内，巴西亚马逊地区关于森林火灾的讨论量增长215%，超过预警阈值200%。</p>
-                    </div>
-                    <div class="ml-4">
-                      <span class="text-danger text-base font-bold">92</span>
-                      <span class="text-dark-100 text-xs">热度值</span>
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center mt-2">
-                    <div class="flex items-center gap-1.5">
-                      <span class="bg-danger/10 text-danger text-xs px-1.5 py-0.5 rounded">消极 78%</span>
-                      <span class="bg-warning/10 text-warning text-xs px-1.5 py-0.5 rounded">中立 15%</span>
-                      <span class="bg-success/10 text-success text-xs px-1.5 py-0.5 rounded">积极 7%</span>
-                    </div>
-                    <button class="text-primary text-xs hover:underline">查看详情</button>
-                  </div>
-                </div>
-
-                <div class="p-3 hover:bg-dark-300/30 transition-colors cursor-pointer">
-                  <div class="flex justify-between items-start">
-                    <div>
-                      <div class="flex items-center">
-                        <div class="bg-warning/20 text-warning text-xs px-2 py-0.5 rounded mr-2">情感波动</div>
-                        <span class="text-dark-100 text-xs">2025-07-15 09:15</span>
-                      </div>
-                      <h4 class="font-medium text-sm mt-1.5">"碳关税"政策相关讨论消极情绪激增</h4>
-                      <p class="text-xs text-dark-100 mt-1">过去48小时内，关于"碳关税"政策的讨论中，消极情绪占比从42%升至65%，增长超过50%。</p>
-                    </div>
-                    <div class="ml-4">
-                      <span class="text-warning text-base font-bold">76</span>
-                      <span class="text-dark-100 text-xs">热度值</span>
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center mt-2">
-                    <div class="flex items-center gap-1.5">
-                      <span class="bg-danger/10 text-danger text-xs px-1.5 py-0.5 rounded">消极 65%</span>
-                      <span class="bg-warning/10 text-warning text-xs px-1.5 py-0.5 rounded">中立 25%</span>
-                      <span class="bg-success/10 text-success text-xs px-1.5 py-0.5 rounded">积极 10%</span>
-                    </div>
-                    <button class="text-primary text-xs hover:underline">查看详情</button>
-                  </div>
-                </div>
-
-                <div class="p-3 hover:bg-dark-300/30 transition-colors cursor-pointer">
-                  <div class="flex justify-between items-start">
-                    <div>
-                      <div class="flex items-center">
-                        <div class="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded mr-2">事件爆发</div>
-                        <span class="text-dark-100 text-xs">2025-07-14 18:45</span>
-                      </div>
-                      <h4 class="font-medium text-sm mt-1.5">中国华北地区极端降雨引发洪灾舆情爆发</h4>
-                      <p class="text-xs text-dark-100 mt-1">过去12小时内，关于中国华北地区极端降雨和洪灾的讨论量达到32.5k，较前日增长310%。</p>
-                    </div>
-                    <div class="ml-4">
-                      <span class="text-primary text-base font-bold">87</span>
-                      <span class="text-dark-100 text-xs">热度值</span>
-                    </div>
-                  </div>
-                  <div class="flex justify-between items-center mt-2">
-                    <div class="flex items-center gap-1.5">
-                      <span class="bg-danger/10 text-danger text-xs px-1.5 py-0.5 rounded">消极 72%</span>
-                      <span class="bg-warning/10 text-warning text-xs px-1.5 py-0.5 rounded">中立 20%</span>
-                      <span class="bg-success/10 text-success text-xs px-1.5 py-0.5 rounded">积极 8%</span>
-                    </div>
-                    <button class="text-primary text-xs hover:underline">查看详情</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 右侧预警设置 -->
-          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-            <div class="p-3 border-b border-dark-300">
-              <h3 class="font-semibold text-sm">预警设置</h3>
-            </div>
-            <div class="p-3 space-y-3">
-              <div>
-                <h4 class="font-medium text-xs mb-2">预警阈值</h4>
-                <div class="space-y-2">
-                  <div>
-                    <div class="flex justify-between text-xs mb-1">
-                      <span>热度增长率阈值</span>
-                      <span>200%</span>
-                    </div>
-                    <input type="range" min="50" max="300" value="200" class="w-full h-1.5 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
-                    <div class="flex justify-between text-xs text-dark-100 mt-1">
-                      <span>50%</span>
-                      <span>300%</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div class="flex justify-between text-xs mb-1">
-                      <span>情感波动阈值</span>
-                      <span>40%</span>
-                    </div>
-                    <input type="range" min="10" max="80" value="40" class="w-full h-1.5 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
-                    <div class="flex justify-between text-xs text-dark-100 mt-1">
-                      <span>10%</span>
-                      <span>80%</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div class="flex justify-between text-xs mb-1">
-                      <span>讨论量阈值</span>
-                      <span>10k</span>
-                    </div>
-                    <input type="range" min="1" max="50" value="10" class="w-full h-1.5 bg-dark-300 rounded-lg appearance-none cursor-pointer accent-primary">
-                    <div class="flex justify-between text-xs text-dark-100 mt-1">
-                      <span>1k</span>
-                      <span>50k</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="border-t border-dark-300 pt-3">
-                <h4 class="font-medium text-xs mb-2">关注话题</h4>
-                <div class="space-y-1.5">
-                  <label class="flex items-center justify-between">
-                    <div class="flex items-center">
-                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                      <span class="ml-2 text-xs">森林火灾</span>
-                    </div>
-                    <div class="bg-danger/20 text-danger text-xs px-1.5 py-0.5 rounded">高风险</div>
-                  </label>
-
-                  <label class="flex items-center justify-between">
-                    <div class="flex items-center">
-                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                      <span class="ml-2 text-xs">极端天气</span>
-                    </div>
-                    <div class="bg-warning/20 text-warning text-xs px-1.5 py-0.5 rounded">中风险</div>
-                  </label>
-
-                  <label class="flex items-center justify-between">
-                    <div class="flex items-center">
-                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                      <span class="ml-2 text-xs">碳关税政策</span>
-                    </div>
-                    <div class="bg-primary/20 text-primary text-xs px-1.5 py-0.5 rounded">中风险</div>
-                  </label>
-
-                  <label class="flex items-center justify-between">
-                    <div class="flex items-center">
-                      <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                      <span class="ml-2 text-xs">可再生能源</span>
-                    </div>
-                    <div class="bg-success/20 text-success text-xs px-1.5 py-0.5 rounded">低风险</div>
-                  </label>
-                </div>
-              </div>
-
-              <div class="border-t border-dark-300 pt-3">
-                <h4 class="font-medium text-xs mb-2">通知方式</h4>
-                <div class="space-y-1.5">
-                  <label class="flex items-center">
-                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                    <span class="ml-2 text-xs">系统内通知</span>
-                  </label>
-
-                  <label class="flex items-center">
-                    <input type="checkbox" checked class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                    <span class="ml-2 text-xs">邮件提醒</span>
-                  </label>
-
-                  <label class="flex items-center">
-                    <input type="checkbox" class="rounded text-primary focus:ring-primary/50 bg-dark-300 border-dark-200">
-                    <span class="ml-2 text-xs">短信提醒</span>
-                  </label>
-                </div>
-              </div>
-
-              <button class="w-full bg-primary hover:bg-primary/90 text-white py-1.5 rounded-lg text-xs transition-colors">
-                保存设置
-              </button>
-            </div>
+  <!-- 预警数据融合可视化 -->
+  <div class="flex flex-row gap-8 mb-8">
+    <div class="w-2/3">
+      <div class="bg-dark-700 p-4 rounded-lg">
+        <h3 class="text-white font-bold text-lg mb-2">多源数据融合动态流</h3>
+        <canvas id="fusion-canvas" class="w-full h-56 bg-dark-800 rounded"></canvas>
+        <div id="fusion-desc" class="text-dark-100 mt-2 text-sm">
+          各类数据（气象、舆情、新闻）实时汇聚，AI分析动态触发预警信号
+        </div>
+        <div id="ai-threshold-panel" class="mt-4">
+          <h4 class="text-white font-semibold text-base mb-1">AI智能阈值学习</h4>
+          <canvas id="threshold-canvas" class="w-full h-32 bg-dark-800 rounded"></canvas>
+          <div class="flex items-center gap-4 mt-2">
+            <span class="text-gray-400 text-xs">历史误报/漏报案例覆盖范围对比</span>
+            <button id="learn-threshold-btn" class="bg-blue-700 text-white px-3 py-1 rounded hover:bg-blue-800 text-sm">AI自进化演示</button>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+    <!-- 预警事件沙盒推演 -->
+    <div class="w-1/3 bg-dark-700 p-4 rounded-lg flex flex-col">
+      <h3 class="text-white font-bold text-lg mb-2">预警事件沙盒推演</h3>
+      <div id="event-sandbox" class="text-dark-100 text-sm mb-3">
+        可调整响应参数，观察预警事件链变化
+      </div>
+      <div class="flex flex-col gap-2 mb-4">
+        <label class="flex items-center text-dark-100 text-xs gap-2">官方回应时间
+          <input type="range" id="official-response" min="1" max="24" value="6" class="w-24 accent-blue-500">
+          <span id="response-time-label" class="text-blue-400">6小时</span>
+        </label>
+        <label class="flex items-center text-dark-100 text-xs gap-2">媒体报道倾向
+          <select id="media-inclination" class="bg-dark-800 text-white rounded px-2 py-1 border-none">
+            <option value="neutral">中性</option>
+            <option value="positive">积极</option>
+            <option value="negative">消极</option>
+          </select>
+        </label>
+      </div>
+      <button id="simulate-btn" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 text-sm">推演预警结果</button>
+      <div id="sandbox-result" class="mt-2 text-dark-100 text-xs bg-dark-800 p-2 rounded"></div>
+      <div id="event-chain-visual" class="mt-2"></div>
+    </div>
+  </div>
+  <!-- 三维预警态势地图 -->
+  <div class="mb-8">
+    <div class="bg-dark-700 p-4 rounded-lg">
+      <h3 class="text-white font-bold text-lg mb-2">三维预警态势地图</h3>
+      <div id="map3d-container" class="w-full h-80 bg-dark-800 rounded relative">
+        <!-- Three.js地图 -->
+        <canvas id="map3d" class="w-full h-full"></canvas>
+      </div>
+      <div id="map-details" class="text-dark-100 mt-2 text-xs"></div>
+    </div>
+  </div>
+  <!-- 全息通知弹窗 -->
+  <div id="holo-alert-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <div class="relative bg-dark-800 rounded-lg p-6 shadow-lg border border-blue-700 max-w-md w-full overflow-hidden">
+      <div id="holo-particles" class="absolute inset-0 pointer-events-none"></div>
+      <h4 class="text-blue-400 font-bold text-xl mb-2 animate-pulse">全息预警通知</h4>
+      <div id="holo-alert-content" class="text-white mb-2"></div>
+      <div id="holo-keydata" class="text-dark-100 mb-3"></div>
+      <div class="flex gap-2">
+        <button id="view-analysis-btn" class="bg-blue-700 text-white px-3 py-1 rounded hover:bg-blue-800 text-sm">查看分析</button>
+        <button id="close-holo-alert" class="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-800 text-sm">关闭</button>
+      </div>
+      <div id="holo-advice" class="text-green-400 mt-3 text-sm"></div>
+    </div>
+  </div>
+  <!-- 跨端预警协同展示 -->
+  <div class="mb-8">
+    <div class="bg-dark-700 p-4 rounded-lg">
+      <h3 class="text-white font-bold text-lg mb-2">跨端预警协同</h3>
+      <div class="flex flex-row gap-6">
+        <div class="w-1/3">
+          <div class="bg-dark-800 rounded p-2 text-white text-xs">PC端：深度分析，预警参数调整</div>
+        </div>
+        <div class="w-1/3">
+          <div class="bg-dark-800 rounded p-2 text-white text-xs">移动端：极简卡片，关键操作入口</div>
+        </div>
+        <div class="w-1/3">
+          <div class="bg-dark-800 rounded p-2 text-white text-xs">大屏端：瀑布流、风险雷达沉浸展示</div>
+        </div>
+      </div>
+      <div class="mt-2 text-gray-400 text-xs">三端数据实时同步，协同研判</div>
+    </div>
+  </div>
+</section>
+<script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+<script>
+// --------- 多源数据融合可视化 ---------
+function drawFusionFlow() {
+  const canvas = document.getElementById('fusion-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // 三条动态曲线模拟数据流
+  const colors = ['#00eaff','#ff4e9b','#ffe600'];
+  for(let i=0;i<3;i++){
+    ctx.beginPath();
+    ctx.strokeStyle = colors[i];
+    ctx.lineWidth = 3;
+    let baseY = 40 + i*60;
+    for(let x=0;x<canvas.width;x+=10){
+      let y = baseY + Math.sin((x+Date.now()/100+i*20)/60)*20 + Math.cos((x+i*30)/50)*10;
+      if(x===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 0.6;
+    ctx.beginPath();
+    ctx.arc(canvas.width-30, baseY, 20, 0, 2*Math.PI);
+    ctx.fillStyle = '#44ffdd';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  // 汇聚点
+  ctx.beginPath();
+  ctx.arc(canvas.width-20, canvas.height/2, 22, 0, 2*Math.PI);
+  ctx.fillStyle = '#00ffea';
+  ctx.shadowColor = '#00ffea';
+  ctx.shadowBlur = 20;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  // 预警信号
+  ctx.font = 'bold 18px "Consolas"';
+  ctx.fillStyle = '#ff004e';
+  ctx.fillText('⚡预警触发', canvas.width-60, canvas.height/2+7);
+}
+setInterval(drawFusionFlow, 80);
+window.addEventListener('resize', () => setTimeout(drawFusionFlow,300));
+
+// --------- 阈值学习可视化 ---------
+let oldThreshold = [0.4,0.5,0.45,0.5,0.6,0.5,0.7,0.6,0.65];
+let newThreshold = [0.5,0.55,0.5,0.55,0.62,0.58,0.75,0.68,0.7];
+function drawThresholdCurve() {
+  const canvas = document.getElementById('threshold-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // 旧阈值曲线
+  ctx.beginPath();
+  ctx.strokeStyle='#ff8c00'; ctx.lineWidth=2;
+  oldThreshold.forEach((v,i)=>{
+    let x=20+i*(canvas.width-40)/8, y=canvas.height-20-v*(canvas.height-40);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // 新阈值曲线
+  ctx.beginPath();
+  ctx.strokeStyle='#00eaff'; ctx.lineWidth=2;
+  newThreshold.forEach((v,i)=>{
+    let x=20+i*(canvas.width-40)/8, y=canvas.height-20-v*(canvas.height-40);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // 图例
+  ctx.font='bold 12px "Consolas"';
+  ctx.fillStyle='#ff8c00'; ctx.fillText('旧阈值',25,15);
+  ctx.fillStyle='#00eaff'; ctx.fillText('新阈值',100,15);
+}
+drawThresholdCurve();
+document.getElementById('learn-threshold-btn').onclick = function() {
+  // 模拟AI自进化：新阈值动态变化
+  for(let i=0;i<newThreshold.length;i++) newThreshold[i]+=Math.random()*0.04-0.02;
+  drawThresholdCurve();
+}
+
+// --------- 预警沙盒推演 ---------
+function simulateEventChain() {
+  let responseTime = Number(document.getElementById('official-response').value);
+  let mediaIncline = document.getElementById('media-inclination').value;
+  let result = '', chain=[];
+  if(responseTime<=6 && mediaIncline=='positive')
+    result='响应及时且舆论积极，预警事件快速平息。';
+  else if(responseTime>12 && mediaIncline=='negative')
+    result='响应迟缓且媒体消极，舆情升级，风险扩大。';
+  else result='舆情与响应适中，预警事件逐步控制。';
+  chain=[
+    {stage:"气象异常",color:"#00eaff"},
+    {stage:"社交热议",color:"#ffe600"},
+    {stage:"政策回应",color:"#2196f3"},
+    {stage:"舆情变化",color:"#ff4e9b"},
+    {stage:"风险控制",color:"#44ffdd"}
+  ];
+  // 事件链可视化
+  let html='<div class="flex gap-1 mt-1">';
+  for(let i=0;i<chain.length;i++){
+    html+=`<div class="px-2 py-1 rounded bg-[${chain[i].color}] text-xs text-dark-800 font-bold">${chain[i].stage}</div>`;
+    if(i!==chain.length-1) html+='<span class="text-white">→</span>';
+  }
+  html+='</div>';
+  document.getElementById('sandbox-result').textContent=result;
+  document.getElementById('event-chain-visual').innerHTML=html;
+}
+document.getElementById('official-response').oninput = function() {
+  document.getElementById('response-time-label').textContent = this.value+'小时';
+};
+document.getElementById('simulate-btn').onclick = simulateEventChain;
+
+// --------- 三维预警态势地图 ---------
+
+let map3dRenderer, map3dScene, map3dCamera, map3dControls;
+function init3DMap() {
+  // 基础场景
+  const canvas = document.getElementById('map3d');
+  map3dRenderer = new THREE.WebGLRenderer({canvas, alpha:true});
+  map3dRenderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+  map3dScene = new THREE.Scene();
+  map3dCamera = new THREE.PerspectiveCamera(45, canvas.offsetWidth/canvas.offsetHeight, 1, 1000);
+  map3dCamera.position.set(0,80,180);
+  // 地面
+  let ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(200,120),
+    new THREE.MeshBasicMaterial({color:0x1b232f, side:THREE.DoubleSide})
+  );
+  ground.rotation.x = -Math.PI/2; ground.position.y = -10;
+  map3dScene.add(ground);
+  // 预警光柱
+  let columns = [
+    {name:"沿海台风",x:-60,z:-20,height:60,color:0xff004e,level:"高"},
+    {name:"内陆暴雨",x:40,z:30,height:40,color:0x00eaff,level:"中"},
+    {name:"西部高温",x:70,z:-40,height:20,color:0xffe600,level:"低"}
+  ];
+  columns.forEach((col,i)=>{
+    let geom = new THREE.CylinderGeometry(8,8,col.height,32);
+    let mat = new THREE.MeshBasicMaterial({color:col.color, transparent:true, opacity:0.8});
+    let cyl = new THREE.Mesh(geom,mat);
+    cyl.position.set(col.x,col.height/2-10,col.z);
+    cyl.name = col.name;
+    map3dScene.add(cyl);
+    // 光柱闪烁
+    setInterval(()=>{cyl.material.opacity=0.7+Math.sin(Date.now()/400+i*2)*0.3;},120);
+  });
+  // 可选：添加时间轴、控件
+  animate();
+  // 鼠标事件
+  canvas.addEventListener('click', function(e){
+    const mouse = new THREE.Vector2(
+      (e.offsetX / canvas.offsetWidth) * 2 - 1,
+      -(e.offsetY / canvas.offsetHeight) * 2 + 1
+    );
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, map3dCamera);
+    const intersects = raycaster.intersectObjects(map3dScene.children);
+    if(intersects.length>0 && intersects[0].object.name){
+      let obj=intersects[0].object;
+      document.getElementById('map-details').innerHTML=
+        `<span class="text-blue-400 font-bold">${obj.name}</span> | 等级:${columns.find(c=>c.name==obj.name).level} | 影响范围:${obj.geometry.parameters.height}km`;
+    }
+  });
+}
+function animate() {
+  requestAnimationFrame(animate);
+  map3dRenderer.render(map3dScene, map3dCamera);
+}
+setTimeout(init3DMap,500);
+
+// --------- 全息预警通知弹窗 ---------
+function showHoloAlert(info) {
+  document.getElementById('holo-alert-modal').classList.remove('hidden');
+  document.getElementById('holo-alert-content').textContent = info.title;
+  document.getElementById('holo-keydata').textContent = info.keydata;
+  document.getElementById('holo-advice').textContent = '';
+  // 粒子特效
+  let particles = document.getElementById('holo-particles');
+  particles.innerHTML = '';
+  for(let i=0;i<40;i++){
+    let p = document.createElement('div');
+    p.style.position='absolute'; p.style.width='4px';p.style.height='4px';
+    p.style.borderRadius='50%';p.style.background='#00eaff';
+    p.style.left=(50+Math.random()*200)+'px';p.style.top=(40+Math.random()*120)+'px';
+    p.style.opacity=Math.random()*0.7+0.3;
+    particles.appendChild(p);
+  }
+}
+document.getElementById('close-holo-alert').onclick = function() {
+  document.getElementById('holo-alert-modal').classList.add('hidden');
+}
+document.getElementById('view-analysis-btn').onclick = function() {
+  document.getElementById('holo-advice').textContent = 'AI锦囊：建议加强沿海防风措施，及时发布权威信息，减少舆情扩散。';
+}
+// 模拟高等级预警触发
+setTimeout(()=>showHoloAlert({
+  title:'台风橙色预警！',
+  keydata:'影响区域：沿海城市 | 风力：12级 | 预计到达时间：08-04 02:00'
+}),3000);
+</script>
+<style>
+.bg-dark-800 { background: #14171a; }
+.bg-dark-700 { background: #22272e; }
+.text-dark-100 { color: #eaf2fb; }
+.text-dark-800 { color: #eaf2fb; }
+.text-white { color: #fff; }
+.text-blue-400 { color: #00eaff; }
+.text-green-400 { color: #44ffdd; }
+.text-gray-400 { color: #a0aec0; }
+.page-content { background: #14171a; }
+button, .rounded { border-radius: 6px; }
+button { transition: background 0.2s, color 0.2s; }
+</style>
 
         <!-- 5. 全国气候事件时间线页面 -->
         <div id="timeline-page" class="page-content hidden">
@@ -1518,110 +1607,490 @@ document.addEventListener('keydown', function(e) {
             <p class="text-dark-100 mt-1">聚合全国最新气候新闻和政策动态</p>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2">
-              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
-                  <h3 class="font-semibold text-lg">最新新闻</h3>
-                  <div class="flex items-center gap-2">
-                    <button class="bg-primary/20 text-primary px-3 py-1 rounded text-sm">全部</button>
-                    <button class="text-dark-100 hover:text-white px-3 py-1 rounded text-sm">政策</button>
-                    <button class="text-dark-100 hover:text-white px-3 py-1 rounded text-sm">科研</button>
-                  </div>
-                </div>
-                <div class="divide-y divide-dark-300">
-                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
-                    <div class="flex justify-between items-start mb-2">
-                      <h4 class="font-medium text-white">中国发布2025年碳达峰行动方案</h4>
-                      <span class="text-dark-100 text-sm">2小时前</span>
-                    </div>
-                    <p class="text-dark-100 text-sm mb-3">国家发改委发布最新碳达峰行动方案，提出到2030年非化石能源占比达到25%的目标...</p>
-                    <div class="flex justify-between items-center">
-                      <div class="flex items-center space-x-2">
-                        <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">政策</span>
-                        <span class="text-dark-100 text-xs">来源: 新华网</span>
-                      </div>
-                      <button class="text-primary text-sm hover:underline">展开详情</button>
-                    </div>
-                  </div>
 
-                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
-                    <div class="flex justify-between items-start mb-2">
-                      <h4 class="font-medium text-white">IPCC发布最新气候报告：全国升温或超预期</h4>
-                      <span class="text-dark-100 text-sm">4小时前</span>
-                    </div>
-                    <p class="text-dark-100 text-sm mb-3">联合国政府间气候变化专门委员会发布最新评估报告，警告全国升温可能比预期更快...</p>
-                    <div class="flex justify-between items-center">
-                      <div class="flex items-center space-x-2">
-                        <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">科研</span>
-                        <span class="text-dark-100 text-xs">来源: BBC</span>
-                      </div>
-                      <button class="text-primary text-sm hover:underline">展开详情</button>
-                    </div>
-                  </div>
-
-                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
-                    <div class="flex justify-between items-start mb-2">
-                      <h4 class="font-medium text-white">美国重返巴黎协定加强减排承诺</h4>
-                      <span class="text-dark-100 text-sm">6小时前</span>
-                    </div>
-                    <p class="text-dark-100 text-sm mb-3">美国政府宣布加强减排承诺，计划到2035年实现电力部门脱碳...</p>
-                    <div class="flex justify-between items-center">
-                      <div class="flex items-center space-x-2">
-                        <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">国际</span>
-                        <span class="text-dark-100 text-xs">来源: CNN</span>
-                      </div>
-                      <button class="text-primary text-sm hover:underline">展开详情</button>
-                    </div>
-                  </div>
+  <!-- 主要内容区：新闻列表与详情 -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- 新闻列表区域 -->
+    <div id="news-list-container" class="lg:col-span-1">
+      <div class="bg-gray-900/50 backdrop-blur-sm rounded-xl shadow-[0_0_15px_rgba(0,255,255,0.1)] border border-cyan-500/20 overflow-hidden h-[calc(100vh-220px)] flex flex-col">
+        <div class="p-4 border-b border-cyan-500/20 flex justify-between items-center">
+          <h3 class="font-semibold text-white">新闻政策列表</h3>
+          <span id="news-count" class="text-sm text-gray-400">共 12 条内容</span>
+        </div>
+        
+        <!-- 新闻列表 -->
+        <div id="news-list" class="overflow-y-auto scrollbar-hide flex-grow p-2">
+          <!-- 新闻项 1 -->
+          <div class="news-item bg-gray-900/60 rounded-lg p-4 mb-3 cursor-pointer hover:bg-gray-800/60 border border-cyan-500/10 hover:border-cyan-400/30 transition-all" data-id="news-1" data-type="policy">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400"></div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-emerald-400/10 text-emerald-400 text-xs rounded-full">政策文件</span>
+                  <span class="text-xs text-gray-400">2023-08-15</span>
                 </div>
+                <h4 class="font-medium text-white truncate">《国家适应气候变化战略2023-2035年》正式发布</h4>
+                <p class="text-gray-300 text-sm mt-1 line-clamp-2">国家发改委发布最新适应气候变化战略，明确未来12年适应气候变化工作的指导思想、主要目标和重点任务。</p>
               </div>
             </div>
-
-            <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-              <div class="p-4 border-b border-dark-300">
-                <h3 class="font-semibold text-lg">政策追踪</h3>
+          </div>
+          
+          <!-- 新闻项 2 -->
+          <div class="news-item bg-gray-900/60 rounded-lg p-4 mb-3 cursor-pointer hover:bg-gray-800/60 border border-cyan-500/10 hover:border-cyan-400/30 transition-all" data-id="news-2" data-type="news">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-cyan-400"></div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-cyan-400/10 text-cyan-400 text-xs rounded-full">最新新闻</span>
+                  <span class="text-xs text-gray-400">2023-08-14</span>
+                </div>
+                <h4 class="font-medium text-white truncate">全国碳市场第二个履约周期顺利收官</h4>
+                <p class="text-gray-300 text-sm mt-1 line-clamp-2">生态环境部表示，全国碳市场第二个履约周期顺利收官，覆盖年排放量约45亿吨二氧化碳，市场运行总体平稳。</p>
               </div>
-              <div class="p-4 space-y-4">
-                <div class="bg-dark-300/30 rounded-lg p-3">
-                  <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-medium text-sm">欧盟REPowerEU计划</h4>
-                    <span class="bg-primary/20 text-primary text-xs px-2 py-1 rounded">进行中</span>
-                  </div>
-                  <p class="text-dark-100 text-xs mb-2">加速可再生能源部署，减少对俄罗斯能源依赖</p>
-                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
-                    <div class="bg-primary h-1.5 rounded-full" style="width: 68%"></div>
-                  </div>
-                  <span class="text-xs text-dark-100">进度: 68%</span>
+            </div>
+          </div>
+          
+          <!-- 新闻项 3 -->
+          <div class="news-item bg-gray-900/60 rounded-lg p-4 mb-3 cursor-pointer hover:bg-gray-800/60 border border-cyan-500/10 hover:border-cyan-400/30 transition-all" data-id="news-3" data-type="news">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-cyan-400"></div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-cyan-400/10 text-cyan-400 text-xs rounded-full">最新新闻</span>
+                  <span class="text-xs text-gray-400">2023-08-12</span>
                 </div>
-
-                <div class="bg-dark-300/30 rounded-lg p-3">
-                  <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-medium text-sm">中国碳交易市场扩容</h4>
-                    <span class="bg-warning/20 text-warning text-xs px-2 py-1 rounded">筹备中</span>
-                  </div>
-                  <p class="text-dark-100 text-xs mb-2">将化工、钢铁等行业纳入全国碳市场</p>
-                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
-                    <div class="bg-warning h-1.5 rounded-full" style="width: 45%"></div>
-                  </div>
-                  <span class="text-xs text-dark-100">进度: 45%</span>
+                <h4 class="font-medium text-white truncate">我国将建立气候适应型城市评价标准体系</h4>
+                <p class="text-gray-300 text-sm mt-1 line-clamp-2">住房和城乡建设部计划在全国范围内建立气候适应型城市评价标准体系，提升城市应对气候变化能力。</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 新闻项 4 -->
+          <div class="news-item bg-gray-900/60 rounded-lg p-4 mb-3 cursor-pointer hover:bg-gray-800/60 border border-cyan-500/10 hover:border-cyan-400/30 transition-all" data-id="news-4" data-type="policy">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400"></div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-emerald-400/10 text-emerald-400 text-xs rounded-full">政策文件</span>
+                  <span class="text-xs text-gray-400">2023-08-10</span>
                 </div>
-
-                <div class="bg-dark-300/30 rounded-lg p-3">
-                  <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-medium text-sm">美国IRA法案实施</h4>
-                    <span class="bg-success/20 text-success text-xs px-2 py-1 rounded">已实施</span>
-                  </div>
-                  <p class="text-dark-100 text-xs mb-2">通胀削减法案推动清洁能源投资</p>
-                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
-                    <div class="bg-success h-1.5 rounded-full" style="width: 85%"></div>
-                  </div>
-                  <span class="text-xs text-dark-100">进度: 85%</span>
+                <h4 class="font-medium text-white truncate">《关于推动新时代气候投融资工作的指导意见》出台</h4>
+                <p class="text-gray-300 text-sm mt-1 line-clamp-2">国家发改委等多部门联合印发指导意见，旨在引导和促进更多资金投向气候适应和减缓领域。</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 新闻项 5 -->
+          <div class="news-item bg-gray-900/60 rounded-lg p-4 mb-3 cursor-pointer hover:bg-gray-800/60 border border-cyan-500/10 hover:border-cyan-400/30 transition-all" data-id="news-5" data-type="news">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-cyan-400"></div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-cyan-400/10 text-cyan-400 text-xs rounded-full">最新新闻</span>
+                  <span class="text-xs text-gray-400">2023-08-08</span>
                 </div>
+                <h4 class="font-medium text-white truncate">我国首次实现省级行政区气候风险普查全覆盖</h4>
+                <p class="text-gray-300 text-sm mt-1 line-clamp-2">应急管理部宣布，我国已完成31个省(自治区、直辖市)气候风险普查工作，为防灾减灾提供科学依据。</p>
               </div>
             </div>
           </div>
         </div>
+        
+        <!-- 加载更多 -->
+        <div class="p-3 border-t border-cyan-500/20 text-center">
+          <button id="load-more-news" class="px-4 py-2 border border-cyan-500/30 hover:border-cyan-400 text-gray-300 hover:text-white rounded-lg transition transition-colors text-sm">
+            加载更多 <i class="fa fa-angle-down ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 新闻详情与AI分析区域 -->
+    <div id="news-detail-container" class="lg:col-span-2 bg-gray-900/50 backdrop-blur-sm rounded-xl shadow-[0_0_15px_rgba(0,255,255,0.1)] border border-cyan-500/20 overflow-hidden h-[calc(100vh-220px)] flex flex-col">
+      <!-- 初始提示 -->
+      <div id="news-detail-placeholder" class="flex-grow flex flex-col items-center justify-center p-8 text-center">
+        <div class="w-20 h-20 rounded-full bg-gray-900/80 flex items-center justify-center mb-4 border border-cyan-500/20">
+          <i class="fa fa-newspaper-o text-3xl text-cyan-400"></i>
+        </div>
+        <h3 class="text-xl font-medium text-white mb-2">选择新闻查看详情</h3>
+        <p class="text-gray-400 max-w-md">从左侧列表中选择一条新闻或政策文件，查看详细内容及AI分析解读</p>
+      </div>
+      
+      <!-- 新闻详情内容 (默认隐藏) -->
+      <div id="news-detail-content" class="hidden flex flex flex-col h-full">
+        <!-- 详情头部 -->
+        <div class="p-4 border-b border-cyan-500/20 flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <button id="back-to-list" class="p-2 rounded-lg hover:bg-cyan-500/10 text-cyan-400/60 hover:text-white transition-colors" title="返回列表">
+              <i class="fa fa-arrow-left"></i>
+            </button>
+            <span id="detail-current-type" class="px-2 py-0.5 bg-emerald-400/10 text-emerald-400 text-xs rounded-full">政策文件</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="share-news" class="p-2 rounded-lg hover:bg-cyan-500/10 text-cyan-400/60 hover:text-white transition-colors" title="分享">
+              <i class="fa fa-share-alt"></i>
+            </button>
+            <button id="save-news" class="p-2 rounded-lg hover:bg-cyan-500/10 text-cyan-400/60 hover:text-white transition-colors" title="收藏">
+              <i class="fa fa-star-o"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 详情内容区域 -->
+        <div class="flex-grow overflow-y-auto scrollbar-hide p-6">
+          <!-- 新闻标题与信息 -->
+          <div class="mb-6">
+            <h3 id="detail-title" class="text-2xl font-bold text-white mb-4">《国家适应气候变化战略2023-2035年》正式发布</h3>
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-4">
+              <div class="flex items-center">
+                <i class="fa fa-calendar-o mr-2"></i>
+                <span id="detail-date">2023-08-15</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-building-o mr-2"></i>
+                <span id="detail-source">国家发展和改革委员会</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-map-marker mr-2"></i>
+                <span id="detail-region">全国</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-eye mr-2"></i>
+                <span id="detail-views">2,354 次浏览</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 新闻内容 -->
+          <div id="detail-content" class="prose prose-invert max-w-none text-white mb-8">
+            <p>国家发展和改革委员会于2023年8月15日正式发布《国家适应气候变化战略2023-2035年》（以下简称《战略》），这是我国应对气候变化的重要指导性文件，明确了未来12年适应气候变化工作的指导思想、主要目标、重点任务和保障措施。</p>
+            
+            <p>《战略》指出，当前全球气候变暖趋势加剧，极端天气气候事件频发，我国面临的气候风险日益严峻。适应气候变化是国家可持续发展的内在要求，是主动应对气候变化的重要内容，对于保障经济社会发展、维护人民生命财产安全具有重要意义。</p>
+            
+            <h4 class="text-white">主要目标</h4>
+            <p>到2025年，我国适应气候变化的政策体系和体制机制基本形成，重点领域适应能力显著增强，气候风险管理水平明显提升。到2035年，适应气候变化能力达到世界先进水平，气候风险得到有效控制，形成适应气候变化的良性循环。</p>
+            
+            <h4 class="text-white">重点任务</h4>
+            <p>《战略》明确了八大重点任务：</p>
+            <ol class="list-decimal pl-5 space-y-1 text-gray-300">
+              <li>加强气候风险评估与管理</li>
+              <li>提升农业适应气候变化能力</li>
+              <li>增强水资源适应气候变化能力</li>
+              <li>提高生态系统适应气候变化能力</li>
+              <li>强化城乡建设适应气候变化能力</li>
+              <li>加强基础设施适应气候变化能力</li>
+              <li>提升健康与公共卫生领域适应能力</li>
+              <li>加强气候适应型社会建设</li>
+            </ol>
+            
+            <p>国家发展和改革委员会有关负责人表示，将通过加强组织领导、完善法律法规、加大资金投入、强化科技支撑、健全标准体系、加强国际合作等措施，确保《战略》各项任务落到实处。</p>
+          </div>
+          
+          <!-- 原文链接 -->
+          <div class="mb-8 p-4 bg-gray-900/80 rounded-lg border border-cyan-500/20">
+            <a href="#" target="_blank" class="flex items-center text-cyan-400 hover:text-white transition-colors">
+              <i class="fa fa-external-link mr-2"></i>
+              <span>查看官方原文</span>
+            </a>
+          </div>
+          
+          <!-- AI分析区域 -->
+          <div class="bg-cyan-500/5 rounded-xl border border-cyan-500/20 p-5">
+            <div class="flex items-center mb-4">
+              <div class="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center mr-3">
+                <i class="fa fa-robot text-cyan-400"></i>
+              </div>
+              <h4 class="text-lg font-medium text-white">AI政策分析</h4>
+            </div>
+            
+            <div class="text-gray-300 space-y-3">
+              <p>本次《国家适应气候变化战略2023-2035年》的发布，反映出我国在应对气候变化方面的战略思路已从单纯的减排转向"减缓与适应并重"的新阶段。这一转变背后反映了几个关键问题：</p>
+              
+              <div class="pl-4 border-l-2 border-cyan-400/50">
+                <p><strong class="text-white">1. 气候风险已成为现实威胁</strong> - 战略的出台表明极端天气事件频发已对我国经济社会发展构成实质性威胁，需要系统性应对。</p>
+              </div>
+              
+              <div class="pl-4 border-l-2 border-cyan-400/50">
+                <p><strong class="text-white">2. 适应能力建设的迫切性</strong> - 与发达国家相比，我国在气候适应方面的基础仍然薄弱，特别是在农业、水资源等关键领域，亟需加强能力建设。</p>
+              </div>
+              
+              <div class="pl-4 border-l-2 border-cyan-400/50">
+                <p><strong class="text-white">3. 多部门协同治理的必要性</strong> - 战略涉及多个领域和部门，反映出气候变化应对需要打破条块分割，建立跨部门协同机制。</p>
+              </div>
+              
+              <div class="pl-4 border-l-2 border-cyan-400/50">
+                <p><strong class="text-white">4. 长期规划与短期行动的结合</strong> - 12年的时间跨度表明气候变化适应是一项长期任务，需要将长期规划与短期行动有机结合。</p>
+              </div>
+              
+              <p>总体而言，该战略的发布标志着我国应对气候变化工作进入了更加系统、全面和务实的新阶段，将为我国经济社会高质量发展提供重要保障。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 新闻政策页面相关脚本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 获取DOM元素
+  const newsItems = document.querySelectorAll('.news-item');
+  const newsDetailPlaceholder = document.getElementById('news-detail-placeholder');
+  const newsDetailContent = document.getElementById('news-detail-content');
+  const backToListBtn = document.getElementById('back-to-list');
+  const refreshNewsBtn = document.getElementById('refresh-news');
+  const autoRefreshSelect = document.getElementById('auto-refresh-interval');
+  const loadMoreNewsBtn = document.getElementById('load-more-news');
+  const newsTypeFilter = document.getElementById('news-type-filter');
+  const newsTimeFilter = document.getElementById('news-time-filter');
+  const newsRegionFilter = document.getElementById('news-region-filter');
+  const newsSearchInput = document.getElementById('news-search');
+  
+  // 新闻数据（实际应用中可从API获取）
+  const newsData = {
+    'news-1': {
+      title: '《国家适应气候变化战略2023-2035年》正式发布',
+      type: 'policy',
+      date: '2023-08-15',
+      source: '国家发展和改革委员会',
+      region: '全国',
+      views: '2,354',
+      content: `<p>国家发展和改革委员会于2023年8月15日正式发布《国家适应气候变化战略2023-2035年》（以下简称《战略》），这是我国应对气候变化的重要指导性文件，明确了未来12年适应气候变化工作的指导思想、主要目标、重点任务和保障措施。</p>
+      
+      <p>《战略》指出，当前全球气候变暖趋势加剧，极端天气气候事件频发，我国面临的气候风险日益严峻。适应气候变化是国家可持续发展的内在要求，是主动应对气候变化的重要内容，对于保障经济社会发展、维护人民生命财产安全具有重要意义。</p>
+      
+      <h4 class="text-white">主要目标</h4>
+      <p>到2025年，我国适应气候变化的政策体系和体制机制基本形成，重点领域适应能力显著增强，气候风险管理水平明显提升。到2035年，适应气候变化能力达到世界先进水平，气候风险得到有效控制，形成适应气候变化的良性循环。</p>
+      
+      <h4 class="text-white">重点任务</h4>
+      <p>《战略》明确了八大重点任务：</p>
+      <ol class="list-decimal pl-5 space-y-1 text-gray-300">
+        <li>加强气候风险评估与管理</li>
+        <li>提升农业适应气候变化能力</li>
+        <li>增强水资源适应气候变化能力</li>
+        <li>提高生态系统适应气候变化能力</li>
+        <li>强化城乡建设适应气候变化能力</li>
+        <li>加强基础设施适应气候变化能力</li>
+        <li>提升健康与公共卫生领域适应能力</li>
+        <li>加强气候适应型社会建设</li>
+      </ol>
+      
+      <p>国家发展和改革委员会有关负责人表示，将通过加强组织领导、完善法律法规、加大资金投入、强化科技支撑、健全标准体系、加强国际合作等措施，确保《战略》各项任务落到实处。</p>`,
+      aiAnalysis: `本次《国家适应气候变化战略2023-2035年》的发布，反映出我国在应对气候变化方面的战略思路已从单纯的减排转向"减缓与适应并重"的新阶段。这一转变背后反映了几个关键问题：
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">1. 气候风险已成为现实威胁</strong> - 战略的出台表明极端天气事件频发已对我国经济社会发展构成实质性威胁，需要系统性应对。</p>
+      </div>
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">2. 适应能力建设的迫切性</strong> - 与发达国家相比，我国在气候适应方面的基础仍然薄弱，特别是在农业、水资源等关键领域，亟需加强能力建设。</p>
+      </div>
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">3. 多部门协同治理的必要性</strong> - 战略涉及多个领域和部门，反映出气候变化应对需要打破条块分割，建立跨部门协同机制。</p>
+      </div>
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">4. 长期规划与短期行动的结合</strong> - 12年的时间跨度表明气候变化适应是一项长期任务，需要将长期规划与短期行动有机结合。</p>
+      </div>
+      
+      <p>总体而言，该战略的发布标志着我国应对气候变化工作进入了更加系统、全面和务实的新阶段，将为我国经济社会高质量发展提供重要保障。`
+    },
+    'news-2': {
+      title: '全国碳市场第二个履约周期顺利收官',
+      type: 'news',
+      date: '2023-08-14',
+      source: '生态环境部',
+      region: '全国',
+      views: '1,892',
+      content: `<p>生态环境部今日宣布，全国碳市场第二个履约周期顺利收官。数据显示，第二个履约周期覆盖年排放量约45亿吨二氧化碳，共有约3000家重点排放单位完成配额清缴，履约率达到99.5%以上，市场运行总体平稳。</p>
+      
+      <p>生态环境部应对气候变化司司长表示，全国碳市场第二个履约周期的顺利收官，标志着我国碳市场建设取得阶段性成果。与第一个履约周期相比，第二个履约周期在交易机制、数据质量管理、市场监管等方面都有明显改进。</p>
+      
+      <p>统计显示，第二个履约周期内，全国碳市场碳排放配额（CEA）累计成交量约2.2亿吨，累计成交额约96亿元。市场价格总体稳定在每吨60-70元区间，体现了市场对碳排放权价值的合理预期。</p>
+      
+      <p>下一步，生态环境部将稳步扩大全国碳市场覆盖行业范围，完善碳定价机制，加强数据质量管理，健全市场风险防控体系，推动全国碳市场健康发展。</p>`,
+      aiAnalysis: `全国碳市场第二个履约周期的顺利收官，反映出我国在推进绿色低碳发展和应对气候变化方面的决心和成效，背后蕴含着几个重要信息：
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">1. 市场机制逐步成熟</strong> - 高履约率表明企业对碳市场的认可度和参与度显著提高，市场机制正在发挥作用，推动企业主动减排。</p>
+      </div>
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">2. 数据质量不断提升</strong> - 碳市场的有效运行依赖于高质量的排放数据，履约周期的顺利完成表明我国在碳排放数据核算和监管方面的能力有所加强。</p>
+      </div>
+      
+      <div class="pl-4 border-l-2 border-cyan-400/50">
+        <p><strong class="text-white">3. 价格信号初步形成</strong> - 稳定的碳价格区间有助于企业形成稳定预期，引导社会资本投向低碳领域，促进绿色技术创新。</p>
+      </div>
+      
+      <p>然而，我国碳市场仍处于发展初期，在覆盖行业范围、交易活跃度、价格发现机制等方面还有较大提升空间。未来随着市场机制的不断完善，碳市场在推动"双碳"目标实现中的作用将更加凸显。`
+    }
+  };
+  
+  // 新闻项点击事件
+  newsItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const newsId = this.getAttribute('data-id');
+      const news = newsData[newsId];
+      
+      if (news) {
+        // 更新详情内容
+        document.getElementById('detail-title').textContent = news.title;
+        document.getElementById('detail-date').textContent = news.date;
+        document.getElementById('detail-source').textContent = news.source;
+        document.getElementById('detail-region').textContent = news.region;
+        document.getElementById('detail-views').textContent = `${news.views} 次浏览`;
+        document.getElementById('detail-content').innerHTML = news.content;
+        
+        // 更新类型标签
+        const typeElement = document.getElementById('detail-current-type');
+        if (news.type === 'policy') {
+          typeElement.className = 'px-2 py-0.5 bg-emerald-400/10 text-emerald-400 text-xs rounded-full';
+          typeElement.textContent = '政策文件';
+        } else {
+          typeElement.className = 'px-2 py-0.5 bg-cyan-400/10 text-cyan-400 text-xs rounded-full';
+          typeElement.textContent = '最新新闻';
+        }
+        
+        // 显示详情，隐藏占位符
+        newsDetailPlaceholder.classList.add('hidden');
+        newsDetailContent.classList.remove('hidden');
+        
+        // 在移动视图下，滚动到详情区域
+        if (window.innerWidth < 1024) {
+          document.getElementById('news-detail-container').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+  
+  // 返回列表按钮
+  backToListBtn.addEventListener('click', function() {
+    newsDetailContent.classList.add('hidden');
+    newsDetailPlaceholder.classList.remove('hidden');
+    
+    // 在移动视图下，滚动到列表区域
+    if (window.innerWidth < 1024) {
+      document.getElementById('news-list-container').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+  
+  // 刷新新闻
+  refreshNewsBtn.addEventListener('click', function() {
+    // 显示加载动画
+    this.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+    
+    // 模拟刷新延迟
+    setTimeout(() => {
+      this.innerHTML = '<i class="fa fa-refresh"></i>';
+      
+      // 显示刷新提示
+      showNotification('新闻已更新至最新', 'success');
+    }, 1500);
+  });
+  
+  // 自动刷新设置
+  let autoRefreshInterval = null;
+  autoRefreshSelect.addEventListener('change', function() {
+    const interval = parseInt(this.value);
+    
+    // 清除现有定时器
+    if (autoRefreshInterval) {
+      clearInterval(autoRefreshInterval);
+      autoRefreshInterval = null;
+    }
+    
+    // 设置新定时器
+    if (interval > 0) {
+      autoRefreshInterval = setInterval(() => {
+        // 模拟自动刷新
+        refreshNewsBtn.click();
+      }, interval * 1000);
+      
+      showNotification(`已设置每 ${interval/60} 分钟自动刷新`, 'info');
+    } else {
+      showNotification('已关闭自动刷新', 'info');
+    }
+  });
+  
+  // 加载更多新闻
+  loadMoreNewsBtn.addEventListener('click', function() {
+    this.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> 加载中...';
+    
+    // 模拟加载延迟
+    setTimeout(() => {
+      this.innerHTML = '没有更多内容了';
+      this.disabled = true;
+      this.classList.add('opacity-50', 'cursor-not-allowed');
+    }, 1500);
+  });
+  
+  // 筛选功能
+  function applyNewsFilters() {
+    const type = newsTypeFilter.value;
+    const time = newsTimeFilter.value;
+    const region = newsRegionFilter.value;
+    const search = newsSearchInput.value.toLowerCase();
+    
+    // 这里仅做UI状态反馈，实际应用中应根据筛选条件更新新闻列表
+    showNotification('筛选条件已应用', 'info');
+  }
+  
+  // 为筛选器添加事件监听
+  newsTypeFilter.addEventListener('change', applyNewsFilters);
+  newsTimeFilter.addEventListener('change', applyNewsFilters);
+  newsRegionFilter.addEventListener('change', applyNewsFilters);
+  newsSearchInput.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') {
+      applyNewsFilters();
+    }
+  });
+  
+  // 通知提示函数
+  function showNotification(message, type = 'info') {
+    // 检查是否已存在通知，若存在则移除
+    const existingNotify = document.querySelector('.news-notification');
+    if (existingNotify) {
+      existingNotify.remove();
+    }
+    
+    // 创建通知元素
+    const notify = document.createElement('div');
+    notify.className = `news-notification fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-[0_0_10px_rgba(0,255,255,0.2)] z-50 transition-all duration-300 transform translate-y-10 opacity-0`;
+    
+    // 根据类型设置样式
+    if (type === 'success') {
+      notify.classList.add('bg-emerald-400/10', 'text-emerald-400', 'border', 'border-emerald-400/20');
+      notify.innerHTML = `<i class="fa fa-check-circle mr-2"></i> ${message}`;
+    } else if (type === 'error') {
+      notify.classList.add('bg-rose-400/10', 'text-rose-400', 'border', 'border-rose-400/20');
+      notify.innerHTML = `<i class="fa fa-exclamation-circle mr-2"></i> ${message}`;
+    } else {
+      notify.classList.add('bg-cyan-400/10', 'text-cyan-400', 'border', 'border-cyan-400/20');
+      notify.innerHTML = `<i class="fa fa-info-circle mr-2"></i> ${message}`;
+    }
+    
+    // 添加到页面
+    document.body.appendChild(notify);
+    
+    // 显示动画
+    setTimeout(() => {
+      notify.classList.remove('translate-y-10', 'opacity-0');
+    }, 10);
+    
+    // 3秒后隐藏
+    setTimeout(() => {
+      notify.classList.add('translate-y-10', 'opacity-0');
+      setTimeout(() => {
+        notify.remove();
+      }, 300);
+    }, 3000);
+  }
+});
+</script>
+
 
         <!-- 7. 用户反馈与讨论区页面 -->
         <div id="discussion-page" class="page-content hidden">
@@ -1948,176 +2417,966 @@ document.addEventListener('keydown', function(e) {
         </div>
 
         <!-- 9. AI未来话题预测页面 -->
-        <div id="future-topic-page" class="page-content hidden">
-          <div class="mb-6">
-            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">AI话题预测</h2>
-            <p class="text-dark-100 mt-1">基于AI模型预测未来气候热门话题趋势</p>
+<!-- 9. AI辅助分析/预测页面 -->
+<div id="future-topic-page" class="page-content hidden min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 text-gray-100">
+  <!-- 页面头部 -->
+  <header class="relative py-6 px-4 md:px-8 lg:px-16 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(66,153,225,0.15),transparent_40%)]"></div>
+    <div class="container mx-auto relative z-10">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-white tracking-tight">
+        <span class="text-blue-400">AI</span> 辅助分析与预测
+      </h2>
+      <p class="text-gray-300 mt-2 max-w-2xl">基于现有数据，通过智能模型提供趋势分析与决策参考，助力精准判断与响应</p>
+    </div>
+  </header>
+
+  <!-- 主要内容区 -->
+  <main class="container mx-auto px-4 md:px-8 lg:px-16 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- 左侧主内容 -->
+    <div class="lg:col-span-3 space-y-8">
+      <!-- 场景选择区 -->
+      <section class="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-blue-500/30">
+        <h3 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fa fa-sitemap text-blue-400 mr-2"></i>分析场景选择
+        </h3>
+        <div class="relative">
+          <select id="analysis-scenario" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+            <option value="trend-prediction">未来7天舆情热度趋势预测</option>
+            <option value="topic-analysis">某主题讨论热度变化原因分析</option>
+            <option value="sentiment-alert">情感倾向转变预警</option>
+          </select>
+          <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <i class="fa fa-chevron-down text-gray-400"></i>
           </div>
+        </div>
+        
+        <!-- 主题选择（场景2专用） -->
+        <div id="topic-selector" class="mt-4 hidden">
+          <label class="block text-sm font-medium text-gray-300 mb-2">选择分析主题</label>
+          <div class="flex flex-wrap gap-2">
+            <button class="topic-btn bg-gray-800 hover:bg-blue-900/50 border border-gray-700 hover:border-blue-500 px-4 py-2 rounded-lg text-sm transition-all">极端天气</button>
+            <button class="topic-btn bg-gray-800 hover:bg-blue-900/50 border border-gray-700 hover:border-blue-500 px-4 py-2 rounded-lg text-sm transition-all">节能减排</button>
+            <button class="topic-btn bg-gray-800 hover:bg-blue-900/50 border border-gray-700 hover:border-blue-500 px-4 py-2 rounded-lg text-sm transition-all">气候变化</button>
+            <button class="topic-btn bg-gray-800 hover:bg-blue-900/50 border border-gray-700 hover:border-blue-500 px-4 py-2 rounded-lg text-sm transition-all">环境保护</button>
+          </div>
+        </div>
+      </section>
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2">
-              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-6">
-                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
-                  <h3 class="font-semibold text-lg">未来30天话题热度预测</h3>
-                  <div class="flex items-center gap-2">
-                    <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
-                      <option>未来30天</option>
-                      <option>未来60天</option>
-                      <option>未来90天</option>
-                    </select>
-                    <button class="text-dark-100 hover:text-white transition-colors">
-                      <i class="fa fa-refresh"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="p-4">
-                  <div class="h-80">
-                    <canvas id="prediction-chart"></canvas>
-                  </div>
-                </div>
-              </div>
+      <!-- 分析结果展示区 -->
+      <section class="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-semibold flex items-center">
+            <i class="fa fa-bar-chart text-blue-400 mr-2"></i>分析结果
+          </h3>
+          <div class="flex items-center text-sm text-gray-400">
+            <span class="mr-2">更新于：</span>
+            <span id="result-update-time">2023-08-03 14:30</span>
+          </div>
+        </div>
 
-              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-                <div class="p-4 border-b border-dark-300">
-                  <h3 class="font-semibold text-lg">预测话题详情</h3>
-                </div>
-                <div class="p-4">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-dark-300/30 rounded-lg p-4">
-                      <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-medium text-white">COP30气候峰会</h4>
-                        <span class="text-success text-sm">↗ 预计上升</span>
-                      </div>
-                      <p class="text-dark-100 text-sm mb-3">预计在未来2周内讨论热度将达到峰值，关注度较当前提升180%</p>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">当前热度: 45</span>
-                        <span class="text-success">预测峰值: 126</span>
-                      </div>
-                    </div>
-
-                    <div class="bg-dark-300/30 rounded-lg p-4">
-                      <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-medium text-white">碳捕集技术突破</h4>
-                        <span class="text-primary text-sm">↗ 预计上升</span>
-                      </div>
-                      <p class="text-dark-100 text-sm mb-3">新兴技术话题，预计随着相关研究发布将获得更多关注</p>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">当前热度: 23</span>
-                        <span class="text-primary">预测峰值: 78</span>
-                      </div>
-                    </div>
-
-                    <div class="bg-dark-300/30 rounded-lg p-4">
-                      <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-medium text-white">极地冰川融化</h4>
-                        <span class="text-warning text-sm">→ 保持稳定</span>
-                      </div>
-                      <p class="text-dark-100 text-sm mb-3">持续关注话题，预计热度将保持相对稳定</p>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">当前热度: 67</span>
-                        <span class="text-warning">预测范围: 60-75</span>
-                      </div>
-                    </div>
-
-                    <div class="bg-dark-300/30 rounded-lg p-4">
-                      <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-medium text-white">绿色氢能发展</h4>
-                        <span class="text-secondary text-sm">↗ 预计上升</span>
-                      </div>
-                      <p class="text-dark-100 text-sm mb-3">政策推动下，氢能相关讨论预计显著增长</p>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">当前热度: 34</span>
-                        <span class="text-secondary">预测峰值: 89</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        <!-- 场景1：趋势预测结果 -->
+        <div id="trend-prediction-result" class="analysis-result">
+          <div class="h-[350px] relative">
+            <canvas id="trend-chart"></canvas>
+            <!-- 加载动画 -->
+            <div class="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-lg opacity-0 pointer-events-none transition-opacity duration-300" id="chart-loading">
+              <div class="flex flex-col items-center">
+                <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="mt-3 text-gray-300">生成预测中...</span>
               </div>
             </div>
-
-            <div class="space-y-6">
-              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-                <div class="p-4 border-b border-dark-300">
-                  <h3 class="font-semibold text-lg">AI模型信息</h3>
+          </div>
+          
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+              <h4 class="font-medium text-gray-300 mb-2">预测依据</h4>
+              <p class="text-sm text-gray-400">基于近30天历史数据的趋势推算，综合考虑了季节性因素和历史相似周期模式</p>
+            </div>
+            <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+              <h4 class="font-medium text-gray-300 mb-2">预测置信度</h4>
+              <div class="flex items-center">
+                <span class="text-yellow-400 mr-2">中等</span>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div class="bg-yellow-400 h-2 rounded-full" style="width: 65%"></div>
                 </div>
-                <div class="p-4 space-y-3">
-                  <div>
-                    <h4 class="font-medium text-sm text-white mb-1">模型版本</h4>
-                    <p class="text-dark-100 text-sm">ClimatePredict v2.1</p>
-                  </div>
-                  <div>
-                    <h4 class="font-medium text-sm text-white mb-1">训练数据</h4>
-                    <p class="text-dark-100 text-sm">2020-2025年全国舆情数据</p>
-                  </div>
-                  <div>
-                    <h4 class="font-medium text-sm text-white mb-1">预测准确率</h4>
-                    <div class="flex items-center space-x-2">
-                      <div class="flex-1 bg-dark-300/50 rounded-full h-2">
-                        <div class="bg-success h-2 rounded-full" style="width: 84%"></div>
-                      </div>
-                      <span class="text-success text-sm">84%</span>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 class="font-medium text-sm text-white mb-1">更新频率</h4>
-                    <p class="text-dark-100 text-sm">每24小时</p>
-                  </div>
-                  <div>
-                    <h4 class="font-medium text-sm text-white mb-1">最后更新</h4>
-                    <p class="text-dark-100 text-sm">2025-07-16 06:00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
-                <div class="p-4 border-b border-dark-300">
-                  <h3 class="font-semibold text-lg">趋势指标</h3>
-                </div>
-                <div class="p-4 space-y-4">
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-success mb-1">+15%</div>
-                    <p class="text-dark-100 text-sm">整体热度增长预期</p>
-                  </div>
-                  <div class="grid grid-cols-2 gap-3 text-center">
-                    <div class="bg-dark-300/30 rounded-lg p-3">
-                      <div class="text-lg font-bold text-primary">7</div>
-                      <p class="text-xs text-dark-100">新兴话题</p>
-                    </div>
-                    <div class="bg-dark-300/30 rounded-lg p-3">
-                      <div class="text-lg font-bold text-warning">12</div>
-                      <p class="text-xs text-dark-100">热度波动</p>
-                    </div>
-                  </div>
-                  <div class="border-t border-dark-300 pt-3">
-                    <h4 class="font-medium text-sm text-white mb-2">预测置信度</h4>
-                    <div class="space-y-2">
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">短期(7天)</span>
-                        <span class="text-success">92%</span>
-                      </div>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">中期(30天)</span>
-                        <span class="text-warning">76%</span>
-                      </div>
-                      <div class="flex justify-between text-xs">
-                        <span class="text-dark-100">长期(90天)</span>
-                        <span class="text-danger">58%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <span class="ml-2 text-sm text-gray-400">65%</span>
               </div>
             </div>
           </div>
         </div>
 
-
+        <!-- 场景2：主题分析结果 -->
+        <div id="topic-analysis-result" class="analysis-result hidden">
+          <div class="bg-blue-900/20 border border-blue-800/50 rounded-lg p-4 mb-6">
+            <h4 class="font-medium text-blue-300 flex items-center">
+              <i class="fa fa-info-circle mr-2"></i>分析主题：<span id="current-topic">极端天气</span>
+            </h4>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 class="font-medium text-gray-300 mb-3">热度变化趋势</h4>
+              <div class="h-[200px]">
+                <canvas id="topic-trend-chart"></canvas>
+              </div>
             </div>
+            <div>
+              <h4 class="font-medium text-gray-300 mb-3">关键时间节点</h4>
+              <div class="space-y-4">
+                <div class="bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium">8月1日</span>
+                    <span class="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">突增</span>
+                  </div>
+                  <p class="text-sm text-gray-400 mt-1">某环保政策发布后，讨论量增长200%</p>
+                </div>
+                <div class="bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-medium">7月25日</span>
+                    <span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded-full">突降</span>
+                  </div>
+                  <p class="text-sm text-gray-400 mt-1">热门事件转移，讨论量下降45%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-medium text-gray-300 mb-3">核心驱动来源</h4>
+            <div class="h-[200px]">
+              <canvas id="drivers-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- 场景3：情感预警结果 -->
+        <div id="sentiment-alert-result" class="analysis-result hidden">
+          <div class="mb-6">
+            <h4 class="font-medium text-gray-300 mb-3">近30天情感变化趋势</h4>
+            <div class="h-[300px]">
+              <canvas id="sentiment-chart"></canvas>
+            </div>
+          </div>
+          
+          <!-- 预警提示 -->
+          <div class="bg-red-900/20 border border-red-800/50 rounded-lg p-4 mb-6 animate-pulse">
+            <div class="flex items-start">
+              <div class="bg-red-500/20 p-2 rounded-full mr-3">
+                <i class="fa fa-exclamation-triangle text-red-400"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-red-300">预警：负面情绪上升</h4>
+                <p class="text-sm text-gray-300 mt-1">"极端天气"相关负面情绪近3天上升15%，建议关注公众关切点并及时回应</p>
+                <div class="mt-3">
+                  <a href="#sentiment-page" class="text-blue-400 hover:text-blue-300 text-sm flex items-center">
+                    查看情感分析详情 <i class="fa fa-arrow-right ml-1"></i>
+                  </a>
+                  <a href="#data-page" class="text-blue-400 hover:text-blue-300 text-sm flex items-center mt-1">
+                    查看原始数据 <i class="fa fa-arrow-right ml-1"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 text-center">
+              <div class="text-2xl font-bold text-green-400">42%</div>
+              <div class="text-sm text-gray-400 mt-1">正面情绪占比</div>
+            </div>
+            <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 text-center">
+              <div class="text-2xl font-bold text-yellow-400">33%</div>
+              <div class="text-sm text-gray-400 mt-1">中性情绪占比</div>
+            </div>
+            <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700 text-center">
+              <div class="text-2xl font-bold text-red-400">25%</div>
+              <div class="text-sm text-gray-400 mt-1">负面情绪占比</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI问答交互区 -->
+      <section class="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300">
+        <h3 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fa fa-comments text-blue-400 mr-2"></i>AI智能问答
+        </h3>
+        
+        <div class="mb-4">
+          <p class="text-sm text-gray-400 mb-3">输入问题，获取舆情相关分析（示例："近一周哪些地区讨论极端天气最多？"）</p>
+          
+          <!-- 问答历史 -->
+          <div id="chat-history" class="bg-gray-800/50 rounded-lg p-4 h-[300px] overflow-y-auto mb-4 space-y-4">
+            <!-- 调整为：提问在右，回答在左 -->
+            <div class="flex items-start justify-end">
+              <div class="bg-gray-700/50 rounded-lg rounded-tr-none px-4 py-2 max-w-[80%]">
+                <p class="text-sm">近一周哪些地区讨论极端天气最多？</p>
+              </div>
+              <div class="bg-blue-500 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 ml-3">
+                <i class="fa fa-user text-white text-sm"></i>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3 relative group">
+                <i class="fa fa-robot text-white text-sm"></i>
+                <!-- AI状态动画 -->
+                <div class="absolute inset-0 bg-blue-400/30 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+              </div>
+              <div class="bg-blue-900/50 rounded-lg rounded-tl-none px-4 py-2 max-w-[80%]">
+                <p class="text-sm">根据近一周数据统计，讨论极端天气最多的三个地区分别是：广东省（18.2%）、江苏省（15.7%）和浙江省（12.3%），主要与近期台风活动相关。</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 输入区域 -->
+          <div class="relative">
+            <input type="text" id="question-input" placeholder="请输入您的问题..." class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
+            <button id="send-question" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-500 text-white p-1.5 rounded-lg transition-all">
+              <i class="fa fa-paper-plane"></i>
+            </button>
+          </div>
+          
+          <!-- 流式回答指示器 (AI接入后使用) -->
+          <div id="streaming-indicator" class="hidden mt-3 flex items-center text-sm text-gray-400">
+            <div class="flex space-x-1 mr-2">
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+            </div>
+            <span>AI正在生成回答...</span>
+          </div>
+        </div>
+        
+        <!-- 快速问题 -->
+        <div>
+          <p class="text-sm text-gray-400 mb-2">热门问题：</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="quick-question bg-gray-800 hover:bg-gray-700 text-xs px-3 py-1 rounded-full transition-all">未来三天舆情热度会上升吗？</button>
+            <button class="quick-question bg-gray-800 hover:bg-gray-700 text-xs px-3 py-1 rounded-full transition-all">哪些人群最关注气候变化？</button>
+            <button class="quick-question bg-gray-800 hover:bg-gray-700 text-xs px-3 py-1 rounded-full transition-all">近期环保政策有何影响？</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 右侧功能说明区 -->
+    <div class="lg:col-span-1">
+      <div class="sticky top-6 bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-blue-500/30">
+        <div class="flex items-center mb-4">
+          <div class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mr-3 relative">
+            <i class="fa fa-lightbulb-o text-blue-400"></i>
+            <!-- 科技感动画效果 -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-30 animate-pulse"></div>
+          </div>
+          <h3 class="text-lg font-semibold">功能说明</h3>
+        </div>
+        
+        <div class="space-y-4 text-sm text-gray-300">
+          <p>本页面提供基于数据的智能分析与预测功能，帮助您把握舆情动态与发展趋势。</p>
+          
+          <div class="pt-4 border-t border-gray-800">
+            <h4 class="font-medium text-blue-300 mb-2">AI接入指南</h4>
+            <div class="bg-gray-800/30 p-3 rounded-lg text-xs text-gray-400">
+              <p class="mb-2"><span class="text-blue-400">// 后端接入示例</span></p>
+              <p>1. 实现WebSocket连接处理流式响应</p>
+              <p>2. 调用streamingAnswer()函数处理实时数据</p>
+              <p>3. 通过updateAIStatus()更新连接状态</p>
+            </div>
+          </div>
+          
+          <div class="pt-4 border-t border-gray-800">
+            <h4 class="font-medium text-blue-300 mb-2">未来迭代</h4>
+            <ul class="list-disc list-inside text-gray-400 space-y-1 pl-2">
+              <li>接入深度学习模型提升预测精度</li>
+              <li>增加实时数据处理与分析能力</li>
+              <li>优化自然语言理解与交互体验</li>
+              <li>提供定制化分析报告生成功能</li>
+            </ul>
+          </div>
+          
+          <div class="pt-4 border-t border-gray-800">
+            <h4 class="font-medium text-blue-300 mb-2">AI接口状态</h4>
+            <div class="flex items-center">
+              <span class="inline-block w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></span>
+              <span class="text-gray-400">准备中，预留接入空间</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- AI接入状态指示器 -->
+        <div class="mt-6 pt-4 border-t border-gray-800">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs text-gray-400">AI服务连接状态</span>
+            <span id="ai-status" class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded-full">未连接</span>
+          </div>
+          <div class="w-full bg-gray-800 rounded-full h-1.5">
+            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-1000" style="width: 0%" id="ai-connection-progress"></div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="mt-12 py-6 px-4 md:px-8 lg:px-16 border-t border-gray-800">
+    <div class="container mx-auto text-center text-sm text-gray-500">
+      <p>AI辅助分析工具 © 2023 | 数据更新周期：每日凌晨2点</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+// 场景切换逻辑
+document.getElementById('analysis-scenario').addEventListener('change', function() {
+  const scenario = this.value;
+  
+  // 隐藏所有结果
+  document.querySelectorAll('.analysis-result').forEach(el => {
+    el.classList.add('hidden');
+  });
+  
+  // 显示选中场景的结果
+  document.getElementById(`${scenario}-result`).classList.remove('hidden');
+  
+  // 特殊处理主题选择器显示
+  if (scenario === 'topic-analysis') {
+    document.getElementById('topic-selector').classList.remove('hidden');
+  } else {
+    document.getElementById('topic-selector').classList.add('hidden');
+  }
+  
+  // 显示加载动画并重新绘制图表
+  if (scenario === 'trend-prediction') {
+    showChartLoading();
+    setTimeout(() => {
+      drawTrendChart();
+      hideChartLoading();
+    }, 800);
+  } else if (scenario === 'topic-analysis') {
+    drawTopicTrendChart();
+    drawDriversChart();
+  } else if (scenario === 'sentiment-alert') {
+    drawSentimentChart();
+  }
+});
+
+// 主题选择逻辑
+document.querySelectorAll('.topic-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    // 移除所有按钮的选中状态
+    document.querySelectorAll('.topic-btn').forEach(b => {
+      b.classList.remove('bg-blue-900/50', 'border-blue-500');
+      b.classList.add('bg-gray-800', 'border-gray-700');
+    });
+    
+    // 添加当前按钮的选中状态
+    this.classList.remove('bg-gray-800', 'border-gray-700');
+    this.classList.add('bg-blue-900/50', 'border-blue-500');
+    
+    // 更新显示的主题
+    document.getElementById('current-topic').textContent = this.textContent;
+    
+    // 重新绘制图表
+    drawTopicTrendChart();
+    drawDriversChart();
+  });
+});
+
+// 问答功能
+document.getElementById('send-question').addEventListener('click', sendQuestion);
+document.getElementById('question-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendQuestion();
+  }
+});
+
+// 快速问题点击
+document.querySelectorAll('.quick-question').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.getElementById('question-input').value = this.textContent;
+    sendQuestion();
+  });
+});
+
+function sendQuestion() {
+  const input = document.getElementById('question-input');
+  const question = input.value.trim();
+  
+  if (!question) return;
+  
+  // 添加用户问题到历史记录（右侧）
+  const history = document.getElementById('chat-history');
+  history.innerHTML += `
+    <div class="flex items-start justify-end">
+      <div class="bg-gray-700/50 rounded-lg rounded-tr-none px-4 py-2 max-w-[80%]">
+        <p class="text-sm">${question}</p>
+      </div>
+      <div class="bg-blue-500 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 ml-3">
+        <i class="fa fa-user text-white text-sm"></i>
+      </div>
+    </div>
+  `;
+  
+  // 清空输入框
+  input.value = '';
+  
+  // 显示流式加载指示器
+  document.getElementById('streaming-indicator').classList.remove('hidden');
+  
+  // 滚动到底部
+  history.scrollTop = history.scrollHeight;
+  
+  // 模拟AI连接过程
+  simulateAIConnection();
+  
+  // 模拟AI流式回答
+  setTimeout(() => {
+    // 生成回答（实际项目中这里会调用AI接口）
+    const answer = generateAnswer(question);
+    
+    // 模拟流式输出效果
+    streamAnswer(answer);
+  }, 1000);
+}
+
+// 生成预设回答（实际项目中替换为AI接口调用）
+function generateAnswer(question) {
+  const answers = [
+    "根据分析，该主题的讨论热度在未来一周可能保持稳定，预计波动幅度不会超过10%。",
+    "数据显示，该地区的讨论主要集中在中青年群体，占比约68%，其中25-35岁年龄段最为活跃。",
+    "近期相关政策发布后，正面情绪占比上升了12个百分点，公众对政策持积极态度。",
+    "根据历史数据对比，当前的舆情趋势与去年同期相似，预计将在未来两周内达到峰值。",
+    "主要讨论渠道分布：社交媒体占比52%，新闻评论区占比31%，论坛讨论占比17%。",
+    "分析发现，该话题的讨论热度与近期天气变化呈现较强相关性，相关系数为0.78。"
+  ];
+  
+  // 简单的关键词匹配，实际项目中可扩展
+  if (question.includes("地区")) {
+    return "根据近一周数据统计，讨论热度最高的三个地区分别是：广东省（18.2%）、江苏省（15.7%）和浙江省（12.3%）。";
+  } else if (question.includes("人群") || question.includes("年龄")) {
+    return "关注该话题的人群中，25-40岁年龄段占比最高，达到53%，其次是40-55岁年龄段，占比28%。";
+  } else if (question.includes("政策")) {
+    return "近期发布的环保政策在舆情中获得了广泛关注，正面评价占比67%，主要集中在政策的可行性和长远影响方面。";
+  }
+  
+  // 随机返回一个预设回答
+  return answers[Math.floor(Math.random() * answers.length)];
+}
+
+// 流式输出回答
+function streamAnswer(fullAnswer) {
+  const history = document.getElementById('chat-history');
+  const streamingIndicator = document.getElementById('streaming-indicator');
+  
+  // 创建AI回答容器
+  const answerId = `ai-answer-${Date.now()}`;
+  history.innerHTML += `
+    <div class="flex items-start" id="${answerId}-container">
+      <div class="bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3 relative group">
+        <i class="fa fa-robot text-white text-sm"></i>
+        <div class="absolute inset-0 bg-blue-400/30 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+      </div>
+      <div class="bg-blue-900/50 rounded-lg rounded-tl-none px-4 py-2 max-w-[80%]">
+        <p class="text-sm" id="${answerId}"></p>
+      </div>
+    </div>
+  `;
+  
+  const answerElement = document.getElementById(answerId);
+  let currentIndex = 0;
+  
+  // 滚动到底部
+  history.scrollTop = history.scrollHeight;
+  
+  // 模拟流式输出
+  const interval = setInterval(() => {
+    if (currentIndex < fullAnswer.length) {
+      // 每次添加1-3个字符，模拟真实打字效果
+      const charsToAdd = Math.min(3, fullAnswer.length - currentIndex);
+      answerElement.textContent += fullAnswer.substr(currentIndex, charsToAdd);
+      currentIndex += charsToAdd;
+      history.scrollTop = history.scrollHeight;
+    } else {
+      clearInterval(interval);
+      streamingIndicator.classList.add('hidden');
+      // 模拟AI处理完成
+      updateAIStatus('就绪');
+    }
+  }, 30);
+}
+
+// 模拟AI连接过程
+function simulateAIConnection() {
+  updateAIStatus('连接中');
+  
+  // 模拟连接进度
+  let progress = 0;
+  const progressBar = document.getElementById('ai-connection-progress');
+  const interval = setInterval(() => {
+    progress += Math.random() * 10;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        updateAIStatus('处理中');
+      }, 500);
+    }
+    progressBar.style.width = `${progress}%`;
+  }, 200);
+}
+
+// 更新AI状态
+function updateAIStatus(status) {
+  const statusElement = document.getElementById('ai-status');
+  
+  // 移除所有状态类
+  statusElement.className = 'text-xs px-2 py-0.5 rounded-full';
+  
+  switch(status) {
+    case '未连接':
+      statusElement.classList.add('bg-gray-700', 'text-gray-300');
+      break;
+    case '连接中':
+      statusElement.classList.add('bg-yellow-900/50', 'text-yellow-300');
+      break;
+    case '处理中':
+      statusElement.classList.add('bg-blue-900/50', 'text-blue-300');
+      break;
+    case '就绪':
+      statusElement.classList.add('bg-green-900/50', 'text-green-300');
+      // 2秒后恢复就绪状态
+      setTimeout(() => {
+        statusElement.classList.remove('bg-green-900/50', 'text-green-300');
+        statusElement.classList.add('bg-gray-700', 'text-gray-300');
+        statusElement.textContent = '就绪';
+        document.getElementById('ai-connection-progress').style.width = '100%';
+      }, 2000);
+      break;
+    default:
+      statusElement.classList.add('bg-gray-700', 'text-gray-300');
+  }
+  
+  statusElement.textContent = status;
+}
+
+// 图表加载动画
+function showChartLoading() {
+  document.getElementById('chart-loading').classList.remove('opacity-0', 'pointer-events-none');
+}
+
+function hideChartLoading() {
+  document.getElementById('chart-loading').classList.add('opacity-0', 'pointer-events-none');
+}
+
+// 趋势预测图表
+function drawTrendChart() {
+  const ctx = document.getElementById('trend-chart').getContext('2d');
+  
+  // 生成未来7天的日期
+  const dates = [];
+  const today = new Date();
+  for (let i = 1; i <= 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    dates.push(`${date.getMonth() + 1}/${date.getDate()}`);
+  }
+  
+  // 生成模拟数据
+  const baseValue = 65;
+  const values = dates.map((_, i) => {
+    // 模拟增长趋势，加入一些随机波动
+    return baseValue + (i * 2) + (Math.random() * 10 - 5);
+  });
+  
+  // 销毁已存在的图表
+  if (window.trendChartInstance) {
+    window.trendChartInstance.destroy();
+  }
+  
+  // 创建新图表
+  window.trendChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [{
+        label: '预测热度指数',
+        data: values,
+        borderColor: '#3B82F6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#3B82F6',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart'
+      },
+      scales: {
+        x: {
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.7)'
+          }
+        },
+        y: {
+          beginAtZero: false,
+          min: Math.min(...values) - 10,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.7)'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17, 24, 39, 0.9)',
+          titleColor: 'rgba(255, 255, 255, 0.9)',
+          bodyColor: 'rgba(255, 255, 255, 0.7)',
+          borderColor: 'rgba(59, 130, 246, 0.3)',
+          borderWidth: 1,
+          padding: 10,
+          cornerRadius: 6
+        }
+      }
+    }
+  });
+}
+
+// 主题趋势图表
+function drawTopicTrendChart() {
+  const ctx = document.getElementById('topic-trend-chart').getContext('2d');
+  
+  // 生成过去14天的日期
+  const dates = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    dates.push(`${date.getMonth() + 1}/${date.getDate()}`);
+  }
+  
+  // 生成模拟数据（带突增突降点）
+  const values = [];
+  let baseValue = 30;
+  
+  dates.forEach((date, i) => {
+    // 模拟正常波动
+    baseValue += (Math.random() * 8 - 4);
+    
+    // 模拟8月1日的突增
+    if (i === 9) {
+      baseValue *= 2;
+    }
+    
+    // 模拟7月25日的突降
+    if (i === 3) {
+      baseValue *= 0.55;
+    }
+    
+    values.push(Math.max(10, Math.round(baseValue)));
+  });
+  
+  // 销毁已存在的图表
+  if (window.topicTrendChartInstance) {
+    window.topicTrendChartInstance.destroy();
+  }
+  
+  // 创建新图表
+  window.topicTrendChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [{
+        label: '讨论热度',
+        data: values,
+        borderColor: '#60A5FA',
+        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+        borderWidth: 2,
+        tension: 0.3,
+        fill: true,
+        pointBackgroundColor: '#60A5FA',
+        pointRadius: 3,
+        pointHoverRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 800
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            maxRotation: 0,
+            font: {
+              size: 10
+            }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            font: {
+              size: 10
+            }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+}
+
+// 驱动来源图表
+function drawDriversChart() {
+  const ctx = document.getElementById('drivers-chart').getContext('2d');
+  
+  // 销毁已存在的图表
+  if (window.driversChartInstance) {
+    window.driversChartInstance.destroy();
+  }
+  
+  // 创建新图表
+  window.driversChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['新闻报道', '社交媒体', '专家分析', '用户讨论'],
+      datasets: [{
+        data: [60, 25, 8, 7],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.8)',
+          'rgba(93, 99, 238, 0.8)',
+          'rgba(139, 92, 246, 0.8)',
+          'rgba(192, 132, 252, 0.8)'
+        ],
+        borderColor: [
+          'rgba(59, 130, 246, 1)',
+          'rgba(93, 99, 238, 1)',
+          'rgba(139, 92, 246, 1)',
+          'rgba(192, 132, 252, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+        duration: 800
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'rgba(255, 255, 255, 0.7)',
+            padding: 15,
+            font: {
+              size: 11
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.raw}%`;
+            }
+          }
+        }
+      },
+      cutout: '65%'
+    }
+  });
+}
+
+// 情感分析图表
+function drawSentimentChart() {
+  const ctx = document.getElementById('sentiment-chart').getContext('2d');
+  
+  // 生成过去30天的日期
+  const dates = [];
+  const today = new Date();
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    dates.push(`${date.getMonth() + 1}/${date.getDate()}`);
+  }
+  
+  // 生成模拟数据
+  const positive = [];
+  const neutral = [];
+  const negative = [];
+  
+  let posBase = 45;
+  let neuBase = 35;
+  let negBase = 20;
+  
+  dates.forEach((date, i) => {
+    // 正常波动
+    posBase += (Math.random() * 4 - 2);
+    neuBase += (Math.random() * 4 - 2);
+    
+    // 最后3天负面情绪上升
+    if (i > 26) {
+      negBase += 5;
+      posBase -= 3;
+      neuBase -= 2;
+    } else {
+      negBase += (Math.random() * 3 - 1.5);
+    }
+    
+    // 确保总和约为100
+    const sum = posBase + neuBase + negBase;
+    const ratio = 100 / sum;
+    
+    positive.push(Math.max(5, Math.min(80, Math.round(posBase * ratio))));
+    neutral.push(Math.max(5, Math.min(80, Math.round(neuBase * ratio))));
+    negative.push(Math.max(5, Math.min(80, Math.round(negBase * ratio))));
+  });
+  
+  // 销毁已存在的图表
+  if (window.sentimentChartInstance) {
+    window.sentimentChartInstance.destroy();
+  }
+  
+  // 创建新图表
+  window.sentimentChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          label: '正面',
+          data: positive,
+          borderColor: '#22C55E',
+          backgroundColor: 'rgba(34, 197, 94, 0.05)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
+          pointRadius: 0
+        },
+        {
+          label: '中性',
+          data: neutral,
+          borderColor: '#EAB308',
+          backgroundColor: 'rgba(234, 179, 8, 0.05)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
+          pointRadius: 0
+        },
+        {
+          label: '负面',
+          data: negative,
+          borderColor: '#EF4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.05)',
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
+          pointRadius: 0,
+          // 最后三个点突出显示
+          pointRadius: function(context) {
+            const index = context.dataIndex;
+            return index > 26 ? 4 : 0;
+          },
+          pointBackgroundColor: '#EF4444'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1000
+      },
+      scales: {
+        x: {
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 8,
+            font: {
+              size: 10
+            }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            callback: function(value) {
+              return value + '%';
+            },
+            font: {
+              size: 10
+            }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'rgba(255, 255, 255, 0.7)',
+            padding: 15
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.dataset.label}: ${context.raw}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// 页面加载时初始化图表
+window.addEventListener('load', function() {
+  drawTrendChart();
+  drawTopicTrendChart();
+  drawDriversChart();
+  drawSentimentChart();
+});
+</script>
 
   <!-- 移动端侧边栏 -->
   <div id="mobile-sidebar" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
