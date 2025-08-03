@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>全国舆情热力图</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 高德地图 JSAPI v2.0（需替换key为你自己的Key） -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=cc418c78b61f96274cc1491539fca1ff&plugin=AMap.HeatMap"></script>
+  <style>
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(130deg, #181A2A 0%, #2D1A44 60%, #21254B 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(ellipse 70% 30% at 80% 10%, #A259FF33 0%, #0000 100%);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    #container {
+      width: 100vw; height: 100vh;
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 1;
+      background: none !important;
+    }
+    .china-outline {
+      position: absolute;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+      mix-blend-mode: lighten;
+      opacity: 0.33;
+    }
+    .title-panel {
+      position: absolute;
+      top: 2vw;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: #a259ff;
+      letter-spacing: 2px;
+      font-size: 2.1em;
+      font-weight: 700;
+      background: none;
+      text-shadow: none;
+      padding: 0 16px;
+      border-radius: 8px;
+      user-select: none;
+      pointer-events: none;
+    }
+    .legend {
+      position: absolute;
+      left: 2vw;
+      bottom: 2vw;
+      color: #ebe3ff;
+      background: rgba(46, 34, 78, 0.97);
+      border-radius: 14px;
+      padding: 13px 22px 10px 22px;
+      box-shadow: 0 0 13px #a259ff33;
+      font-size: 1.1em;
+      z-index: 11;
+      border: 1.6px solid #a259ff;
+      line-height: 2;
+      letter-spacing: 2px;
+      backdrop-filter: blur(2.5px);
+    }
+    .legend-gradient {
+      display: inline-block;
+      width: 126px;
+      height: 14px;
+      vertical-align: middle;
+      background: linear-gradient(to right, #f3e8ff 0%, #a259ff 35%, #7c3aed 80%, #4f26ff 100%);
+      border-radius: 7px;
+      margin: 0 10px;
+      box-shadow: 0 0 7px #a259ff99;
+      border: 1px solid #a259ff;
+    }
+    .copyright {
+      position: absolute;
+      right: 2vw;
+      bottom: 2vw;
+      color: #d1b3fc;
+      font-size: 0.99em;
+      z-index: 13;
+      background: rgba(46,34,78,0.88);
+      border-radius: 8px;
+      padding: 6px 16px;
+      letter-spacing: 1px;
+      user-select: none;
+      border: 1.4px solid #b197fc;
+      box-shadow: 0 0 12px #a259ff55;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <!-- SVG中国地图轮廓·发光 -->
+  <svg class="china-outline" viewBox="0 0 1000 750">
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <path d="M162,120L174,136L183,126L204,143L224,137L239,153L260,149L271,164L279,189L301,195L309,220L312,245L339,252L356,265L379,265L399,273L419,270L432,287L453,282L470,297L487,313L509,312L523,326L547,330L564,349L587,353L603,372L627,368L641,381L656,392L681,384L691,409L711,416L731,432L752,440L765,462L782,477L805,471L818,487L840,491L860,500L877,492L895,507L917,517L933,524L945,540L957,555L968,573L989,579"
+      stroke="#d1b3fc" stroke-width="6.5" fill="none" filter="url(#glow)" opacity="0.78"/>
+  </svg>
+  <div class="title-panel">全国舆情热力分析图</div>
+  <div class="legend">
+    舆情热度
+    <span style="color:#f3e8ff">低</span>
+    <span class="legend-gradient"></span>
+    <span style="color:#4f26ff">高</span>
+  </div>
+  <div class="copyright">底图 © 高德地图 GS(2023)637号</div>
+  <script>
+    // 建议用更密集的点，这里仍用省会示例
+    const provinceHeatPoints = [
+      [116.4074,39.9042, 188],[121.4737,31.2304, 154],[113.2644,23.1291, 210],
+      [114.3054,30.5931, 110],[117.2000,39.0842, 108],[106.5049,29.5332, 130],
+      [108.9402,34.3416, 72],[119.3062,26.0753, 61],[87.6177,43.7928, 58],
+      [91.1172,29.6469, 22],[123.4291,41.7968, 77],[126.5349,45.8038, 56],
+      [115.8582,28.6829, 64],[120.1551,30.2741, 180],[118.7969,32.0603, 195],
+      [113.6254,34.7466, 138],[104.0657,30.6595, 122],[112.9388,28.2282, 98],
+      [117.2830,31.8612, 110],[114.5149,38.0428, 88],[106.2782,38.4664, 42],
+      [109.5038,18.2528, 79],[110.3467,20.0250, 66],[99.1773,25.1392, 44],
+      [111.6913,40.8426, 57],[108.3661,22.8170, 61],[103.8343,36.0611, 49],
+      [113.5491,22.1987, 28],[114.1694,22.3193, 32],[121.5091,25.0443, 65],
+      [118.1102,24.4905, 99],[106.6132,26.6470, 53],[109.1696,27.6749, 36],
+      [85.1396,41.7686, 30],[102.8329,24.8801, 41],[101.7778,36.6171, 25],
+      [87.9236,47.3561, 16]
+    ];
+    var map = new AMap.Map('container', {
+      resizeEnable: true,
+      zoom: 5.4,
+      center: [105.8, 35.6],
+      mapStyle: "amap://styles/darkpurple",
+      features: ['bg','road','building','point'],
+      showLabel: false,
+      viewMode: '2D'
+    });
+    var heatmap;
+    map.plugin(["AMap.HeatMap"], function() {
+      heatmap = new AMap.HeatMap(map, {
+        radius: 38,
+        opacity: [0.20, 0.78],
+        gradient: {
+          0.08: '#f3e8ff',
+          0.28: '#b197fc',
+          0.55: '#a259ff',
+          0.80: '#7c3aed',
+          1.00: '#4f26ff'
+        }
+      });
+      heatmap.setDataSet({
+        data: provinceHeatPoints.map(function(p) {
+          return {lng: p[0], lat: p[1], count: p[2]};
+        }),
+        max: 220
+      });
+    });
+    map.setLimitBounds(AMap.Bounds([73.66, 3.86], [135.05, 53.55]));
+  </script>
+</body>
+</html>
