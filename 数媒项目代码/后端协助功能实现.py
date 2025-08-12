@@ -45,7 +45,7 @@ def init_db():
 # ----------- 路由 -----------
 @app.route('/')
 def index():
-    return send_from_directory('.', '111111.html')
+    return send_from_directory('.', '333333.html')
 
 @app.route('/api/register', methods=['POST'])
 def register():
