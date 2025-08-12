@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>全国气候变化舆情热力图 | 高德地图分省填色</title>
+  <!-- 高德地图 JSAPI v2.0 -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=cc418c78b61f96274cc1491539fca1ff"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #181c2d;
+      font-family: 'Montserrat','微软雅黑',Arial,sans-serif;
+    }
+    #container {
+      position: absolute;
+      left: 40px; right: 40px; top: 40px; bottom: 40px;
+      border-radius: 24px;
+      border: 2px solid #8566db;
+      box-shadow: 0 2px 40px #6e45e299;
+      overflow: hidden;
+    }
+    .tech-title {
+      position: absolute;
+      left: 64px; top: 14px;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 16px #6e45e2bb;
+      background: linear-gradient(90deg, #6e45e2 30%, #8d81f9 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      z-index: 10;
+    }
+    .tech-footer {
+      position: absolute;
+      left: 64px; bottom: 16px;
+      font-size: 1rem;
+      color: #6e45e2;
+      opacity: 0.7;
+      z-index: 9;
+      text-shadow: 0 0 8px #3023ae99;
+    }
+    /* 配色渐变条示例 */
+    #legend {
+      position: absolute;
+      left: 64px; bottom: 64px;
+      width: 18px;
+      height: 160px;
+      background: linear-gradient(to top, #3023ae 0%, #6e45e2 70%, #69b7fc 100%);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #6e45e255;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #legend-labels {
+      position: absolute;
+      left: 90px; bottom: 64px;
+      color: #fff;
+      font-size: 0.95rem;
+      z-index: 100;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="tech-title">全国气候变化舆情热力图</div>
+  <div id="container"></div>
+  <div id="legend"></div>
+  <div id="legend-labels">
+    <div style="margin-bottom:140px;">高</div>
+    <div>低</div>
+  </div>
+  <div class="tech-footer">地图图号自动显示 | 数据仅供演示 | 舆情热度分布</div>
+  <script>
+    // 省份热度数据（模拟，可对接后端接口）
+    const provinceHeat = {
+      "北京市": 93,
+      "广东省": 88,
+      "江苏省": 72,
+      "浙江省": 68,
+      "四川省": 60,
+      "山东省": 66,
+      "湖北省": 55,
+      "辽宁省": 40,
+      "新疆维吾尔自治区": 24,
+      "云南省": 34,
+      "福建省": 47,
+      "重庆市": 51,
+      "西藏自治区": 13,
+      "海南省": 27,
+      "黑龙江省": 16,
+      "陕西省": 36
+      // 可补充其他省份
+    };
+
+    // 根据热度生成渐变色
+    function getHeatColor(value) {
+      // 0~100线性渐变从浅蓝->紫->深蓝
+      if (value >= 80) return '#3023ae';
+      if (value >= 60) return '#6e45e2';
+      if (value >= 40) return '#69b7fc';
+      return '#bbeafd';
+    }
+
+    // 高德地图初始化
+    var map = new AMap.Map('container', {
+      zoom: 5.2,
+      center: [104.195397, 35.86166],
+      mapStyle: 'amap://styles/darkblue', // 科技风底图
+      showLabel: false,
+      resizeEnable: true,
+      viewMode: '2D'
+    });
+
+    // 省份GeoJSON数据（示例用阿里云接口，可用本地或后端数据对接）
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=100000_full')
+      .then(res => res.json())
+      .then(geojson => {
+        geojson.features.forEach(feature => {
+          var provName = feature.properties.name;
+          var heat = provinceHeat[provName] || 0;
+          var color = getHeatColor(heat);
+
+          // 构造多边形坐标
+          var coords = [];
+          if (feature.geometry.type === 'Polygon') {
+            coords = feature.geometry.coordinates.map(ring =>
+              ring.map(coord => [coord[0], coord[1]])
+            );
+          } else if (feature.geometry.type === 'MultiPolygon') {
+            coords = feature.geometry.coordinates.flat().map(ring =>
+              ring.map(coord => [coord[0], coord[1]])
+            );
+          }
+
+          // 绘制多边形覆盖物
+          coords.forEach(polygonPath => {
+            var polygon = new AMap.Polygon({
+              path: polygonPath,
+              strokeColor: '#232a45',
+              strokeWeight: 1,
+              fillColor: color,
+              fillOpacity: 0.72,
+              bubble: true
+            });
+            polygon.setMap(map);
+
+            // 鼠标提示
+            polygon.on('mouseover', function(e) {
+              map.setStatus({cursor: 'pointer'});
+              var info = new AMap.InfoWindow({
+                content: `<div style="color:#181c2d;font-weight:700;">
+                  ${provName}<br>
+                  热度：<span style="color:#6e45e2">${heat}</span>
+                </div>`,
+                offset: new AMap.Pixel(0, -12),
+                closeWhenClickMap: true
+              });
+              info.open(map, e.lnglat);
+            });
+            polygon.on('mouseout', function() {
+              map.setStatus({cursor: 'default'});
+            });
+          });
+        });
+      });
+  </script>
+</body>
+</html>

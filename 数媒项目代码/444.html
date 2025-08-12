@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全国气候变化预警中心</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson@3.0.2/dist/topojson.min.js"></script>
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.5);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.8);
+        }
+        
+        /* 颜色系统 */
+        .bg-slate-900 { background-color: #0f172a; }
+        .bg-slate-800 { background-color: #1e293b; }
+        .bg-slate-700 { background-color: #334155; }
+        .bg-slate-600 { background-color: #475569; }
+        
+        .text-white { color: #ffffff; }
+        .text-slate-300 { color: #cbd5e1; }
+        .text-slate-400 { color: #94a3b8; }
+        
+        .text-red-400 { color: #f87171; }
+        .text-blue-400 { color: #60a5fa; }
+        .text-green-400 { color: #6ee7b7; }
+        .text-amber-400 { color: #fbbf24; }
+        .text-orange-400 { color: #f97316; }
+        .text-yellow-400 { color: #eab308; }
+        .text-purple-400 { color: #c084fc; }
+        
+        .bg-red-500 { background-color: #ef4444; }
+        .bg-blue-500 { background-color: #3b82f6; }
+        .bg-green-500 { background-color: #10b981; }
+        .bg-amber-500 { background-color: #f59e0b; }
+        .bg-orange-500 { background-color: #f97316; }
+        .bg-yellow-500 { background-color: #eab308; }
+        .bg-purple-500 { background-color: #8b5cf6; }
+        
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 地图容器样式 */
+        #map-chart {
+            transition: transform 0.3s ease;
+            transform-origin: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 热力图特有样式 */
+        .map-container {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(2, 8, 20, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #7dd3fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-title i {
+            color: #38bdf8;
+            font-size: 1.8rem;
+        }
+        
+        .risk-selector {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .risk-btn {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(30, 41, 59, 0.8);
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .risk-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .risk-btn.active {
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        
+        .map-wrapper {
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+        
+        .map-control {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #38bdf8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(2, 8, 20, 0.3);
+        }
+        
+        .map-control:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        
+        .legend-title {
+            color: #f1f5f9;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-label {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+        
+        .info-panel {
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .info-text {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        
+        .info-text span {
+            color: #38bdf8;
+            font-weight: 500;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .map-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .risk-selector {
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-wrapper {
+                height: 400px;
+            }
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1024px) {
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            
+            .lg:col-span-2 {
+                grid-column: span 1 / span 1;
+            }
+            
+            .lg:col-span-1 {
+                grid-column: span 1 / span 1;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-cols-3, .grid-cols-2 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(2, 8, 20, 0.4);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: #38bdf8;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #38bdf8, #7dd3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .risk-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .risk-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .risk-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .risk-name {
+            flex: 1;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .risk-value {
+            color: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .risk-high {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+        
+        .risk-medium {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+        
+        .risk-low {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        
+        .trend-chart {
+            height: 200px;
+            margin-top: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.9rem;
+            padding: 20px 0;
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
+        }
+        
+        .pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>全国气候变化预警中心</h1>
+            <p class="subtitle">
+                基于多源数据融合的智能预警系统，实时监测全国气候变化趋势，提供精准预测与风险评估
+            </p>
+            
+            <!-- 关键指标卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div class="bg-slate-800/80 border border-slate-700 rounded-lg p-4 backdrop-blur-sm transform hover:translate-y-[-4px] transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-400 text-sm">全国平均温度</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">16.8°C</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
+                            <i class="fa fa-thermometer-full text-red-400"></i>
+                        </div>
+                    </div>
+                    <p class="text-red-400 text-xs mt-2 flex items-center">
+                        <i class="fa fa-arrow-up mr-1"></i>较常年同期上升0.7°C
+                    </p>
+                </div>
+                
+                <div class="bg-slate-800/80 border border-slate-700 rounded-lg p-4 backdrop-blur-sm transform hover:translate-y-[-4px] transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-400 text-sm">活跃极端事件</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">8</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                            <i class="fa fa-exclamation-triangle text-amber-400"></i>
+                        </div>
+                    </div>
+                    <p class="text-amber-400 text-xs mt-2 flex items-center">
+                        <i class="fa fa-map-marker mr-1"></i>全国范围内监测
+                    </p>
+                </div>
+                
+                <div class="bg-slate-800/80 border border-slate-700 rounded-lg p-4 backdrop-blur-sm transform hover:translate-y-[-4px] transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-400 text-sm">区域降水距平</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">±23%</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                            <i class="fa fa-tint text-blue-400"></i>
+                        </div>
+                    </div>
+                    <p class="text-blue-400 text-xs mt-2 flex items-center">
+                        <i class="fa fa-area-chart mr-1"></i>空间分布不均
+                    </p>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 主要内容区 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 左侧：气候趋势与预警 -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- 气候趋势可视化 -->
+                <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-5 backdrop-blur-sm shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white font-semibold text-lg">全国气候趋势分析</h3>
+                        <div class="flex gap-2">
+                            <button class="period-btn active px-3 py-1 text-xs rounded-full bg-blue-600 text-white">近30年</button>
+                            <button class="period-btn px-3 py-1 text-xs rounded-full bg-slate-700 text-slate-300 hover:bg-slate-600">近10年</button>
+                            <button class="period-btn px-3 py-1 text-xs rounded-full bg-slate-700 text-slate-300 hover:bg-slate-600">近5年</button>
+                        </div>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="climate-trend-chart" class="w-full h-full"></canvas>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+                        <div class="p-2 bg-slate-700/50 rounded-lg">
+                            <p class="text-slate-400 text-xs">温度上升速率</p>
+                            <p class="text-red-400 font-semibold">+0.22°C/10年</p>
+                        </div>
+                        <div class="p-2 bg-slate-700/50 rounded-lg">
+                            <p class="text-slate-400 text-xs">极端降水增加</p>
+                            <p class="text-blue-400 font-semibold">+6.5%/ decade</p>
+                        </div>
+                        <div class="p-2 bg-slate-700/50 rounded-lg">
+                            <p class="text-slate-400 text-xs">高温日数变化</p>
+                            <p class="text-orange-400 font-semibold">+3.2天/10年</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 全国气候风险热力图 (整合后的版本) -->
+                <div class="map-container">
+                    <div class="map-header">
+                        <h2 class="map-title"><i class="fas fa-map"></i> 全国气候风险分布图</h2>
+                        <div class="risk-selector">
+                            <button class="risk-btn active" data-type="overall">
+                                <i class="fas fa-layer-group"></i> 综合风险
+                            </button>
+                            <button class="risk-btn" data-type="flood">
+                                <i class="fas fa-water"></i> 洪涝风险
+                            </button>
+                            <button class="risk-btn" data-type="drought">
+                                <i class="fas fa-sun"></i> 干旱风险
+                            </button>
+                            <button class="risk-btn" data-type="heat">
+                                <i class="fas fa-temperature-high"></i> 高温风险
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="map-wrapper">
+                        <div id="map-chart"></div>
+                        
+                        <div class="map-controls">
+                            <div class="map-control" id="zoom-in">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="map-control" id="zoom-out">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div class="map-control" id="reset-map">
+                                <i class="fas fa-expand"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="map-legend">
+                            <div class="legend-title">风险等级图例</div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                                <div class="legend-label">低风险 (1-2级)</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                                <div class="legend-label">中风险 (3-4级)</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+                                <div class="legend-label">高风险 (5-6级)</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #7e22ce, #c084fc);"></div>
+                                <div class="legend-label">极高风险 (7级以上)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-panel">
+                        <p class="info-text"><span>点击地图上的省份</span> 查看详细气候风险分析及历史数据趋势</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：预警信息与分析工具 -->
+            <div class="space-y-6">
+                <!-- 活跃预警 -->
+                <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-5 backdrop-blur-sm shadow-lg">
+                    <h3 class="text-white font-semibold text-lg mb-4">当前活跃预警</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- 高优先级预警 -->
+                        <div class="p-4 bg-red-900/20 border border-red-800/30 rounded-lg border-l-4 border-red-500 transform hover:translate-x-1 transition-transform cursor-pointer alert-item" data-alert-id="1">
+                            <div class="flex justify-between">
+                                <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">极端高温</span>
+                                <span class="text-slate-400 text-xs">12小时前发布</span>
+                            </div>
+                            <h4 class="text-white font-medium mt-2">江南地区持续高温预警</h4>
+                            <p class="text-slate-300 text-sm mt-1">预计未来5天温度将持续在38°C以上，部分地区可达40°C</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-red-400 text-xs font-medium">风险等级：极高</span>
+                                <button class="text-xs text-blue-400 hover:text-blue-300">查看详情</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 中优先级预警 -->
+                        <div class="p-4 bg-amber-900/20 border border-amber-800/30 rounded-lg border-l-4 border-amber-500 transform hover:translate-x-1 transition-transform cursor-pointer alert-item" data-alert-id="2">
+                            <div class="flex justify-between">
+                                <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded-full">暴雨</span>
+                                <span class="text-slate-400 text-xs">3小时前发布</span>
+                            </div>
+                            <h4 class="text-white font-medium mt-2">华北地区强降雨预警</h4>
+                            <p class="text-slate-300 text-sm mt-1">未来24小时将出现大到暴雨，局部地区有大暴雨</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-amber-400 text-xs font-medium">风险等级：高</span>
+                                <button class="text-xs text-blue-400 hover:text-blue-300">查看详情</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 低优先级预警 -->
+                        <div class="p-4 bg-blue-900/20 border border-blue-800/30 rounded-lg border-l-4 border-blue-500 transform hover:translate-x-1 transition-transform cursor-pointer alert-item" data-alert-id="3">
+                            <div class="flex justify-between">
+                                <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">台风</span>
+                                <span class="text-slate-400 text-xs">6小时前发布</span>
+                            </div>
+                            <h4 class="text-white font-medium mt-2">东南沿海台风影响预警</h4>
+                            <p class="text-slate-300 text-sm mt-1">台风"木兰"将影响东南沿海，带来大风和降雨</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-blue-400 text-xs font-medium">风险等级：中</span>
+                                <button class="text-xs text-blue-400 hover:text-blue-300">查看详情</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-4 py-2 text-sm text-blue-400 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
+                        查看所有预警 <i class="fa fa-chevron-right ml-1 text-xs"></i>
+                    </button>
+                </div>
+                
+                <!-- AI气候预测分析工具 -->
+                <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-5 backdrop-blur-sm shadow-lg">
+                    <h3 class="text-white font-semibold text-lg mb-4">AI气候情景预测</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-slate-300 text-sm mb-1">预测时间范围</label>
+                            <select id="prediction-period" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                                <option value="15">未来15天</option>
+                                <option value="30" selected>未来30天</option>
+                                <option value="90">未来3个月</option>
+                                <option value="180">未来6个月</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-slate-300 text-sm mb-1">重点关注区域</label>
+                            <select id="focus-region" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                                <option value="national" selected>全国</option>
+                                <option value="north">华北地区</option>
+                                <option value="northeast">东北地区</option>
+                                <option value="east">华东地区</option>
+                                <option value="south">华南地区</option>
+                                <option value="central">华中地区</option>
+                                <option value="west">西部地区</option>
+                                <option value="northwest">西北地区</option>
+                                <option value="southwest">西南地区</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-slate-300 text-sm mb-1">预测要素</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center gap-2 p-2 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors">
+                                    <input type="checkbox" checked class="accent-blue-500">
+                                    <span class="text-sm text-white">温度趋势</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors">
+                                    <input type="checkbox" checked class="accent-blue-500">
+                                    <span class="text-sm text-white">降水概率</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors">
+                                    <input type="checkbox" checked class="accent-blue-500">
+                                    <span class="text-sm text-white">极端天气</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors">
+                                    <input type="checkbox" class="accent-blue-500">
+                                    <span class="text-sm text-white">农业影响</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button id="run-prediction" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <i class="fa fa-bolt"></i> AI智能预测分析
+                        </button>
+                    </div>
+                    
+                    <div id="prediction-results" class="mt-4 hidden">
+                        <div class="p-3 bg-slate-700/50 rounded-lg border border-slate-600">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-white text-sm font-medium">AI预测结果摘要</h4>
+                                <span class="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">
+                                    可信度: 92%
+                                </span>
+                            </div>
+                            
+                            <div class="space-y-3 mb-3">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-300">温度趋势预测</span>
+                                    </div>
+                                    <p class="text-white text-sm text-opacity-90">
+                                        未来30天全国平均气温较常年偏高0.5-0.8°C，江南地区高温日数偏多
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-300">降水概率预测</span>
+                                    </div>
+                                    <p class="text-white text-sm text-opacity-90">
+                                        华北、黄淮地区降水偏多2-5成，西南地区降水偏少1-3成
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-300">极端天气预警</span>
+                                    </div>
+                                    <p class="text-amber-400 text-sm">
+                                        <i class="fa fa-exclamation-circle"></i> 预计15-20日华南可能出现1次台风过程
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <button id="show-detail-prediction" class="w-full mt-1 py-1.5 text-xs text-blue-400 bg-slate-600 hover:bg-slate-500 rounded transition-colors">
+                                查看详细预测报告
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 数据来源与预测模型 -->
+        <div class="mt-8 bg-slate-800/60 border border-slate-700 rounded-xl p-5 backdrop-blur-sm shadow-lg">
+            <h3 class="text-white font-semibold text-lg mb-4">数据来源与AI预测模型</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-slate-300 font-medium text-sm mb-3">全国气象数据网络</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-700/50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <i class="fa fa-satellite text-blue-400 text-sm"></i>
+                                </div>
+                                <span class="text-white text-sm">气象卫星</span>
+                            </div>
+                            <p class="text-slate-400 text-xs">8颗在轨气象卫星实时监测</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                                    <i class="fa fa-map-marker text-green-400 text-sm"></i>
+                                </div>
+                                <span class="text-white text-sm">地面观测网</span>
+                            </div>
+                            <p class="text-slate-400 text-xs">全国2400+气象观测站</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                    <i class="fa fa-database text-purple-400 text-sm"></i>
+                                </div>
+                                <span class="text-white text-sm">历史资料库</span>
+                            </div>
+                            <p class="text-slate-400 text-xs">1951年至今完整气象记录</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                    <i class="fa fa-water text-amber-400 text-sm"></i>
+                                </div>
+                                <span class="text-white text-sm">水文监测</span>
+                            </div>
+                            <p class="text-slate-400 text-xs">主要江河湖泊监测网络</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-slate-300 font-medium text-sm mb-3">智能预测模型</h4>
+                    <div class="bg-slate-700/50 p-3 rounded-lg h-full">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-white text-sm">ClimateAI 4.0 全国预测系统</span>
+                            <span class="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">实时更新</span>
+                        </div>
+                        <p class="text-slate-400 text-xs mb-3">
+                            基于深度学习的多变量预测模型，融合物理机制与统计学习，专门针对中国复杂气候特征优化。
+                        </p>
+                        <div class="space-y-2">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-400">短期预测准确率</span>
+                                    <span class="text-green-400">94%</span>
+                                </div>
+                                <div class="w-full bg-slate-600 rounded-full h-1.5">
+                                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 94%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-400">中期预测准确率</span>
+                                    <span class="text-blue-400">82%</span>
+                                </div>
+                                <div class="w-full bg-slate-600 rounded-full h-1.5">
+                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-400">极端事件预警</span>
+                                    <span class="text-amber-400">88%</span>
+                                </div>
+                                <div class="w-full bg-slate-600 rounded-full h-1.5">
+                                    <div class="bg-amber-500 h-1.5 rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><span class="pulse"></span> 数据最后更新: 2023年11月15日 14:30:25</p>
+            <p>全国气候风险监测平台 © 2023 中国气象局国家气候中心</p>
+        </div>
+    </div>
+
+    <!-- 热力图脚本 -->
+    <script>
+        // 初始化ECharts实例
+        const mapChart = echarts.init(document.getElementById('map-chart'));
+        
+        // 模拟数据
+        const riskData = {
+            overall: {
+                '北京': 3.2,
+                '天津': 3.8,
+                '河北': 4.5,
+                '山西': 3.7,
+                '内蒙古': 2.9,
+                '辽宁': 4.1,
+                '吉林': 3.5,
+                '黑龙江': 3.1,
+                '上海': 5.2,
+                '江苏': 6.1,
+                '浙江': 7.5,
+                '安徽': 5.8,
+                '福建': 7.9,
+                '江西': 6.7,
+                '山东': 5.1,
+                '河南': 5.6,
+                '湖北': 5.9,
+                '湖南': 6.3,
+                '广东': 8.2,
+                '广西': 6.1,
+                '海南': 5.4,
+                '重庆': 4.8,
+                '四川': 4.3,
+                '贵州': 4.7,
+                '云南': 3.9,
+                '西藏': 2.5,
+                '陕西': 4.0,
+                '甘肃': 3.6,
+                '青海': 2.8,
+                '宁夏': 3.3,
+                '新疆': 3.0,
+                '台湾': 6.5,
+                '香港': 6.8,
+                '澳门': 5.9
+            },
+            flood: {
+                '北京': 2.5,
+                '天津': 3.2,
+                '河北': 4.0,
+                '山西': 2.8,
+                '内蒙古': 1.8,
+                '辽宁': 3.5,
+                '吉林': 3.0,
+                '黑龙江': 2.7,
+                '上海': 4.5,
+                '江苏': 5.8,
+                '浙江': 7.2,
+                '安徽': 5.5,
+                '福建': 7.5,
+                '江西': 6.9,
+                '山东': 4.8,
+                '河南': 5.2,
+                '湖北': 5.7,
+                '湖南': 6.8,
+                '广东': 8.0,
+                '广西': 6.5,
+                '海南': 4.8,
+                '重庆': 4.5,
+                '四川': 4.8,
+                '贵州': 5.2,
+                '云南': 4.0,
+                '西藏': 2.0,
+                '陕西': 3.8,
+                '甘肃': 3.0,
+                '青海': 2.2,
+                '宁夏': 2.8,
+                '新疆': 1.9,
+                '台湾': 7.0,
+                '香港': 7.2,
+                '澳门': 6.0
+            },
+            drought: {
+                '北京': 4.0,
+                '天津': 3.5,
+                '河北': 5.2,
+                '山西': 4.8,
+                '内蒙古': 4.2,
+                '辽宁': 3.8,
+                '吉林': 3.2,
+                '黑龙江': 3.0,
+                '上海': 3.0,
+                '江苏': 4.2,
+                '浙江': 5.0,
+                '安徽': 4.5,
+                '福建': 5.8,
+                '江西': 4.2,
+                '山东': 5.5,
+                '河南': 5.8,
+                '湖北': 4.0,
+                '湖南': 3.5,
+                '广东': 5.5,
+                '广西': 4.0,
+                '海南': 3.2,
+                '重庆': 4.2,
+                '四川': 5.5,
+                '贵州': 3.0,
+                '云南': 4.8,
+                '西藏': 3.5,
+                '陕西': 5.0,
+                '甘肃': 5.2,
+                '青海': 4.0,
+                '宁夏': 5.5,
+                '新疆': 6.0,
+                '台湾': 4.2,
+                '香港': 3.5,
+                '澳门': 3.0
+            },
+            heat: {
+                '北京': 5.5,
+                '天津': 5.2,
+                '河北': 6.0,
+                '山西': 4.5,
+                '内蒙古': 3.8,
+                '辽宁': 4.2,
+                '吉林': 3.8,
+                '黑龙江': 3.2,
+                '上海': 7.0,
+                '江苏': 7.5,
+                '浙江': 8.2,
+                '安徽': 7.2,
+                '福建': 7.8,
+                '江西': 7.5,
+                '山东': 6.8,
+                '河南': 7.0,
+                '湖北': 7.2,
+                '湖南': 7.0,
+                '广东': 8.5,
+                '广西': 7.8,
+                '海南': 7.5,
+                '重庆': 6.5,
+                '四川': 5.8,
+                '贵州': 5.2,
+                '云南': 4.5,
+                '西藏': 2.8,
+                '陕西': 5.5,
+                '甘肃': 4.8,
+                '青海': 3.5,
+                '宁夏': 5.0,
+                '新疆': 6.5,
+                '台湾': 7.2,
+                '香港': 8.0,
+                '澳门': 7.8
+            }
+        };
+        
+        // 地图配置
+        const mapOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return `${params.name}<br/>风险指数: ${params.value}<br/>${getRiskLevel(params.value)}`;
+                }
+            },
+            visualMap: {
+                show: true,
+                min: 1,
+                max: 10,
+                calculable: true,
+                inRange: {
+                    color: ['#10b981', '#f59e0b', '#ef4444', '#7e22ce']
+                },
+                textStyle: {
+                    color: '#e2e8f0'
+                }
+            },
+            series: [{
+                name: '气候风险指数',
+                type: 'map',
+                map: 'china',
+                roam: true,
+                zoom: 1.2,
+                center: [105, 36],
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e2e8f0'
+                },
+                emphasis: {
+                    label: {
+                        color: '#fff',
+                        fontSize: 12,
+                        fontWeight: 'bold'
+                    },
+                    itemStyle: {
+                        areaColor: 'rgba(56, 189, 248, 0.5)',
+                        borderColor: '#38bdf8',
+                        borderWidth: 1
+                    }
+                },
+                itemStyle: {
+                    borderColor: 'rgba(100, 116, 139, 0.5)',
+                    borderWidth: 0.5,
+                    areaColor: 'rgba(15, 23, 42, 0.7)'
+                },
+                data: Object.entries(riskData.overall).map(([name, value]) => ({ name, value })),
+                nameMap: {
+                    '内蒙古': '内蒙古',
+                    '西藏': '西藏',
+                    '新疆': '新疆',
+                    '广西': '广西',
+                    '宁夏': '宁夏',
+                    '香港': '香港',
+                    '澳门': '澳门'
+                }
+            }]
+        };
+        
+        // 设置图表选项
+        mapChart.setOption(mapOption);
+        
+        // 响应窗口变化
+        window.addEventListener('resize', function() {
+            mapChart.resize();
+        });
+        
+        // 风险等级描述
+        function getRiskLevel(value) {
+            if (value < 3) return '低风险';
+            if (value < 5) return '较低风险';
+            if (value < 7) return '中风险';
+            if (value < 8.5) return '高风险';
+            return '极高风险';
+        }
+        
+        // 风险类型切换
+        document.querySelectorAll('.risk-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const type = this.dataset.type;
+                mapOption.series[0].data = Object.entries(riskData[type]).map(([name, value]) => ({ name, value }));
+                mapChart.setOption(mapOption);
+            });
+        });
+        
+        // 地图控制
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            const option = mapChart.getOption();
+            const zoom = option.series[0].zoom * 1.2;
+            mapChart.setOption({
+                series: [{
+                    zoom: zoom
+                }]
+            });
+        });
+        
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            const option = mapChart.getOption();
+            const zoom = option.series[0].zoom / 1.2;
+            mapChart.setOption({
+                series: [{
+                    zoom: zoom
+                }]
+            });
+        });
+        
+        document.getElementById('reset-map').addEventListener('click', function() {
+            mapChart.setOption({
+                series: [{
+                    center: [105, 36],
+                    zoom: 1.2
+                }]
+            });
+        });
+        
+        // 地图点击事件
+        mapChart.on('click', function(params) {
+            const regionName = params.name;
+            alert(`已选择: ${regionName}\n风险指数: ${params.value}\n风险等级: ${getRiskLevel(params.value)}`);
+        });
+        
+        // 添加动画效果
+        setTimeout(() => {
+            document.querySelector('.map-container').style.transform = 'translateY(0)';
+            document.querySelector('.map-container').style.opacity = '1';
+        }, 300);
+    </script>
+    
+    <!-- 其他脚本 -->
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化气候趋势图表
+            initClimateTrendChart();
+            
+            // 初始化AI预测功能
+            initAIPrediction();
+            
+            // 初始化预警项点击事件
+            initAlertItems();
+            
+            // 模拟一段时间后显示预警弹窗
+            setTimeout(showAlertModal, 10000);
+        });
+        
+        // 气候趋势图表初始化
+        function initClimateTrendChart() {
+            const ctx = document.getElementById('climate-trend-chart').getContext('2d');
+            
+            // 温度数据 - 全国范围
+            const years = Array.from({length: 31}, (_, i) => 1993 + i);
+            const tempData = years.map((year, i) => 15.2 + (i * 0.022) + (Math.random() * 0.05 - 0.025));
+            const rainfallData = years.map((year, i) => 620 + (i * 3.5) + (Math.random() * 20 - 10));
+            const extremeDaysData = years.map((year, i) => 8 + (i * 0.32) + (Math.random() * 1 - 0.5));
+            
+            // 创建图表
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: '全国平均温度 (°C)',
+                            data: tempData,
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '年降水量 (mm)',
+                            data: rainfallData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y1'
+                        },
+                        {
+                            label: '极端天气日数',
+                            data: extremeDaysData,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y2'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                maxRotation: 0,
+                                callback: function(value, index, values) {
+                                    // 每5年显示一次年份
+                                    return index % 5 === 0 ? this.getLabelForValue(value) : '';
+                                }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: '温度 (°C)',
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: '降水量 (mm)',
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        y2: {
+                            type: 'linear',
+                            display: false,
+                            position: 'right',
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                boxWidth: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 10,
+                            titleColor: 'white',
+                            bodyColor: 'rgba(255, 255, 255, 0.8)',
+                            titleFont: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            },
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 周期按钮事件
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新按钮状态
+                    document.querySelectorAll('.period-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-blue-600', 'text-white');
+                        b.classList.add('bg-slate-700', 'text-slate-300');
+                    });
+                    this.classList.add('active', 'bg-blue-600', 'text-white');
+                    this.classList.remove('bg-slate-700', 'text-slate-300');
+                    
+                    // 更新图表数据
+                    const period = this.textContent.trim();
+                    updateTrendChart(period, chart);
+                });
+            });
+        }
+        
+        // 更新趋势图表数据
+        function updateTrendChart(period, chart) {
+            let years, startYear;
+            
+            switch(period) {
+                case '近30年':
+                    startYear = 1993;
+                    break;
+                case '近10年':
+                    startYear = 2013;
+                    break;
+                case '近5年':
+                    startYear = 2018;
+                    break;
+            }
+            
+            const count = period === '近30年' ? 31 : period === '近10年' ? 11 : 6;
+            years = Array.from({length: count}, (_, i) => startYear + i);
+            
+            // 生成对应周期的数据
+            const baseTemp = 15.2 + (startYear - 1993) * 0.022;
+            const tempData = years.map((year, i) => baseTemp + (i * 0.022) + (Math.random() * 0.05 - 0.025));
+            
+            const baseRainfall = 620 + (startYear - 1993) * 3.5;
+            const rainfallData = years.map((year, i) => baseRainfall + (i * 3.5) + (Math.random() * 20 - 10));
+            
+            const baseExtremeDays = 8 + (startYear - 1993) * 0.32;
+            const extremeDaysData = years.map((year, i) => baseExtremeDays + (i * 0.32) + (Math.random() * 1 - 0.5));
+            
+            // 更新图表
+            chart.data.labels = years;
+            chart.data.datasets[0].data = tempData;
+            chart.data.datasets[1].data = rainfallData;
+            chart.data.datasets[2].data = extremeDaysData;
+            
+            // 添加过渡动画
+            chart.update('none'); // 先清除当前动画
+            chart.update('animate'); // 应用新动画
+        }
+        
+        // 初始化AI预测功能
+        function initAIPrediction() {
+            // 预测按钮点击事件
+            document.getElementById('run-prediction').addEventListener('click', function() {
+                // 显示加载状态
+                this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 分析中...';
+                this.disabled = true;
+                
+                // 获取选中的参数
+                const period = document.getElementById('prediction-period').value;
+                const region = document.getElementById('focus-region').value;
+                
+                // 模拟AI分析延迟
+                setTimeout(() => {
+                    // 更新结果显示
+                    document.getElementById('prediction-results').classList.remove('hidden');
+                    
+                    // 恢复按钮状态
+                    this.innerHTML = '<i class="fa fa-bolt"></i> AI智能预测分析';
+                    this.disabled = false;
+                    
+                    // 添加显示动画
+                    const resultElement = document.getElementById('prediction-results');
+                    resultElement.style.opacity = '0';
+                    resultElement.style.transform = 'translateY(10px)';
+                    resultElement.style.transition = 'opacity 0.5s, transform 0.5s';
+                    
+                    setTimeout(() => {
+                        resultElement.style.opacity = '1';
+                        resultElement.style.transform = 'translateY(0)';
+                    }, 50);
+                }, 2000);
+            });
+            
+            // 查看详细预测报告
+            document.getElementById('show-detail-prediction').addEventListener('click', function() {
+                // 更新详细报告的时间和区域
+                const periodMap = {
+                    '15': '未来15天',
+                    '30': '未来30天',
+                    '90': '未来3个月',
+                    '180': '未来6个月'
+                };
+                
+                const regionMap = {
+                    'national': '全国范围',
+                    'north': '华北地区',
+                    'northeast': '东北地区',
+                    'east': '华东地区',
+                    'south': '华南地区',
+                    'central': '华中地区',
+                    'west': '西部地区',
+                    'northwest': '西北地区',
+                    'southwest': '西南地区'
+                };
+                
+                const period = document.getElementById('prediction-period').value;
+                const region = document.getElementById('focus-region').value;
+                
+                // 获取当前日期并格式化
+                const today = new Date();
+                const endDate = new Date();
+                endDate.setDate(today.getDate() + parseInt(period));
+                
+                const formatDate = (date) => {
+                    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+                };
+                
+                document.getElementById('detail-prediction-period').textContent = 
+                    `${periodMap[period]}（${formatDate(today)}至${formatDate(endDate)}）`;
+                document.getElementById('detail-prediction-region').textContent = regionMap[region];
+                
+                // 显示详细预测弹窗
+                const modal = document.getElementById('prediction-detail-modal');
+                const modalContent = document.getElementById('prediction-modal-content');
+                
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 50);
+                
+                // 关闭按钮事件
+                document.getElementById('close-prediction-modal').addEventListener('click', hidePredictionDetail);
+            });
+        }
+        
+        // 隐藏预测详情
+        function hidePredictionDetail() {
+            const modal = document.getElementById('prediction-detail-modal');
+            const modalContent = document.getElementById('prediction-modal-content');
+            
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            }, 300);
+        }
+        
+        // 初始化预警项点击事件
+        function initAlertItems() {
+            document.querySelectorAll('.alert-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const alertId = this.getAttribute('data-alert-id');
+                    showAlertDetail(alertId);
+                });
+            });
+        }
+        
+        // 显示预警详情
+        function showAlertDetail(alertId) {
+            // 根据预警ID设置不同的弹窗内容
+            const alerts = {
+                '1': {
+                    title: '江南地区持续高温预警',
+                    content: '监测显示，江南地区将出现持续性极端高温天气，未来5天最高气温可达38-40°C，部分地区可能突破历史同期纪录。高温天气可能导致中暑事件增加，电力负荷攀升。',
+                    area: '江苏南部、安徽南部、浙江大部、江西东北部、上海',
+                    duration: '未来5-7天',
+                    measures: [
+                        '做好防暑降温工作，高温时段尽量减少户外活动',
+                        '有关部门应保障电力供应，做好应对用电高峰准备',
+                        '加强水资源管理，保障农业灌溉用水',
+                        '注意防范城市和森林火灾风险'
+                    ]
+                },
+                '2': {
+                    title: '华北地区强降雨预警',
+                    content: '受冷暖空气共同影响，未来24小时华北地区将出现大到暴雨，局部地区有大暴雨，小时雨强可达30-50毫米。强降雨可能引发城市内涝和中小河流洪水。',
+                    area: '北京、天津、河北中南部、山西东部、河南北部',
+                    duration: '未来24-36小时',
+                    measures: [
+                        '相关地区应做好防汛准备，及时排除城市低洼地区积水',
+                        '山区需防范山洪和地质灾害，必要时组织危险区群众转移',
+                        '公众应减少前往低洼地带和山区，注意安全',
+                        '关注水文和气象部门发布的最新预警信息'
+                    ]
+                },
+                '3': {
+                    title: '东南沿海台风影响预警',
+                    content: '今年第X号台风"木兰"目前位于南海东北部海面，强度逐渐加强，预计将在未来48小时内登陆我国东南沿海地区，带来大风和强降雨天气。',
+                    area: '广东东部、福建南部、台湾岛南部',
+                    duration: '未来3-5天',
+                    measures: [
+                        '沿海地区应加固港口设施，船舶及时回港避风',
+                        '相关部门应做好防风防汛准备，防范城市内涝',
+                        '公众应减少外出，远离广告牌等易被风吹落的物体',
+                        '渔民应及时回港，确保人身安全'
+                    ]
+                }
+            };
+            
+            const alert = alerts[alertId];
+            if (!alert) return;
+            
+            // 更新弹窗内容
+            document.querySelector('#alert-modal h4').textContent = alert.title;
+            document.querySelector('#alert-modal p').innerHTML = alert.content;
+            
+            // 更新信息卡片
+            const infoCards = document.querySelectorAll('#alert-modal .grid-cols-2 .bg-slate-700/50');
+            infoCards[0].innerHTML = `
+                <p class="text-slate-400 text-xs">预计持续时间</p>
+                <p class="text-white font-medium mt-1">${alert.duration}</p>
+            `;
+            infoCards[1].innerHTML = `
+                <p class="text-slate-400 text-xs">影响区域</p>
+                <p class="text-white font-medium mt-1">${alert.area}</p>
+            `;
+            
+            // 更新建议措施
+            const measuresList = document.querySelector('#alert-modal .bg-amber-900/20 ul');
+            measuresList.innerHTML = '';
+            
+            alert.measures.forEach(measure => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-2';
+                li.innerHTML = `
+                    <i class="fa fa-check-circle text-amber-400 mt-0.5 text-xs"></i>
+                    <span>${measure}</span>
+                `;
+                measuresList.appendChild(li);
+            });
+            
+            // 显示弹窗
+            showAlertModal();
+        }
+        
+        // 显示预警弹窗
+        function showAlertModal() {
+            const modal = document.getElementById('alert-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 50);
+            
+            // 弹窗关闭按钮
+            document.getElementById('close-alert-modal').addEventListener('click', hideAlertModal);
+        }
+        
+        // 隐藏预警弹窗
+        function hideAlertModal() {
+            const modal = document.getElementById('alert-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            }, 300);
+        }
+    </script>
+</body>
+</html>

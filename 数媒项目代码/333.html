@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全国气候风险热力图 - 科技风</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .map-container {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(2, 8, 20, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #7dd3fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-title i {
+            color: #38bdf8;
+            font-size: 1.8rem;
+        }
+        
+        .risk-selector {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .risk-btn {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(30, 41, 59, 0.8);
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .risk-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .risk-btn.active {
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        
+        .map-wrapper {
+            height: 580px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        #map-chart {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+        
+        .map-control {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #38bdf8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(2, 8, 20, 0.3);
+        }
+        
+        .map-control:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        
+        .legend-title {
+            color: #f1f5f9;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-label {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+        
+        .info-panel {
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .info-text {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        
+        .info-text span {
+            color: #38bdf8;
+            font-weight: 500;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(2, 8, 20, 0.4);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: #38bdf8;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #38bdf8, #7dd3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .risk-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .risk-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .risk-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .risk-name {
+            flex: 1;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .risk-value {
+            color: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .risk-high {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+        
+        .risk-medium {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+        
+        .risk-low {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        
+        .trend-chart {
+            height: 200px;
+            margin-top: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.9rem;
+            padding: 20px 0;
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
+        }
+        
+        .pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .map-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .risk-selector {
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>全国气候风险热力图</h1>
+            <p class="subtitle">实时监测全国气候风险分布，可视化展示洪涝、干旱、高温等灾害风险等级，助力防灾减灾决策</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="map-container">
+                <div class="map-header">
+                    <h2 class="map-title"><i class="fas fa-map"></i> 全国气候风险分布图</h2>
+                    <div class="risk-selector">
+                        <button class="risk-btn active" data-type="overall">
+                            <i class="fas fa-layer-group"></i> 综合风险
+                        </button>
+                        <button class="risk-btn" data-type="flood">
+                            <i class="fas fa-water"></i> 洪涝风险
+                        </button>
+                        <button class="risk-btn" data-type="drought">
+                            <i class="fas fa-sun"></i> 干旱风险
+                        </button>
+                        <button class="risk-btn" data-type="heat">
+                            <i class="fas fa-temperature-high"></i> 高温风险
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="map-wrapper">
+                    <div id="map-chart"></div>
+                    
+                    <div class="map-controls">
+                        <div class="map-control" id="zoom-in">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="map-control" id="zoom-out">
+                            <i class="fas fa-minus"></i>
+                        </div>
+                        <div class="map-control" id="reset-map">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="map-legend">
+                        <div class="legend-title">风险等级图例</div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                            <div class="legend-label">低风险 (1-2级)</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                            <div class="legend-label">中风险 (3-4级)</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+                            <div class="legend-label">高风险 (5-6级)</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #7e22ce, #c084fc);"></div>
+                            <div class="legend-label">极高风险 (7级以上)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-panel">
+                    <p class="info-text"><span>点击地图上的省份</span> 查看详细气候风险分析及历史数据趋势</p>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="card">
+                    <h3 class="card-title"><i class="fas fa-chart-line"></i> 风险统计概览</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">高风险省份数量</div>
+                            <div class="stat-value">8</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">中风险省份数量</div>
+                            <div class="stat-value">12</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">本月灾害预警</div>
+                            <div class="stat-value">24</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">受影响人口(万)</div>
+                            <div class="stat-value">3,850</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> 高风险地区</h3>
+                    <div class="risk-list">
+                        <div class="risk-item">
+                            <div class="risk-color risk-high"></div>
+                            <div class="risk-name">广东省</div>
+                            <div class="risk-value">8.2</div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-color risk-high"></div>
+                            <div class="risk-name">福建省</div>
+                            <div class="risk-value">7.9</div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-color risk-high"></div>
+                            <div class="risk-name">浙江省</div>
+                            <div class="risk-value">7.5</div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-color risk-medium"></div>
+                            <div class="risk-name">江西省</div>
+                            <div class="risk-value">6.7</div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-color risk-medium"></div>
+                            <div class="risk-name">湖南省</div>
+                            <div class="risk-value">6.3</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title"><i class="fas fa-chart-bar"></i> 风险趋势分析</h3>
+                    <div class="trend-chart" id="trend-chart"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><span class="pulse"></span> 数据最后更新: 2023年11月15日 14:30:25</p>
+            <p>全国气候风险监测平台 © 2023 中国气象局国家气候中心</p>
+        </div>
+    </div>
+
+    <script>
+        // 初始化ECharts实例
+        const mapChart = echarts.init(document.getElementById('map-chart'));
+        const trendChart = echarts.init(document.getElementById('trend-chart'));
+        
+        // 模拟数据
+        const riskData = {
+            overall: {
+                '北京': 3.2,
+                '天津': 3.8,
+                '河北': 4.5,
+                '山西': 3.7,
+                '内蒙古': 2.9,
+                '辽宁': 4.1,
+                '吉林': 3.5,
+                '黑龙江': 3.1,
+                '上海': 5.2,
+                '江苏': 6.1,
+                '浙江': 7.5,
+                '安徽': 5.8,
+                '福建': 7.9,
+                '江西': 6.7,
+                '山东': 5.1,
+                '河南': 5.6,
+                '湖北': 5.9,
+                '湖南': 6.3,
+                '广东': 8.2,
+                '广西': 6.1,
+                '海南': 5.4,
+                '重庆': 4.8,
+                '四川': 4.3,
+                '贵州': 4.7,
+                '云南': 3.9,
+                '西藏': 2.5,
+                '陕西': 4.0,
+                '甘肃': 3.6,
+                '青海': 2.8,
+                '宁夏': 3.3,
+                '新疆': 3.0,
+                '台湾': 6.5,
+                '香港': 6.8,
+                '澳门': 5.9
+            },
+            flood: {
+                '北京': 2.5,
+                '天津': 3.2,
+                '河北': 4.0,
+                '山西': 2.8,
+                '内蒙古': 1.8,
+                '辽宁': 3.5,
+                '吉林': 3.0,
+                '黑龙江': 2.7,
+                '上海': 4.5,
+                '江苏': 5.8,
+                '浙江': 7.2,
+                '安徽': 5.5,
+                '福建': 7.5,
+                '江西': 6.9,
+                '山东': 4.8,
+                '河南': 5.2,
+                '湖北': 5.7,
+                '湖南': 6.8,
+                '广东': 8.0,
+                '广西': 6.5,
+                '海南': 4.8,
+                '重庆': 4.5,
+                '四川': 4.8,
+                '贵州': 5.2,
+                '云南': 4.0,
+                '西藏': 2.0,
+                '陕西': 3.8,
+                '甘肃': 3.0,
+                '青海': 2.2,
+                '宁夏': 2.8,
+                '新疆': 1.9,
+                '台湾': 7.0,
+                '香港': 7.2,
+                '澳门': 6.0
+            },
+            drought: {
+                '北京': 4.0,
+                '天津': 3.5,
+                '河北': 5.2,
+                '山西': 4.8,
+                '内蒙古': 4.2,
+                '辽宁': 3.8,
+                '吉林': 3.2,
+                '黑龙江': 3.0,
+                '上海': 3.0,
+                '江苏': 4.2,
+                '浙江': 5.0,
+                '安徽': 4.5,
+                '福建': 5.8,
+                '江西': 4.2,
+                '山东': 5.5,
+                '河南': 5.8,
+                '湖北': 4.0,
+                '湖南': 3.5,
+                '广东': 5.5,
+                '广西': 4.0,
+                '海南': 3.2,
+                '重庆': 4.2,
+                '四川': 5.5,
+                '贵州': 3.0,
+                '云南': 4.8,
+                '西藏': 3.5,
+                '陕西': 5.0,
+                '甘肃': 5.2,
+                '青海': 4.0,
+                '宁夏': 5.5,
+                '新疆': 6.0,
+                '台湾': 4.2,
+                '香港': 3.5,
+                '澳门': 3.0
+            },
+            heat: {
+                '北京': 5.5,
+                '天津': 5.2,
+                '河北': 6.0,
+                '山西': 4.5,
+                '内蒙古': 3.8,
+                '辽宁': 4.2,
+                '吉林': 3.8,
+                '黑龙江': 3.2,
+                '上海': 7.0,
+                '江苏': 7.5,
+                '浙江': 8.2,
+                '安徽': 7.2,
+                '福建': 7.8,
+                '江西': 7.5,
+                '山东': 6.8,
+                '河南': 7.0,
+                '湖北': 7.2,
+                '湖南': 7.0,
+                '广东': 8.5,
+                '广西': 7.8,
+                '海南': 7.5,
+                '重庆': 6.5,
+                '四川': 5.8,
+                '贵州': 5.2,
+                '云南': 4.5,
+                '西藏': 2.8,
+                '陕西': 5.5,
+                '甘肃': 4.8,
+                '青海': 3.5,
+                '宁夏': 5.0,
+                '新疆': 6.5,
+                '台湾': 7.2,
+                '香港': 8.0,
+                '澳门': 7.8
+            }
+        };
+        
+        // 地图配置
+        const mapOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return `${params.name}<br/>风险指数: ${params.value}<br/>${getRiskLevel(params.value)}`;
+                }
+            },
+            visualMap: {
+                show: true,
+                min: 1,
+                max: 10,
+                calculable: true,
+                inRange: {
+                    color: ['#10b981', '#f59e0b', '#ef4444', '#7e22ce']
+                },
+                textStyle: {
+                    color: '#e2e8f0'
+                }
+            },
+            series: [{
+                name: '气候风险指数',
+                type: 'map',
+                map: 'china',
+                roam: true,
+                zoom: 1.2,
+                center: [105, 36],
+                label: {
+                    show: true,
+                    fontSize: 10,
+                    color: '#e2e8f0'
+                },
+                emphasis: {
+                    label: {
+                        color: '#fff',
+                        fontSize: 12,
+                        fontWeight: 'bold'
+                    },
+                    itemStyle: {
+                        areaColor: 'rgba(56, 189, 248, 0.5)',
+                        borderColor: '#38bdf8',
+                        borderWidth: 1
+                    }
+                },
+                itemStyle: {
+                    borderColor: 'rgba(100, 116, 139, 0.5)',
+                    borderWidth: 0.5,
+                    areaColor: 'rgba(15, 23, 42, 0.7)'
+                },
+                data: Object.entries(riskData.overall).map(([name, value]) => ({ name, value })),
+                nameMap: {
+                    '内蒙古': '内蒙古',
+                    '西藏': '西藏',
+                    '新疆': '新疆',
+                    '广西': '广西',
+                    '宁夏': '宁夏',
+                    '香港': '香港',
+                    '澳门': '澳门'
+                }
+            }]
+        };
+        
+        // 趋势图配置
+        const trendOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '10%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                axisLine: {
+                    lineStyle: {
+                        color: '#64748b'
+                    }
+                },
+                axisLabel: {
+                    color: '#94a3b8'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '风险指数',
+                nameTextStyle: {
+                    color: '#94a3b8'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#64748b'
+                    }
+                },
+                axisLabel: {
+                    color: '#94a3b8'
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'rgba(100, 116, 139, 0.2)'
+                    }
+                }
+            },
+            series: [{
+                name: '综合风险',
+                type: 'line',
+                data: [3.2, 3.5, 3.8, 4.2, 5.1, 6.3, 7.8, 7.5, 6.2, 5.0, 4.5, 3.8],
+                smooth: true,
+                lineStyle: {
+                    width: 3,
+                    color: '#38bdf8'
+                },
+                symbol: 'circle',
+                symbolSize: 8,
+                itemStyle: {
+                    color: '#38bdf8'
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: 'rgba(56, 189, 248, 0.5)'
+                        }, {
+                            offset: 1, color: 'rgba(56, 189, 248, 0.1)'
+                        }]
+                    }
+                }
+            }]
+        };
+        
+        // 设置图表选项
+        mapChart.setOption(mapOption);
+        trendChart.setOption(trendOption);
+        
+        // 响应窗口变化
+        window.addEventListener('resize', function() {
+            mapChart.resize();
+            trendChart.resize();
+        });
+        
+        // 风险等级描述
+        function getRiskLevel(value) {
+            if (value < 3) return '低风险';
+            if (value < 5) return '较低风险';
+            if (value < 7) return '中风险';
+            if (value < 8.5) return '高风险';
+            return '极高风险';
+        }
+        
+        // 风险类型切换
+        document.querySelectorAll('.risk-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const type = this.dataset.type;
+                mapOption.series[0].data = Object.entries(riskData[type]).map(([name, value]) => ({ name, value }));
+                mapChart.setOption(mapOption);
+            });
+        });
+        
+        // 地图控制
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            const option = mapChart.getOption();
+            const zoom = option.series[0].zoom * 1.2;
+            mapChart.setOption({
+                series: [{
+                    zoom: zoom
+                }]
+            });
+        });
+        
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            const option = mapChart.getOption();
+            const zoom = option.series[0].zoom / 1.2;
+            mapChart.setOption({
+                series: [{
+                    zoom: zoom
+                }]
+            });
+        });
+        
+        document.getElementById('reset-map').addEventListener('click', function() {
+            mapChart.setOption({
+                series: [{
+                    center: [105, 36],
+                    zoom: 1.2
+                }]
+            });
+        });
+        
+        // 地图点击事件
+        mapChart.on('click', function(params) {
+            const regionName = params.name;
+            alert(`已选择: ${regionName}\n风险指数: ${params.value}\n风险等级: ${getRiskLevel(params.value)}`);
+        });
+        
+        // 添加动画效果
+        setTimeout(() => {
+            document.querySelector('.map-container').style.transform = 'translateY(0)';
+            document.querySelector('.map-container').style.opacity = '1';
+        }, 300);
+    </script>
+</body>
+</html>
