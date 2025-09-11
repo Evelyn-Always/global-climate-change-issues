@@ -1,0 +1,64 @@
+/* 高级科技感 · 玻璃拟态 · 霓虹高光 */
+.neo-panel {
+  background: linear-gradient(180deg, rgba(2,6,23,0.76), rgba(2,6,23,0.6));
+  border: 1px solid rgba(34,211,238,0.2);
+  border-radius: 16px;
+  box-shadow: 0 0 0 1px rgba(34,211,238,0.06) inset, 0 8px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.panel-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 12px 16px; border-bottom: 1px solid rgba(34,211,238,0.2);
+}
+.panel-title { color:#fff; font-weight:600; }
+.panel-actions .icon-btn {
+  background: rgba(2,6,23,0.5); border:1px solid rgba(148,163,184,0.2);
+  color:#e5e7eb; border-radius:10px; padding:6px 10px; margin-left:6px;
+  transition:.15s ease;
+}
+.panel-actions .icon-btn:hover { transform: translateY(-1px); box-shadow:0 8px 18px rgba(34,211,238,0.12); }
+
+.chart { width:100%; }
+
+.ui-input {
+  background: rgba(15,23,42,0.6); color:#e5e7eb; border:1px solid rgba(148,163,184,0.2);
+  border-radius:10px; padding:8px 12px; outline:none; transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.ui-input:focus { border-color: rgba(34,211,238,0.45); box-shadow:0 0 0 3px rgba(34,211,238,0.15); background: rgba(15,23,42,0.72); }
+
+.ui-btn-primary, .ui-btn-secondary {
+  border-radius:10px; padding:10px 12px; color:#e5e7eb; border:1px solid transparent; transition:.15s ease;
+}
+.ui-btn-primary {
+  background: linear-gradient(180deg, rgba(34,197,94,0.25), rgba(34,197,94,0.15));
+  border-color: rgba(34,197,94,0.35);
+}
+.ui-btn-secondary {
+  background: rgba(14,165,233,0.18); border-color: rgba(34,211,238,0.35);
+}
+.ui-btn-primary:hover, .ui-btn-secondary:hover { transform: translateY(-1px); box-shadow:0 8px 18px rgba(34,211,238,0.12); }
+
+.chip {
+  background: rgba(2,6,23,0.5); color:#e5e7eb; border:1px solid rgba(148,163,184,0.2);
+  padding:6px 10px; border-radius:9999px; font-size:12px; transition:.15s ease;
+}
+.chip:hover { border-color: rgba(34,211,238,0.45); }
+.chip-active {
+  background: rgba(14,165,233,0.25); border-color: rgba(34,211,238,0.45); color:#d1fafe;
+  box-shadow: 0 6px 16px rgba(34,211,238,0.12);
+}
+
+.chk { display:flex; align-items:center; gap:8px; background:rgba(2,6,23,0.4); padding:6px 8px; border-radius:8px; border:1px solid rgba(148,163,184,0.2); }
+.chk input { accent-color:#06b6d4; }
+.chk span { color:#e5e7eb; font-size:13px; }
+
+.toast {
+  min-width:220px; max-width:70vw; padding:8px 12px; border-radius:10px;
+  color:#fff; border:1px solid rgba(148,163,184,0.25); background: rgba(2,6,23,0.85);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  animation: fadein .18s ease-out both;
+}
+.toast.hide { animation: fadeout .18s ease-in both; }
+@keyframes fadein { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+@keyframes fadeout { from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(6px)} }
