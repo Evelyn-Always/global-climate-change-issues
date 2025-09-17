@@ -122,6 +122,36 @@
               <span class="text-sm">预警中心</span>
             </a>
           </li>
+          <li>
+            <a href="#timeline" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-history w-5 text-center"></i>
+              <span class="text-sm">气候时间线</span>
+            </a>
+          </li>
+          <li>
+            <a href="#news-policy" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-newspaper-o w-5 text-center"></i>
+              <span class="text-sm">新闻政策</span>
+            </a>
+          </li>
+          <li>
+            <a href="#discussion" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-comments w-5 text-center"></i>
+              <span class="text-sm">用户讨论</span>
+            </a>
+          </li>
+          <li>
+            <a href="#download-share" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-download w-5 text-center"></i>
+              <span class="text-sm">数据分享</span>
+            </a>
+          </li>
+          <li>
+            <a href="#future-topic" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-magic w-5 text-center"></i>
+              <span class="text-sm">AI预测</span>
+            </a>
+          </li>
         </ul>
 
         <div class="mt-8 px-4">
@@ -1361,6 +1391,693 @@ document.addEventListener('keydown', function(e) {
         </div>
       </section>
 
+        <!-- 5. 全球气候事件时间线页面 -->
+        <div id="timeline-page" class="page-content hidden">
+          <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">全球气候事件时间线</h2>
+            <p class="text-dark-100 mt-1">展示全球重大气候事件的时间发展脉络</p>
+          </div>
+
+          <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+            <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+              <h3 class="font-semibold text-lg">重大气候事件</h3>
+              <div class="flex items-center gap-2">
+                <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <option>2025年</option>
+                  <option>2024年</option>
+                  <option>2023年</option>
+                </select>
+                <button class="text-dark-100 hover:text-white transition-colors">
+                  <i class="fa fa-filter"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="space-y-6">
+                <div class="flex items-start space-x-4 group hover:bg-dark-300/20 p-4 rounded-lg transition-all cursor-pointer">
+                  <div class="flex-shrink-0 w-12 h-12 bg-danger/20 rounded-full flex items-center justify-center">
+                    <i class="fa fa-fire text-danger"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-semibold text-white">巴西亚马逊森林大火爆发</h4>
+                      <span class="text-dark-100 text-sm">2025-07-10</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">亚马逊雨林再次遭受大规模火灾，过火面积超过50万公顷，引发全球关注和环保抗议。</p>
+                    <div class="flex items-center space-x-2">
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">紧急事件</span>
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">环境灾害</span>
+                    </div>
+                  </div>
+                  <button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary/20 text-primary px-3 py-1 rounded text-sm">
+                    展开详情
+                  </button>
+                </div>
+
+                <div class="flex items-start space-x-4 group hover:bg-dark-300/20 p-4 rounded-lg transition-all cursor-pointer">
+                  <div class="flex-shrink-0 w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                    <i class="fa fa-leaf text-primary"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-semibold text-white">欧盟碳边境调节机制正式实施</h4>
+                      <span class="text-dark-100 text-sm">2025-06-15</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">欧盟碳边境调节机制(CBAM)正式生效，对高碳排放进口商品征收碳关税，引发国际贸易争议。</p>
+                    <div class="flex items-center space-x-2">
+                      <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">政策实施</span>
+                      <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">国际贸易</span>
+                    </div>
+                  </div>
+                  <button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary/20 text-primary px-3 py-1 rounded text-sm">
+                    展开详情
+                  </button>
+                </div>
+
+                <div class="flex items-start space-x-4 group hover:bg-dark-300/20 p-4 rounded-lg transition-all cursor-pointer">
+                  <div class="flex-shrink-0 w-12 h-12 bg-warning/20 rounded-full flex items-center justify-center">
+                    <i class="fa fa-thermometer-full text-warning"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-semibold text-white">全球平均气温创历史新高</h4>
+                      <span class="text-dark-100 text-sm">2025-05-20</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">世界气象组织发布报告，2025年前5个月全球平均气温较工业革命前升高1.52°C，创历史记录。</p>
+                    <div class="flex items-center space-x-2">
+                      <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">气温异常</span>
+                      <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">气候变化</span>
+                    </div>
+                  </div>
+                  <button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary/20 text-primary px-3 py-1 rounded text-sm">
+                    展开详情
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 全球气候新闻与政策聚合页面 -->
+        <div id="news-policy-page" class="page-content hidden">
+          <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">新闻政策聚合</h2>
+            <p class="text-dark-100 mt-1">聚合全球最新气候新闻和政策动态</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+                  <h3 class="font-semibold text-lg">最新新闻</h3>
+                  <div class="flex items-center gap-2">
+                    <button class="bg-primary/20 text-primary px-3 py-1 rounded text-sm">全部</button>
+                    <button class="text-dark-100 hover:text-white px-3 py-1 rounded text-sm">政策</button>
+                    <button class="text-dark-100 hover:text-white px-3 py-1 rounded text-sm">科研</button>
+                  </div>
+                </div>
+                <div class="divide-y divide-dark-300">
+                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
+                    <div class="flex justify-between items-start mb-2">
+                      <h4 class="font-medium text-white">中国发布2025年碳达峰行动方案</h4>
+                      <span class="text-dark-100 text-sm">2小时前</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">国家发改委发布最新碳达峰行动方案，提出到2030年非化石能源占比达到25%的目标...</p>
+                    <div class="flex justify-between items-center">
+                      <div class="flex items-center space-x-2">
+                        <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">政策</span>
+                        <span class="text-dark-100 text-xs">来源: 新华网</span>
+                      </div>
+                      <button class="text-primary text-sm hover:underline">展开详情</button>
+                    </div>
+                  </div>
+
+                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
+                    <div class="flex justify-between items-start mb-2">
+                      <h4 class="font-medium text-white">IPCC发布最新气候报告：全球升温或超预期</h4>
+                      <span class="text-dark-100 text-sm">4小时前</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">联合国政府间气候变化专门委员会发布最新评估报告，警告全球升温可能比预期更快...</p>
+                    <div class="flex justify-between items-center">
+                      <div class="flex items-center space-x-2">
+                        <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">科研</span>
+                        <span class="text-dark-100 text-xs">来源: BBC</span>
+                      </div>
+                      <button class="text-primary text-sm hover:underline">展开详情</button>
+                    </div>
+                  </div>
+
+                  <div class="p-4 hover:bg-dark-300/20 transition-colors cursor-pointer">
+                    <div class="flex justify-between items-start mb-2">
+                      <h4 class="font-medium text-white">美国重返巴黎协定加强减排承诺</h4>
+                      <span class="text-dark-100 text-sm">6小时前</span>
+                    </div>
+                    <p class="text-dark-100 text-sm mb-3">美国政府宣布加强减排承诺，计划到2035年实现电力部门脱碳...</p>
+                    <div class="flex justify-between items-center">
+                      <div class="flex items-center space-x-2">
+                        <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">国际</span>
+                        <span class="text-dark-100 text-xs">来源: CNN</span>
+                      </div>
+                      <button class="text-primary text-sm hover:underline">展开详情</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+              <div class="p-4 border-b border-dark-300">
+                <h3 class="font-semibold text-lg">政策追踪</h3>
+              </div>
+              <div class="p-4 space-y-4">
+                <div class="bg-dark-300/30 rounded-lg p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-sm">欧盟REPowerEU计划</h4>
+                    <span class="bg-primary/20 text-primary text-xs px-2 py-1 rounded">进行中</span>
+                  </div>
+                  <p class="text-dark-100 text-xs mb-2">加速可再生能源部署，减少对俄罗斯能源依赖</p>
+                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
+                    <div class="bg-primary h-1.5 rounded-full" style="width: 68%"></div>
+                  </div>
+                  <span class="text-xs text-dark-100">进度: 68%</span>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-sm">中国碳交易市场扩容</h4>
+                    <span class="bg-warning/20 text-warning text-xs px-2 py-1 rounded">筹备中</span>
+                  </div>
+                  <p class="text-dark-100 text-xs mb-2">将化工、钢铁等行业纳入全国碳市场</p>
+                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
+                    <div class="bg-warning h-1.5 rounded-full" style="width: 45%"></div>
+                  </div>
+                  <span class="text-xs text-dark-100">进度: 45%</span>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-sm">美国IRA法案实施</h4>
+                    <span class="bg-success/20 text-success text-xs px-2 py-1 rounded">已实施</span>
+                  </div>
+                  <p class="text-dark-100 text-xs mb-2">通胀削减法案推动清洁能源投资</p>
+                  <div class="w-full bg-dark-300/50 rounded-full h-1.5">
+                    <div class="bg-success h-1.5 rounded-full" style="width: 85%"></div>
+                  </div>
+                  <span class="text-xs text-dark-100">进度: 85%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. 用户反馈与讨论区页面 -->
+        <div id="discussion-page" class="page-content hidden">
+          <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">用户讨论区</h2>
+            <p class="text-dark-100 mt-1">参与气候变化话题讨论，分享观点和见解</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-6">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">发表新讨论</h3>
+                </div>
+                <div class="p-4">
+                  <div class="space-y-4">
+                    <input type="text" placeholder="讨论标题..." class="w-full bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <textarea placeholder="分享您的观点..." rows="4" class="w-full bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50"></textarea>
+                    <div class="flex justify-between items-center">
+                      <div class="flex items-center space-x-2">
+                        <button class="text-dark-100 hover:text-white transition-colors">
+                          <i class="fa fa-image"></i>
+                        </button>
+                        <button class="text-dark-100 hover:text-white transition-colors">
+                          <i class="fa fa-link"></i>
+                        </button>
+                      </div>
+                      <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors">
+                        发布讨论
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+                  <h3 class="font-semibold text-lg">热门讨论</h3>
+                  <div class="flex items-center gap-2">
+                    <button class="bg-primary/20 text-primary px-3 py-1 rounded text-sm">最新</button>
+                    <button class="text-dark-100 hover:text-white px-3 py-1 rounded text-sm">热门</button>
+                  </div>
+                </div>
+                <div class="divide-y divide-dark-300">
+                  <div class="p-4 hover:bg-dark-300/20 transition-colors">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                          <h4 class="font-medium text-white">环保小卫士</h4>
+                          <span class="text-dark-100 text-sm">2小时前</span>
+                        </div>
+                        <h5 class="text-white mb-2">如何看待欧盟碳关税对发展中国家的影响？</h5>
+                        <p class="text-dark-100 text-sm mb-3">欧盟CBAM机制可能会增加发展中国家的出口成本，是否会影响全球贸易公平性？大家怎么看？</p>
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center space-x-4">
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-primary transition-colors">
+                              <i class="fa fa-thumbs-up"></i>
+                              <span class="text-sm">24</span>
+                            </button>
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-secondary transition-colors">
+                              <i class="fa fa-comment"></i>
+                              <span class="text-sm">12</span>
+                            </button>
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-warning transition-colors">
+                              <i class="fa fa-share"></i>
+                              <span class="text-sm">5</span>
+                            </button>
+                          </div>
+                          <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded">政策讨论</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="p-4 hover:bg-dark-300/20 transition-colors">
+                    <div class="flex items-start space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary to-accent"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                          <h4 class="font-medium text-white">气候研究员</h4>
+                          <span class="text-dark-100 text-sm">4小时前</span>
+                        </div>
+                        <h5 class="text-white mb-2">亚马逊森林火灾的长期环境影响分析</h5>
+                        <p class="text-dark-100 text-sm mb-3">从生态系统角度分析，此次火灾可能会对全球碳循环产生什么影响？</p>
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center space-x-4">
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-primary transition-colors">
+                              <i class="fa fa-thumbs-up"></i>
+                              <span class="text-sm">18</span>
+                            </button>
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-secondary transition-colors">
+                              <i class="fa fa-comment"></i>
+                              <span class="text-sm">8</span>
+                            </button>
+                            <button class="flex items-center space-x-1 text-dark-100 hover:text-warning transition-colors">
+                              <i class="fa fa-share"></i>
+                              <span class="text-sm">3</span>
+                            </button>
+                          </div>
+                          <span class="bg-danger/10 text-danger text-xs px-2 py-1 rounded">环境灾害</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">活跃用户</h3>
+                </div>
+                <div class="p-4 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary"></div>
+                      <div>
+                        <h4 class="font-medium text-sm">环保小卫士</h4>
+                        <p class="text-xs text-dark-100">92 讨论</p>
+                      </div>
+                    </div>
+                    <span class="bg-primary/20 text-primary text-xs px-2 py-1 rounded">活跃</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-accent"></div>
+                      <div>
+                        <h4 class="font-medium text-sm">气候研究员</h4>
+                        <p class="text-xs text-dark-100">76 讨论</p>
+                      </div>
+                    </div>
+                    <span class="bg-secondary/20 text-secondary text-xs px-2 py-1 rounded">专家</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-warning"></div>
+                      <div>
+                        <h4 class="font-medium text-sm">绿色地球</h4>
+                        <p class="text-xs text-dark-100">54 讨论</p>
+                      </div>
+                    </div>
+                    <span class="bg-success/20 text-success text-xs px-2 py-1 rounded">新星</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">热门话题</h3>
+                </div>
+                <div class="p-4 space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="bg-primary/10 text-primary text-sm px-2 py-1 rounded">#碳中和</span>
+                    <span class="text-dark-100 text-sm">128 讨论</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="bg-danger/10 text-danger text-sm px-2 py-1 rounded">#森林火灾</span>
+                    <span class="text-dark-100 text-sm">96 讨论</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="bg-warning/10 text-warning text-sm px-2 py-1 rounded">#碳关税</span>
+                    <span class="text-dark-100 text-sm">74 讨论</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="bg-secondary/10 text-secondary text-sm px-2 py-1 rounded">#可再生能源</span>
+                    <span class="text-dark-100 text-sm">58 讨论</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. 数据下载与分享页面 -->
+        <div id="download-share-page" class="page-content hidden">
+          <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">数据下载与分享</h2>
+            <p class="text-dark-100 mt-1">下载分析数据或分享至社交平台</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+              <div class="p-4 border-b border-dark-300">
+                <h3 class="font-semibold text-lg">数据下载</h3>
+              </div>
+              <div class="p-4 space-y-4">
+                <div class="bg-dark-300/30 rounded-lg p-4 hover:bg-dark-300/50 transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <i class="fa fa-file-excel-o text-success text-xl"></i>
+                      <div>
+                        <h4 class="font-medium text-white">舆情数据总览</h4>
+                        <p class="text-dark-100 text-sm">包含近30天全球舆情统计数据</p>
+                      </div>
+                    </div>
+                    <button class="bg-success hover:bg-success/90 text-white px-3 py-1 rounded text-sm transition-colors">
+                      <i class="fa fa-download mr-1"></i>下载
+                    </button>
+                  </div>
+                  <div class="text-xs text-dark-100">
+                    <span>格式: Excel | 大小: 2.4MB | 更新: 2025-07-16</span>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-4 hover:bg-dark-300/50 transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <i class="fa fa-file-text-o text-primary text-xl"></i>
+                      <div>
+                        <h4 class="font-medium text-white">热点话题分析报告</h4>
+                        <p class="text-dark-100 text-sm">详细的主题分类和情感分析报告</p>
+                      </div>
+                    </div>
+                    <button class="bg-primary hover:bg-primary/90 text-white px-3 py-1 rounded text-sm transition-colors">
+                      <i class="fa fa-download mr-1"></i>下载
+                    </button>
+                  </div>
+                  <div class="text-xs text-dark-100">
+                    <span>格式: PDF | 大小: 5.8MB | 更新: 2025-07-16</span>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-4 hover:bg-dark-300/50 transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <i class="fa fa-database text-secondary text-xl"></i>
+                      <div>
+                        <h4 class="font-medium text-white">原始数据集</h4>
+                        <p class="text-dark-100 text-sm">用于研究的完整原始数据</p>
+                      </div>
+                    </div>
+                    <button class="bg-secondary hover:bg-secondary/90 text-white px-3 py-1 rounded text-sm transition-colors">
+                      <i class="fa fa-download mr-1"></i>下载
+                    </button>
+                  </div>
+                  <div class="text-xs text-dark-100">
+                    <span>格式: JSON | 大小: 15.2MB | 更新: 2025-07-16</span>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-4 hover:bg-dark-300/50 transition-colors cursor-pointer">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <i class="fa fa-line-chart text-warning text-xl"></i>
+                      <div>
+                        <h4 class="font-medium text-white">可视化图表包</h4>
+                        <p class="text-dark-100 text-sm">高清图表文件，适合报告使用</p>
+                      </div>
+                    </div>
+                    <button class="bg-warning hover:bg-warning/90 text-white px-3 py-1 rounded text-sm transition-colors">
+                      <i class="fa fa-download mr-1"></i>下载
+                    </button>
+                  </div>
+                  <div class="text-xs text-dark-100">
+                    <span>格式: PNG/SVG | 大小: 8.7MB | 更新: 2025-07-16</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+              <div class="p-4 border-b border-dark-300">
+                <h3 class="font-semibold text-lg">社交分享</h3>
+              </div>
+              <div class="p-4 space-y-4">
+                <div class="bg-dark-300/30 rounded-lg p-4">
+                  <h4 class="font-medium text-white mb-3">生成分享卡片</h4>
+                  <div class="space-y-3">
+                    <select class="w-full bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                      <option>选择分享内容</option>
+                      <option>舆情热度趋势</option>
+                      <option>主题分布统计</option>
+                      <option>地区热力图</option>
+                      <option>自定义内容</option>
+                    </select>
+                    <div class="grid grid-cols-2 gap-2">
+                      <button class="bg-primary hover:bg-primary/90 text-white px-3 py-2 rounded text-sm transition-colors">
+                        <i class="fa fa-image mr-1"></i>生成卡片
+                      </button>
+                      <button class="bg-secondary hover:bg-secondary/90 text-white px-3 py-2 rounded text-sm transition-colors">
+                        <i class="fa fa-eye mr-1"></i>预览
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-3">
+                  <h4 class="font-medium text-white">分享到平台</h4>
+                  <div class="grid grid-cols-2 gap-3">
+                    <button class="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors">
+                      <i class="fa fa-twitter"></i>
+                      <span>微博</span>
+                    </button>
+                    <button class="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors">
+                      <i class="fa fa-wechat"></i>
+                      <span>微信</span>
+                    </button>
+                    <button class="flex items-center justify-center space-x-2 bg-blue-800 hover:bg-blue-900 text-white px-4 py-3 rounded-lg transition-colors">
+                      <i class="fa fa-linkedin"></i>
+                      <span>LinkedIn</span>
+                    </button>
+                    <button class="flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition-colors">
+                      <i class="fa fa-envelope"></i>
+                      <span>邮件</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="bg-dark-300/30 rounded-lg p-4">
+                  <h4 class="font-medium text-white mb-3">分享链接</h4>
+                  <div class="flex space-x-2">
+                    <input type="text" value="https://climate-dashboard.com/share/abc123" readonly class="flex-1 bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 text-sm">
+                    <button class="bg-primary hover:bg-primary/90 text-white px-3 py-2 rounded text-sm transition-colors">
+                      <i class="fa fa-copy"></i>
+                    </button>
+                  </div>
+                  <p class="text-xs text-dark-100 mt-2">此链接将展示当前页面的实时数据快照</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. AI未来话题预测页面 -->
+        <div id="future-topic-page" class="page-content hidden">
+          <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">AI话题预测</h2>
+            <p class="text-dark-100 mt-1">基于AI模型预测未来气候热门话题趋势</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg mb-6">
+                <div class="p-4 border-b border-dark-300 flex justify-between items-center">
+                  <h3 class="font-semibold text-lg">未来30天话题热度预测</h3>
+                  <div class="flex items-center gap-2">
+                    <select class="bg-dark-300 border border-dark-200 rounded-lg py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                      <option>未来30天</option>
+                      <option>未来60天</option>
+                      <option>未来90天</option>
+                    </select>
+                    <button class="text-dark-100 hover:text-white transition-colors">
+                      <i class="fa fa-refresh"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="p-4">
+                  <div class="h-80">
+                    <canvas id="prediction-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">预测话题详情</h3>
+                </div>
+                <div class="p-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-dark-300/30 rounded-lg p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-white">COP30气候峰会</h4>
+                        <span class="text-success text-sm">↗ 预计上升</span>
+                      </div>
+                      <p class="text-dark-100 text-sm mb-3">预计在未来2周内讨论热度将达到峰值，关注度较当前提升180%</p>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">当前热度: 45</span>
+                        <span class="text-success">预测峰值: 126</span>
+                      </div>
+                    </div>
+
+                    <div class="bg-dark-300/30 rounded-lg p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-white">碳捕集技术突破</h4>
+                        <span class="text-primary text-sm">↗ 预计上升</span>
+                      </div>
+                      <p class="text-dark-100 text-sm mb-3">新兴技术话题，预计随着相关研究发布将获得更多关注</p>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">当前热度: 23</span>
+                        <span class="text-primary">预测峰值: 78</span>
+                      </div>
+                    </div>
+
+                    <div class="bg-dark-300/30 rounded-lg p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-white">极地冰川融化</h4>
+                        <span class="text-warning text-sm">→ 保持稳定</span>
+                      </div>
+                      <p class="text-dark-100 text-sm mb-3">持续关注话题，预计热度将保持相对稳定</p>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">当前热度: 67</span>
+                        <span class="text-warning">预测范围: 60-75</span>
+                      </div>
+                    </div>
+
+                    <div class="bg-dark-300/30 rounded-lg p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-white">绿色氢能发展</h4>
+                        <span class="text-secondary text-sm">↗ 预计上升</span>
+                      </div>
+                      <p class="text-dark-100 text-sm mb-3">政策推动下，氢能相关讨论预计显著增长</p>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">当前热度: 34</span>
+                        <span class="text-secondary">预测峰值: 89</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">AI模型信息</h3>
+                </div>
+                <div class="p-4 space-y-3">
+                  <div>
+                    <h4 class="font-medium text-sm text-white mb-1">模型版本</h4>
+                    <p class="text-dark-100 text-sm">ClimatePredict v2.1</p>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-sm text-white mb-1">训练数据</h4>
+                    <p class="text-dark-100 text-sm">2020-2025年全球舆情数据</p>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-sm text-white mb-1">预测准确率</h4>
+                    <div class="flex items-center space-x-2">
+                      <div class="flex-1 bg-dark-300/50 rounded-full h-2">
+                        <div class="bg-success h-2 rounded-full" style="width: 84%"></div>
+                      </div>
+                      <span class="text-success text-sm">84%</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-sm text-white mb-1">更新频率</h4>
+                    <p class="text-dark-100 text-sm">每24小时</p>
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-sm text-white mb-1">最后更新</h4>
+                    <p class="text-dark-100 text-sm">2025-07-16 06:00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-dark-400 rounded-xl border border-dark-300 overflow-hidden shadow-lg">
+                <div class="p-4 border-b border-dark-300">
+                  <h3 class="font-semibold text-lg">趋势指标</h3>
+                </div>
+                <div class="p-4 space-y-4">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-success mb-1">+15%</div>
+                    <p class="text-dark-100 text-sm">整体热度增长预期</p>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-dark-300/30 rounded-lg p-3">
+                      <div class="text-lg font-bold text-primary">7</div>
+                      <p class="text-xs text-dark-100">新兴话题</p>
+                    </div>
+                    <div class="bg-dark-300/30 rounded-lg p-3">
+                      <div class="text-lg font-bold text-warning">12</div>
+                      <p class="text-xs text-dark-100">热度波动</p>
+                    </div>
+                  </div>
+                  <div class="border-t border-dark-300 pt-3">
+                    <h4 class="font-medium text-sm text-white mb-2">预测置信度</h4>
+                    <div class="space-y-2">
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">短期(7天)</span>
+                        <span class="text-success">92%</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">中期(30天)</span>
+                        <span class="text-warning">76%</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-dark-100">长期(90天)</span>
+                        <span class="text-danger">58%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
             </div>
           </div>
@@ -1406,6 +2123,36 @@ document.addEventListener('keydown', function(e) {
             <a href="#alerts" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
               <i class="fa fa-bell w-5 text-center"></i>
               <span>预警中心</span>
+            </a>
+          </li>
+          <li>
+            <a href="#timeline" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-history w-5 text-center"></i>
+              <span>气候时间线</span>
+            </a>
+          </li>
+          <li>
+            <a href="#news-policy" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-newspaper-o w-5 text-center"></i>
+              <span>新闻政策</span>
+            </a>
+          </li>
+          <li>
+            <a href="#discussion" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-comments w-5 text-center"></i>
+              <span>用户讨论</span>
+            </a>
+          </li>
+          <li>
+            <a href="#download-share" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-download w-5 text-center"></i>
+              <span>数据分享</span>
+            </a>
+          </li>
+          <li>
+            <a href="#future-topic" class="mobile-nav-link flex items-center space-x-3 px-4 py-3 rounded-lg text-dark-100 hover:bg-dark-300/50 transition-all">
+              <i class="fa fa-magic w-5 text-center"></i>
+              <span>AI预测</span>
             </a>
           </li>
         </ul>
